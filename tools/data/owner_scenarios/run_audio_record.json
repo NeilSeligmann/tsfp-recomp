@@ -1,0 +1,38 @@
+{
+  "script": "run_audio_record",
+  "title": "Story audio capture and dropout report",
+  "summary": "Plays Story on the private host with the SDL disk audio driver: everything the game sends to its audio device is written to audio.raw (48 kHz stereo 16 bit) at real device speed, so you will NOT hear the game in this mode. When you close the window the script runs python -m tools.audio_dropout_report on audio.raw and run.log: it lists every stretch of digital silence of 100 ms or more (a dropout), the rebuffer and stall lines of the host and the silent fraction. Start it with LISTEN=1 in the environment to hear the game on your real device instead: nothing is captured, only the host's audio log lines are listed, and your subjective notes are the data. Session folder tmp/owner-profiles/audio-record-STAMP. See docs/t-engine-audio-record.md.",
+  "kind": "wrapper",
+  "duration": "about 10 minutes plus the host build",
+  "prerequisites": [
+    "Disc tmp/TimeSplitters - Future Perfect (USA) (XBOX).iso. The script builds the private host first, which takes a few minutes.",
+    "Free disk space: audio.raw grows by about 11 MB per minute."
+  ],
+  "steps": [
+    {
+      "text": "Press Enter at 'Enter = start the game'. Drive to Story and start a level with music and sound effects, then play for a few minutes (the more continuous music and voice, the better). Note the wall clock time (or the level time) of anything you notice."
+    },
+    {
+      "text": "Close the game window. The script prints the dropout report and where audio.raw, run.log and the report are."
+    },
+    {
+      "text": "Optional second run with LISTEN=1 set (real audio device): play the same stretch and write down what you HEAR, using the template in docs/t-engine-audio-record.md."
+    }
+  ],
+  "note_at_end": [
+    "Music: did it cut out or loop wrongly? When?",
+    "Voice and dialogue: missing, cut off, late? When?",
+    "Sound effects: missing, doubled, late? When?",
+    "Audio out of step with the picture (desync), and by how much roughly.",
+    "Pops, clicks, crackle or a pitch change.",
+    "If the game stopped: the 'unimplemented instruction at ...' or STOP line."
+  ],
+  "stop": [
+    "Close the game window to end the capture. Answer q at the prompt to skip."
+  ],
+  "send_back": [
+    "Tell Claude the session finished: folder tmp/owner-profiles/audio-record-STAMP.",
+    "audio.raw (or its size and sha256 if it is large), run.log and dropout_report.txt.",
+    "The notes above."
+  ]
+}

@@ -1,0 +1,56 @@
+# T1736 all-buttons-and-axes checklist, fixed press order. One step per line, fields separated by ' | ':
+#   KIND | ID | EXPECT | KEY | INSTRUCTION
+# KIND    digital (tap once, the host button dump records the edges) or analog (HOLD steady until the terminal says 'taken').
+# ID      [a-z0-9_-]+, unique, used in the dump labels.
+# EXPECT  digital: button:NAME (host names, BUTTON_NAMES of tools/button_dump_report.py).
+#         analog: axis:AXIS:SIGN:PERCENT, AXIS in LX LY RX RY LT RT, SIGN + or -, PERCENT of full deflection (1..100).
+#         A diagonal lists two such items joined by ','.
+# KEY     key(s) the headless driver holds, joined by '+' (docs/presentation.md key map, xdotool names), '-' for none.
+# The pad arrays 0x6B93C0..0x6B95B8 (docs/t-guest-input-chain.md) are diffed per step by tools.button_checklist_report.
+# The Xbox pad has no separate LB/RB: the SDL LB and RB are BLACK and WHITE in this host (docs/presentation.md).
+digital | a | button:A | z | Tap A once, release at once
+digital | b | button:B | x | Tap B once, release at once
+digital | x | button:X | a | Tap X once, release at once
+digital | y | button:Y | s | Tap Y once, release at once
+digital | black | button:BLACK | q | Tap BLACK (LB on an SDL pad) once, release at once
+digital | white | button:WHITE | w | Tap WHITE (RB on an SDL pad) once, release at once
+digital | start | button:START | Return | Tap START once, release at once
+digital | back | button:BACK | BackSpace | Tap BACK once, release at once
+digital | dpad_up | button:DPAD_UP | Up | Tap D-pad UP once, release at once
+digital | dpad_down | button:DPAD_DOWN | Down | Tap D-pad DOWN once, release at once
+digital | dpad_left | button:DPAD_LEFT | Left | Tap D-pad LEFT once, release at once
+digital | dpad_right | button:DPAD_RIGHT | Right | Tap D-pad RIGHT once, release at once
+digital | l3 | button:LTHUMB | e | Tap the LEFT stick click (L3) once, release at once
+digital | r3 | button:RTHUMB | r | Tap the RIGHT stick click (R3) once, release at once
+analog | ls_up_50 | axis:LY:+:50 | - | HOLD the Left stick UP about half way, steady
+analog | ls_down_50 | axis:LY:-:50 | - | HOLD the Left stick DOWN about half way, steady
+analog | ls_left_50 | axis:LX:-:50 | - | HOLD the Left stick LEFT about half way, steady
+analog | ls_right_50 | axis:LX:+:50 | - | HOLD the Left stick RIGHT about half way, steady
+analog | ls_up_100 | axis:LY:+:100 | i | HOLD the Left stick UP to the stop, steady
+analog | ls_down_100 | axis:LY:-:100 | k | HOLD the Left stick DOWN to the stop, steady
+analog | ls_left_100 | axis:LX:-:100 | j | HOLD the Left stick LEFT to the stop, steady
+analog | ls_right_100 | axis:LX:+:100 | l | HOLD the Left stick RIGHT to the stop, steady
+analog | ls_upright_100 | axis:LY:+:100,axis:LX:+:100 | i+l | HOLD the Left stick UP-RIGHT diagonal to the stop, steady
+analog | ls_upleft_100 | axis:LY:+:100,axis:LX:-:100 | i+j | HOLD the Left stick UP-LEFT diagonal to the stop, steady
+analog | ls_downright_100 | axis:LY:-:100,axis:LX:+:100 | k+l | HOLD the Left stick DOWN-RIGHT diagonal to the stop, steady
+analog | ls_downleft_100 | axis:LY:-:100,axis:LX:-:100 | k+j | HOLD the Left stick DOWN-LEFT diagonal to the stop, steady
+analog | rs_up_50 | axis:RY:+:50 | - | HOLD the Right stick UP about half way, steady
+analog | rs_down_50 | axis:RY:-:50 | - | HOLD the Right stick DOWN about half way, steady
+analog | rs_left_50 | axis:RX:-:50 | - | HOLD the Right stick LEFT about half way, steady
+analog | rs_right_50 | axis:RX:+:50 | - | HOLD the Right stick RIGHT about half way, steady
+analog | rs_up_100 | axis:RY:+:100 | t | HOLD the Right stick UP to the stop, steady
+analog | rs_down_100 | axis:RY:-:100 | g | HOLD the Right stick DOWN to the stop, steady
+analog | rs_left_100 | axis:RX:-:100 | f | HOLD the Right stick LEFT to the stop, steady
+analog | rs_right_100 | axis:RX:+:100 | h | HOLD the Right stick RIGHT to the stop, steady
+analog | rs_upright_100 | axis:RY:+:100,axis:RX:+:100 | t+h | HOLD the Right stick UP-RIGHT diagonal to the stop, steady
+analog | rs_upleft_100 | axis:RY:+:100,axis:RX:-:100 | t+f | HOLD the Right stick UP-LEFT diagonal to the stop, steady
+analog | rs_downright_100 | axis:RY:-:100,axis:RX:+:100 | g+h | HOLD the Right stick DOWN-RIGHT diagonal to the stop, steady
+analog | rs_downleft_100 | axis:RY:-:100,axis:RX:-:100 | g+f | HOLD the Right stick DOWN-LEFT diagonal to the stop, steady
+analog | lt_25 | axis:LT:+:25 | - | PULL the LEFT trigger about a quarter of the way, steady
+analog | lt_50 | axis:LT:+:50 | - | PULL the LEFT trigger about half way, steady
+analog | lt_75 | axis:LT:+:75 | - | PULL the LEFT trigger about three quarters of the way, steady
+analog | lt_100 | axis:LT:+:100 | 1 | PULL the LEFT trigger all the way, steady
+analog | rt_25 | axis:RT:+:25 | - | PULL the RIGHT trigger about a quarter of the way, steady
+analog | rt_50 | axis:RT:+:50 | - | PULL the RIGHT trigger about half way, steady
+analog | rt_75 | axis:RT:+:75 | - | PULL the RIGHT trigger about three quarters of the way, steady
+analog | rt_100 | axis:RT:+:100 | 2 | PULL the RIGHT trigger all the way, steady

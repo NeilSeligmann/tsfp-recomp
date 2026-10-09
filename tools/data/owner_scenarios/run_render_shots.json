@@ -1,0 +1,80 @@
+{
+  "script": "run_render_shots",
+  "title": "Render screenshot session in the Map Maker preview: one SHOT press per HUD element, effect or menu",
+  "summary": "One game session in the Map Maker preview. In route mode the game gets there by itself (your saved route is replayed) and then gives you the pad, in free mode you drive there yourself. Whenever a HUD element, an effect or a menu is on screen you press the SHOT chord. The host then writes a PNG of exactly the frame that is presented and one line (host poll, number of presented pictures, phase, time, size) into shots.manifest, so every picture can be matched to the draw census and the play.log of the same session (T1720). Afterwards the script builds shots.jsonl and a contact sheet with every picture and its number (python -m tools.shot_index), so one look shows what you took. Nothing is changed in the game.",
+  "kind": "wrapper",
+  "duration": "about 10 minutes in the preview, plus 2 to 5 minutes for the route replay to reach it",
+  "options": {
+    "mode": {
+      "values": ["route", "free"],
+      "default": "route"
+    },
+    "route": {
+      "free": true,
+      "default": "the newest route in tmp/owner-profiles/routes"
+    },
+    "folder": {
+      "free": true,
+      "default": "tmp/owner-profiles/render-STAMP"
+    }
+  },
+  "prerequisites": [
+    {
+      "text": "ROUTE MODE: the game replays {route} by itself up to the Map Maker preview (the route you recorded once with fish tmp/record_mapmaker_route.fish, your own recorded keys, FABRICATED input). The HDD is a fresh copy of tmp/hdds/route-hdd-pristine, so nothing from an earlier run is in it. The private host is built first, which takes a few minutes the first time.",
+      "when": {
+        "mode": "route"
+      }
+    },
+    {
+      "text": "FREE MODE (no usable route was found, or --free): nothing is replayed. You start the game from boot with tmp/hdds/profile-hdd and drive to the Map Maker preview yourself (profile, Map Maker, load your map, editor, preview).",
+      "when": {
+        "mode": "free"
+      }
+    },
+    "The SHOT chord works from the pad AND from the keyboard while the game window has focus. The pictures, the manifest, the contact sheet and play.log all go into {folder}."
+  ],
+  "steps": [
+    {
+      "text": "START. Press Enter at the prompt 'Enter = start the game'. The window opens and the game replays {route} by itself. DO NOT touch the keyboard or the pad until this terminal prints the line 'route finished: the pad is YOURS'. If it prints 'ROUTE FAILED' instead, press q + Enter and run the script again with --free.",
+      "when": {
+        "mode": "route"
+      }
+    },
+    {
+      "text": "START. Press Enter at the prompt 'Enter = start the game'. The window opens. Drive to the Map Maker preview, wait until you can move, then take the pictures below.",
+      "when": {
+        "mode": "free"
+      }
+    },
+    {
+      "text": "TAKE THE PICTURES in the preview. When the thing is ON SCREEN, press the SHOT chord: {hotkey:shot}. One press is one picture. Hold the chord until this terminal prints a line like '[shots] 3 taken, last shot-003.png' (the script counts the pictures shot-001.png, shot-002.png and so on in the folder every few seconds, the host log says 'hotkey (T1720): shot #N ... -> shot-NNN.png') (the press is read at the game's next controller poll, so nothing is taken while the game is loading). The SHOT press is NOT recorded as game input (this run records nothing), and only the first key of the pad chord (Back) reaches the game while you hold it. In this order, one picture each unless it says more:",
+      "substeps": [
+        "HUD with the weapon visible: stand still, the weapon in your hands, nothing else going on.",
+        "A pickup message: walk over a pickup (weapon, ammo, health or armour) and press SHOT while the pickup message is still on screen.",
+        "The health bar changed: take damage (shoot yourself with an explosive, or let an enemy hit you) and press SHOT while the bar shows less health. Take one picture before the hit too if you can.",
+        "The radar: one picture with enemies or bots close, one without, if the preview has a radar.",
+        "The scoreboard: open it if the preview has one (hold the usual scoreboard button) and press SHOT while it is up. Say so in your note if there is none.",
+        "The crosshair: one picture standing idle and one while you aim or fire.",
+        "A menu page: open the pause menu and press SHOT on its first page, then one more on any page you open from it, then close it again.",
+        "One CONTROL picture of anything that looks right to you (a normal level view). A control picture next to a defect picture is worth more than three defects."
+      ]
+    },
+    {
+      "text": "OPTIONAL, to name what you are looking at: open a SECOND terminal in the repo root and run: echo radar > {folder}/phase (the exact line is also printed by the script). The first line of that file is copied into the manifest as the phase of every following picture, so change it before the next press. Use one word, for example hud, pickup, health, radar, scoreboard, crosshair, menu, defect. Without it the phase is '-'."
+    }
+  ],
+  "note_at_end": [
+    "For every picture NUMBER (the number stamped on its cell of the contact sheet): one line, what you wanted to show (for example 'shot-004: radar missing, enemies on screen') and whether it looked right or wrong. You can also write those lines into {folder}/labels.txt, one per line as '4 radar missing' and run python -m tools.shot_index {folder} again.",
+    "Which of the requested pictures you could not take (no scoreboard, no pickup near, and so on).",
+    "If the game stopped: the 'unimplemented instruction at ...' or STOP line."
+  ],
+  "stop": [
+    "Press the STOP chord: {hotkey:stop}. The host ends cleanly and the script analyses the pictures.",
+    "Or type q + Enter in this terminal, or close the game window, which does the same."
+  ],
+  "send_back": [
+    "Tell Claude the session finished and send the folder {folder}: the pictures shot-NNN.png, shots.manifest, shots.jsonl, contact-sheet.png (the one file to look at first), contact-sheet.html and play.log, or a zip of it.",
+    "The note above: one line per picture number.",
+    "Any 'unimplemented instruction' or 'STOP' line from play.log."
+  ]
+}

@@ -1,0 +1,110 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+#include "game_replace.h"
+static void guest_write16(uint32_t p,uint16_t v)
+{
+    memcpy(game_host_ptr(p),&v,2);
+}
+/* Original contracts: docs/t1478-census-123.md. Unsigned guest address arithmetic. */
+GAME_REPLACE_EXACT(001B5840,cdecl,2,u32,game_object_flag_0xc_0x40_or_kind_1_record_29c_flag_20000_clear)
+{
+    g_eax=game_stack_arg(0);
+    if(guest_read8(g_eax+12u)&0x40u)
+    {
+        g_eax=1;
+        return;
+    }
+    g_eax=game_stack_arg(1);
+    if(guest_read32(g_eax+0x38u)!=1u)
+    {
+        g_eax=0;
+        return;
+    }
+    g_ecx=guest_read32(g_eax+0x30u);
+    g_edx=guest_read32(0x4f9bacu);
+    g_ecx*=0x29cu;
+    g_eax=(guest_read32(g_ecx+g_edx+12u)&0x20000u)?0u:1u;
+}
+GAME_REPLACE_EXACT(001B6540,cdecl,1,u32,game_object_stash_field_0x94_to_0x9c_if_no_player_or_flag_759ed4_clear)
+{
+    g_eax=game_stack_arg(0);
+    g_edx=0;
+    int move=1;
+    if(g_eax!=0)
+    {
+        g_ecx=guest_read32(g_eax+8u);
+        if((int32_t)g_ecx<(int32_t)guest_read32(0x790950u)&&guest_read32(0x759ed4u)!=0)move=0;
+    }
+    if(move)
+    {
+        g_ecx=guest_read32(g_eax+0x94u);
+        if(g_ecx!=0)
+        {
+            guest_write32(g_eax+0x9cu,g_ecx);
+            guest_write32(g_eax+0x94u,0);
+            guest_write32(g_eax+0x98u,0);
+        }
+    }
+}
+GAME_REPLACE_EXACT(001B6A10,cdecl,2,u32,game_object_field_0x80_set_and_not_masked_by_flag_7de458_bit12)
+{
+    g_eax=game_stack_arg(0);
+    g_ecx=guest_read32(g_eax+0x80u);
+    if(g_ecx!=0)
+    {
+        g_eax=game_stack_arg(1);
+        if(g_eax==0)
+        {
+            g_eax=0;
+            return;
+        }
+        g_eax=guest_read32(0x7de458u);
+        if(g_eax&0x1000u)
+        {
+            g_eax=0;
+            return;
+        }
+    }
+    g_eax=1;
+}
+GAME_REPLACE_EXACT(001B9920,cdecl,1,u32,game_get_record_29c_dword_250_by_index)
+{
+    g_eax=game_stack_arg(0);
+    if((int32_t)g_eax<0||g_eax>=0x42u)
+    {
+        g_eax=0xffffffffu;
+        return;
+    }
+    g_ecx=guest_read32(0x4f9bacu);
+    g_eax=guest_read32(g_eax*0x29cu+g_ecx+0x250u);
+}
+GAME_REPLACE_EXACT(001CCE70,cdecl,2,u32,game_ring_75aec8_push_halfword_masked_0xfcff_when_arg_has_0x30ff_index_75aef0_mod_0x14)
+{
+    if(!(game_stack_arg(0)&0x30ffu))return;
+    g_ecx=game_stack_arg(1);
+    g_eax=guest_read32(0x75aef0u);
+    g_ecx&=0xfcffu;
+    guest_write16(g_eax*2u+0x75aec8u,(uint16_t)g_ecx);
+    g_eax+=1u;
+    g_edx=(g_eax&0x80000000u)?0xffffffffu:0u;
+    g_ecx=20u;
+    int32_t v=(int32_t)g_eax;
+    g_eax=(uint32_t)(v/20);
+    g_edx=(uint32_t)(v%20);
+    guest_write32(0x75aef0u,g_edx);
+}
+GAME_REPLACE_EXACT(002561B0,cdecl,1,u32,game_record_18_by_byte_index)
+{
+    g_eax=game_stack_arg(0)&0xffu;
+    g_eax=g_eax<26u?0x51c160u+g_eax*24u:0u;
+}
+GAME_REPLACE_EXACT(00275620,cdecl,0,u32,game_byte_7de402_nonzero_and_mode_byte_7de455_is_2)
+{
+    g_eax=(g_eax&0xffffff00u)|guest_read8(0x7de402u);
+    if((g_eax&0xffu)==0)
+    {
+        g_eax=0;
+        return;
+    }
+    g_ecx=(g_ecx&0xffffff00u)|guest_read8(0x7de455u);
+    g_eax=(g_ecx&0xffu)==2u?1u:0u;
+}

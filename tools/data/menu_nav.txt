@@ -1,0 +1,106 @@
+# menu_nav.txt (T1640): the menu table of the closed loop menu navigator. Findings and evidence:
+# docs/t1640-menu-state-findings.md. Everything here was read from guest memory of the recompiled title on the
+# tsfp host (route replay of the Map Maker route, dumps at every button edge), NOT from xemu or hardware.
+# conf= MEASURED  seen in guest memory dumps of the host run;
+#       INFERRED  read from the disassembly, consistent with every dump but not exercised;
+#       UNVERIFIED not observed at all.
+#
+# ---------------------------------------------------------------------------------------------------------------
+# GRAMMAR (one record per line, blank lines and lines starting with # are comments, text after ' # ' is a comment)
+#
+#   widgets table=ADDR stride=N count=N [closing=S,S]   once, the table of UI page widgets (all menu lines refer to it)
+#   menu ID key=value key=value ...                      one line per menu, values contain no spaces
+#
+# mem spec   [*]ADDR[+OFF][:W]     the T1633 form (docs/t1633-route-events-findings.md): W = 1, 2 or 4 bytes (default 4),
+#                                  `*` = read the pointer at ADDR first, then OFF from it. Values are unsigned.
+# page spec  @+OFF[:W]             EXTENSION E1: OFF/W inside the PAGE WIDGET that `page=` selected for the line.
+# cond       SPEC OP VALUE[&MASK]  OP is == != < <= > >=, SPEC is a mem spec or a page spec, MASK is applied first.
+#                                  Several conditions are comma separated and AND-ed.
+#
+# keys:
+#   page=builder:0xVA   EXTENSION E2, which widget is the menu. Scan the `count` slots at `table + i*stride`. A slot is a
+#                       candidate when its dword at +0 is non-zero (slot in use), its dword at +8 equals VA (the page
+#                       builder function, a constant code address) and its state dword at +0x1b0 is not in `closing`
+#                       (4 and 5 = page is closing or dead). Among candidates take the highest state, then the highest
+#                       slot index. No candidate = the menu is not on screen. page=none = no page widget is required.
+#                       (Heap pointers and the slot number of a page change from run to run, builder VAs do not.)
+#   active=COND,...     the menu is on screen when the page was found AND every cond holds. Typically
+#                       0x79094C==MODE (0x65 front end, 0x66 map editor, 0x64 preview / in game, 0x67 loading).
+#   ready=COND,...      input is accepted now: all conds hold. The lines use state 3 (fully open, costs at most ~50 polls per
+#                       page). A press at the edge poll of a page still in state 1 was MEASURED lost (1 sample), presses in state 2
+#                       were accepted (4 of 4), so `>=2` may be used to go faster. Keep `@+0x170:4==0` (no live child page on top).
+#   cursor=SPEC         the cursor index, 0 based, counts every selectable row incl. disabled ones. 0xFFFFFFFF = none yet.
+#   count=SPEC          number of cursor rows (selectable rows incl. disabled ones).
+#   axis=v|h            direction of cursor travel: v = DOWN increments, UP decrements.
+#   wrap=0|1            1 = the cursor wraps from the last row to the first and back.
+#   itemid=SPEC         dword with the id of the row under the cursor (a game constant per row, NOT the index).
+#   items=walk(HEAD;next=+N;type=+N:T1|T2..;id=+N;text=+N;flags=+N;skip=MASK;grey=MASK)   EXTENSION E3, the row list.
+#                       HEAD is a spec whose value is the first node. Follow `next` (dword at node+N) until 0. A node is a
+#                       cursor row when the dword at node+(type offset) is one of T1|T2.. . Row k = the k th such node,
+#                       and k is the cursor value. Per row: id = dword at node+N, text = POINTER at node+N to a NUL
+#                       terminated ASCII string (8 bit text, localised at load time), flags = dword at node+N. A row with
+#                       flags&skip is skipped by the cursor (title and hint rows) and a row with flags&grey is shown
+#                       greyed and ignores the select press.
+#   select=A back=B     the pad keys that activate the cursor row and go back one page.
+#   dpad=0|1            (T1640, default 1) 0 = the menu does not take the d-pad (pointer / stick driven): the navigator never presses it, it waits up to 3 s for
+#                       the cursor to be on the target and activates, else FAILS. The recorder then ends no range at d-pad presses (at = the select press).
+#   selectby=id|name|index  (T1640, default id) what the RECORDER writes as `select=` for the activated row: the item id, the row text (percent encoded; only when it
+#                       is non empty and unique among the rows the cursor does not skip, else the id, else the index) or the cursor index. name for lists whose
+#                       ids are only list positions (profiles, saved maps).
+#   conf=MEASURED|INFERRED|UNVERIFIED
+#
+# How a line is used (the closed loop): find the page, wait for `ready`, read cursor / count / itemid / items, choose UP or
+# DOWN (shortest way if wrap=1, press once and re-read, because skipped rows move the cursor by more than one), press the
+# direction 2+ polls and release 2+ polls, repeat until the row (by id or by text) is under the cursor, press A, then wait
+# for this page to disappear or another builder to appear. If the page is unchanged and ready after N polls press A once more.
+# What the grammar cannot say is listed at the end of docs/t1640-menu-state-findings.md (section Host requirements).
+# ---------------------------------------------------------------------------------------------------------------
+
+widgets table=0x6FEBE8 stride=0x23C count=20 closing=4,5   # conf=MEASURED, 20 slots to 0x701898, slot = struct of 0x23c bytes
+
+# Pad keys are fed to the title as the ordinary d-pad / A / B bits. The UI turns them into widget +0xC4 (pressed or
+# repeating, bit 16+k) and +0xC8 (held bit k, released bit 16+k) with k: 0 UP 1 DOWN 2 LEFT 3 RIGHT 4 A 5 B/BACK 6 X 7 Y
+# 8 START 9 BLACK 10 WHITE 11 RT 12 LT (mask table at 0x6FEBB0). The left stick also moves the cursor (INFERRED).
+
+# ---- start: no page --------------------------------------------------------------------------------------------
+menu title-press-start page=none active=0x79094C==0x65,0x78AE00==0,*0x7BA26C+0x16C:4==0 select=A conf=MEASURED   # root widget (slot 0) alone, idle state var 0x78AE00 == 0, A or START dismisses it (A pressed at poll 117 in the route)
+# UNKNOWN: no cursor on this screen, nothing to read. The page 0x2D7580 (id 0x5246E8) shows for a moment after the press.
+menu transient-idle page=builder:0x2D7580 active=0x79094C==0x65 conf=MEASURED   # empty page, wait until it is gone, no input
+
+# ---- players select --------------------------------------------------------------------------------------------
+menu players-select page=builder:0x2D2350 active=0x79094C==0x65 ready=@+0x1B0:4==3,@+0x170:4==0 cursor=@+0x184:4 count=@+0x180:4 axis=v wrap=1 itemid=@+0x18C:4 items=walk(@+0x178:4;next=+0x8;type=+0x0:4|7|8;id=+0x14;text=+0x20;flags=+0x28;skip=0x4;grey=0x1) select=A back=B conf=MEASURED   # rows '1 Player'..'4 Player' ids 1..4, only id 1 is enabled with one pad (ids 2..4 have flags 0xE2605 = greyed + skipped), the builder puts the cursor on the row whose id equals the dword at 0x5236C4 (INFERRED from 0x2D2350, = 1 in the route) (descriptor 0x5246CC)
+
+# ---- profile select (the slow one) ------------------------------------------------------------------------------
+menu profile-container page=builder:0x191B10 active=0x79094C==0x65 conf=MEASURED   # container (descriptor 0x4E8D64), type 1 widget, no rows, never the target. While it is state 2 or 3 its child below is the list
+menu profile-select page=builder:0x194980 active=0x79094C==0x65 ready=@+0x1B0:4==3,@+0x170:4==0 cursor=@+0x184:4 count=@+0x180:4 axis=v wrap=1 itemid=@+0x18C:4 items=walk(@+0x178:4;next=+0x8;type=+0x0:4|7|8;id=+0x14;text=+0x20;flags=+0x28;skip=0x4;grey=0x1) select=A back=B selectby=name conf=MEASURED   # child panel (type 3, descriptor 0x4E8D54) rows: title (id 0xFFFFFFFD, skipped), 'Create New Profile' (id 0xFFFFFFFA), one row per profile (id = profile slot 0.., text pointer into game memory 0x79EF04 = 'Player 1'), 2 hint rows (skipped). Default cursor 1.
+# UNKNOWN: when the profile file itself has finished loading. After A the main menu page is state 3 within about 85 polls (poll 236 -> 320) while the title keeps reading the profile for about 1100 more polls (route mark 1 waits for file I/O). Whether presses in that window act on a half loaded profile is not known: keep the T1633 file-idle wait for that part.
+
+# ---- main menu --------------------------------------------------------------------------------------------------
+menu main-menu page=builder:0x2D0BE0 active=0x79094C==0x65 ready=@+0x1B0:4==3,@+0x170:4==0 cursor=@+0x184:4 count=@+0x180:4 axis=v wrap=1 itemid=@+0x18C:4 items=walk(@+0x178:4;next=+0x8;type=+0x0:4|7|8;id=+0x14;text=+0x20;flags=+0x28;skip=0x4;grey=0x1) select=A back=B conf=MEASURED   # descriptor 0x524598, 8 rows ids 0..7 = Story 0, Arcade 1, Challenge 2, id 3 (Xbox Live / System Link, label not read), Mapmaker 4, Player Progress 5, Settings 6, Extras 7. Wrap MEASURED both ways (UP at 0 -> 7, DOWN at 7 -> 0). B pops back to the profile page (MEASURED, page closes).
+
+# ---- Map Maker --------------------------------------------------------------------------------------------------
+menu mapmaker-menu page=builder:0x2C8940 active=0x79094C==0x65 ready=@+0x1B0:4==3,@+0x170:4==0 cursor=@+0x184:4 count=@+0x180:4 axis=v wrap=1 itemid=@+0x18C:4 items=walk(@+0x178:4;next=+0x8;type=+0x0:4|7|8;id=+0x14;text=+0x20;flags=+0x28;skip=0x4;grey=0x1) select=A back=B conf=MEASURED   # descriptor 0x523830, count 4 = rows id 0 (Edit/Create new map, dynamic label), id 1 'Load Map', id 2 'Play Map' (greyed, flags&1, until a map is in memory: flags became 0xE2E00 after the load in the route), plus a type 8 row (id 0xFFFFFFFF, skipped, the 'No map in memory' / map title line). Row handlers (node+0x38): id 0 0x2C8610, id 1 0x2C8790, id 2 0x2C8740.
+menu storage-select page=builder:0x32B6A0 active=0x79094C==0x65 ready=@+0x1B0:4==3,@+0x170:4==0 cursor=@+0x184:4 count=@+0x180:4 axis=v wrap=1 itemid=@+0x18C:4 items=walk(@+0x178:4;next=+0x8;type=+0x0:4|7|8;id=+0x14;text=+0x20;flags=+0x28;skip=0x4;grey=0x1) select=A back=B conf=MEASURED   # 'where to load from' list (descriptor 0x52EA68), rows: title (skipped), id 0x3E7 (label not read), id 9 'Xbox Hard Disk'. The route picks the third row (cursor 2 = 'Xbox Hard Disk').
+menu map-list page=builder:0x32BEA0 active=0x79094C==0x65 ready=@+0x1B0:4==3,@+0x170:4==0 cursor=@+0x184:4 count=@+0x180:4 axis=v wrap=1 itemid=@+0x18C:4 items=walk(@+0x178:4;next=+0x8;type=+0x0:4|7|8;id=+0x14;text=+0x20;flags=+0x28;skip=0x4;grey=0x1) select=A back=B selectby=name conf=MEASURED   # saved map list (descriptor 0x52EA88): row 0 is the title 'Maps on  Xbox Hard Disk' (skipped), then one row per saved map, id = list position 0.., text = the map TITLE ('abc' for the file anicemap.mkr, pointer 0x764A58 into game memory), NOT the file name. The file name is not in the rows.
+menu storage-status page=builder:0x32AEE0 active=0x79094C==0x65 conf=MEASURED   # status / progress message while the list or the map is read (descriptor 0x52EA98), no cursor (cursor -1), wait for it to go away, never press
+menu loading-page page=builder:0x2BF770 active=0x79094C==0x65 conf=MEASURED   # 'loading' page shown between Edit/Play and the editor (descriptor 0x5236DC), no rows; mode becomes 0x66 about 90 polls later
+
+# ---- Settings and Controls (T1640 UI framework pass, docs/t-ui-framework.md) -----------------------------------------
+menu settings-menu page=builder:0x2CBFC0 active=0x79094C==0x65 ready=@+0x1B0:4==3,@+0x170:4==0 cursor=@+0x184:4 count=@+0x180:4 axis=v wrap=1 itemid=@+0x18C:4 items=walk(@+0x178:4;next=+0x8;type=+0x0:4|7|8;id=+0x14;text=+0x20;flags=+0x28;skip=0x4;grey=0x1) select=A back=B conf=MEASURED   # descriptor 0x523910 (gate 0x2CBF00), opened from main menu id 6 `Settings`. 3 rows with one profile and no cheats: `Audio/Video Options` (id 0xFFFFFFFF, cb 0x2CBE10), `Controls` (id 0xFFFFFFFF, cb 0x2CBE50), `Copy Profile` (id 1, literal string 0x47602C, cb 0x2CBEC0 storage device picker). Labels MEASURED. A `Cheats` row (text 0x1A0F) is inserted before the divider once an unlock exists. Select by text, the ids repeat.
+menu controls-menu page=builder:0x2EA8E0 active=0x79094C==0x65 ready=@+0x1B0:4==3,@+0x170:4==0 cursor=@+0x184:4 count=@+0x180:4 axis=v wrap=1 itemid=@+0x18C:4 items=walk(@+0x178:4;next=+0x8;type=+0x0:4|7|8;id=+0x14;text=+0x20;flags=+0x28;skip=0x4;grey=0x1) select=A back=B conf=MEASURED   # Controls page (descriptor 0x524A40, gate 0x2EAB30), reached from Settings (A on `Controls`) and from the pause menu in the preview (mode 0x64). 12 rows, cursor order: 0 `Control Layout` (id 0, A opens the layout chooser 0x524A20), 1 `Crosshair` (id 1, Off / On and Moving / On and Fixed), 2 `Inverse Look` (id 3, Off/On), 3 `Auto Aim` (id 2), 4 `Auto Lookahead` (id 4), 5 `Aim Mode` (id 5, Toggle/Hold), 6 `Crouch` (id 7, Toggle/Hold), 7 `Weapon Change` (id 6, Always / Never / Best / If New / If New and Best), 8 `Vibration mode` (id 8, Off / Fire / Hit / Fire&Hit), 9 `Turn Speed` (id 9, slider 0..1 by LEFT/RIGHT, step 0.05), 10 `Accept` (id 10, saves into the profile and leaves), 11 `Cancel` (id 11). LEFT / RIGHT cycle the options of the row under the cursor and WRAP (Weapon Change 4 -> 0 on RIGHT, MEASURED), the new value is visible in the row node +0xC8 (selected option index) and in the UI block at 0x7BA364 within one frame, and in the profile object only after Accept. Row option index: use `cursor row node +0xC8`, see the doc for the value to option text map.
+menu controls-accept-changes page=builder:0x2E9EC0 active=0x79094C==0x65 ready=@+0x1B0:4==3,@+0x170:4==0 cursor=@+0x184:4 count=@+0x180:4 axis=v wrap=1 itemid=@+0x18C:4 items=walk(@+0x178:4;next=+0x8;type=+0x0:4|7|8;id=+0x14;text=+0x20;flags=+0x28;skip=0x4;grey=0x1) select=A back=B conf=INFERRED   # yes/no page (descriptor 0x524A30) pushed by the Controls B handler 0x2E9FC0 when the UI block differs from the profile; rows text ids 0x1799 and 0x179A. Page seen in the disassembly only, not opened in a run.
+# NOTE (T1640): the three controls-* lines use mode ==0x65 (front end, MEASURED via Settings from the main menu). The Controls page is probably also reachable from the pause menu in the preview (mode 0x64, INFERRED, not opened in a run): a separate line with ==0x64 would be needed, a `<=` condition is avoided because the recorder early-out keys on mode equality.
+menu controls-layout-chooser page=builder:0x2E9A20 active=0x79094C==0x65 conf=INFERRED   # Control Layout chooser (descriptor 0x524A20, opened by cb 0x2EA210 after 0x2E7DF0 and 0x2E8C00); not opened in a run, rows unknown.
+
+# ---- map editor (mode 0x66) -------------------------------------------------------------------------------------
+# dpad=0 on the four editor-* lines (T1640, conf=MEASURED for the fact): agent E measured on the real title that the editor menus do NOT take the d-pad at all:
+# a DOWN press leaves the page widget +0xC4 / +0xC8 at 0 (no input reaches the page), the editor cursor is moved by the stick / a pointer (mechanism unknown).
+# The navigator never presses the d-pad there: it waits for the cursor to be on the target (the recorded stick movement before the step) and activates;
+# after 3 s it FAILS naming the menu, the cursor and the wanted row. The recorder writes an activate-only range (at = the select press) for them.
+menu editor-menu page=builder:0x313010 active=0x79094C==0x66 ready=@+0x1B0:4==3,@+0x170:4==0 cursor=@+0x184:4 count=@+0x180:4 axis=v wrap=1 itemid=@+0x18C:4 items=walk(@+0x178:4;next=+0x8;type=+0x0:4|7|8;id=+0x14;text=+0x20;flags=+0x28;skip=0x4;grey=0x1) select=A back=B dpad=0 conf=MEASURED   # editor main menu (descriptor 0x52D464), 12 rows ids 0..11: Edit 0, Preview Map 1, Undo 2 (greyed), Redo 3 (greyed), Map Settings 4, Editor Settings 5, Center Map 6, Clear Map 7, Load Map 8, Save Map 9, id 10 (label not read), Quit MapMaker 11. The cursor starts at 0xFFFFFFFF (no row yet) and the first DOWN gives row 0 (INFERRED from the update code, the route used the stick).
+menu editor-map-settings page=builder:0x3133E0 active=0x79094C==0x66 ready=@+0x1B0:4==3,@+0x170:4==0 cursor=@+0x184:4 count=@+0x180:4 axis=v wrap=1 itemid=@+0x18C:4 items=walk(@+0x178:4;next=+0x8;type=+0x0:4|7|8;id=+0x14;text=+0x20;flags=+0x28;skip=0x4;grey=0x1) select=A back=B dpad=0 conf=MEASURED   # Map Settings page (descriptor 0x52D474), 29 rows, many ids repeat or are 0xFFFFFFFF, so select by text or cursor: 'View/Edit Weapon Sets' was cursor 3 (id 1), 'View/Edit Bot Sets' cursor 5, 'Enable Spawn Sounds', 'Indoor Level'. Several rows have text 'None' (spacers / sliders whose label is drawn by a callback).
+menu editor-tools page=builder:0x314420 active=0x79094C==0x66 ready=@+0x1B0:4==3,@+0x170:4==0 cursor=@+0x184:4 count=@+0x180:4 axis=v wrap=1 itemid=@+0x18C:4 items=walk(@+0x178:4;next=+0x8;type=+0x0:4|7|8;id=+0x14;text=+0x20;flags=+0x28;skip=0x4;grey=0x1) select=A back=B dpad=0 conf=MEASURED   # 'Edit' tool list (descriptor 0x52D494), 15 ids, some ids twice (a tool plus its option row, text 'i')
+menu editor-weapon-sets page=builder:0x2D4220 active=0x79094C==0x66 ready=@+0x1B0:4==3,@+0x170:4==0 cursor=@+0x184:4 count=@+0x180:4 axis=v wrap=1 itemid=@+0x18C:4 items=walk(@+0x178:4;next=+0x8;type=+0x0:4|7|8;id=+0x14;text=+0x20;flags=+0x28;skip=0x4;grey=0x1) select=A back=B dpad=0 conf=INFERRED   # current weapon set page (descriptor 0x5236EC, container builder 0x2D44D0), count 8, seen with cursor 0xFFFFFFFF only; rows and wrap not exercised. The weapon list builder 0x2BFA70 (n=40) opens next to it.
+
+# ---- pause menu in the preview (mode 0x64) -----------------------------------------------------------------------
+menu pause-menu page=builder:0x2F5520 active=0x79094C==0x64 ready=@+0x1B0:4==3,@+0x170:4==0 cursor=@+0x184:4 count=@+0x180:4 axis=v wrap=1 itemid=@+0x18C:4 items=walk(@+0x178:4;next=+0x8;type=+0x0:4|7|8;id=+0x14;text=+0x20;flags=+0x28;skip=0x4;grey=0x1) select=A conf=MEASURED   # pause list (descriptor 0x524700) opened by START in the preview, 5 rows in the editor preview (all ids 0xFFFFFFFF: select by cursor or text; text ids 0x179D 0x17A4 0x182F or 0x1830 0x17A5/0x17A8 0x17A7 0x17AD 0x17AB/0x17AC, names not read). Opens with the cursor on 0, DOWN, DOWN, UP gave 0->1->2->1 (MEASURED). B did NOT close it (still open 80 polls later), START closed it (MEASURED), so no back= key.

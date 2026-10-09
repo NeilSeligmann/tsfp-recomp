@@ -1,0 +1,54 @@
+path,title,kind,task
+ui,User interface,umbrella,T1659
+ui/framework,UI framework: widgets fonts text layout overlays popups load bars,leaf,T1694
+ui/menu,"Frontend menus and screens: main menu, attract, credits, dialogs",leaf,T1696
+ui/settings,"Settings UI: options, controls, audio/video and profile settings screens",leaf,T1697
+ui/hud,"In-game HUD: scoreboard, radar, crosshair, status widgets",leaf,T1695
+mapmaker,Map Maker,umbrella,T1657
+mapmaker/editor,"Editor core: camera, cursor, selection, placement, undo",leaf,T1687
+mapmaker/ui,"Editor menus, pages and palettes",leaf,T1690
+mapmaker/modes,"Map Maker game modes: deathmatch, bag, escort, assault rules",leaf,T1688
+mapmaker/storage,"Map save, load, share and online map exchange",leaf,T1689
+mapmaker/content,"Bricks, props, spawners, weapon slots and themes",leaf,T1686
+engine,Engine,umbrella,T1654
+engine/render,Renderer (game side),umbrella,T1676
+engine/render/d3d,Game-side D3D device use: draw submission and viewport,leaf,T1698
+engine/render/scene,"Scene graph, camera, models, meshes, textures, sky and lights",leaf,T1700
+engine/render/effects,"Particles, decals, weather, clouds and post effects",leaf,T1699
+engine/physics,"Collision, raycast, sweep and constraints",leaf,T1675
+engine/anim,Skeletons and animation,leaf,T1668
+engine/audio,"Audio: sound, music, DSP and codecs",leaf,T1669
+engine/video,Movie playback (XMV),leaf,T1677
+engine/object,"Object, component and entity system and pools",leaf,T1674
+engine/input,"Input: pad, XPP, hotkeys and rumble",leaf,T1671
+engine/math,"Game math: vector, matrix and trig wrappers (game code, provable)",leaf,T1672
+engine/core,"Launch, init, main loop, timers and events",leaf,T1670
+engine/memory,"Game-side allocators, pools and heaps",leaf,T1673
+ai,AI,umbrella,T1651
+ai/behavior,AI behaviour and decision logic,leaf,T1660
+ai/pathfinding,Pathfinding and navigation,leaf,T1662
+ai/characters,Characters and actors (NPC state and control),leaf,T1661
+gameplay,Gameplay,umbrella,T1655
+gameplay/player,Player control and state,leaf,T1680
+gameplay/weapons,"Weapons, ammo, hits, damage and pickups",umbrella,T1682
+gameplay/inventory,Player weapon inventory structure and rules,leaf,T1678
+gameplay/vehicles,Vehicles,leaf,T1681
+gameplay/modes,Game modes,umbrella,T1679
+gameplay/modes/story,Story mode flow,leaf,T1703
+gameplay/modes/arcade,Arcade and challenge modes,leaf,T1701
+gameplay/modes/multiplayer,"Multiplayer rules, teams and results",leaf,T1702
+network,Networking,umbrella,T1658
+network/live,"Xbox Live: FESL, theater, XOnline, messenger and clans",leaf,T1691
+network/syslink,System Link: LAN discovery and game list,leaf,T1693
+network/session,"Session, lobby, packet and transport layer",leaf,T1692
+data,Data and content,umbrella,T1652
+data/missions,"Missions, level scripts, terminals and scripted sequences",leaf,T1665
+data/text,Text and string tables,leaf,T1667
+data/assets,Pak and asset loading,leaf,T1663
+data/save,"Profile, save and unlock data",leaf,T1666
+data/cutscenes,Cutscenes,leaf,T1664
+library,Library code (not game): CRT and XDK,umbrella,T1656
+library/crt,C runtime,leaf,T1683
+library/xdk,XDK libraries: D3D8 DSOUND XNET XONLINE XAPI XGRPH XPP XVOICE XMV,leaf,T1685
+library/math,"CRT and x87 math helpers (library, not game)",leaf,T1684
+dev,Debug and developer code,leaf,T1653

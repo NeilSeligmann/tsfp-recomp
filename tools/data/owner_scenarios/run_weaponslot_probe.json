@@ -1,0 +1,56 @@
+{
+  "script": "run_weaponslot_probe",
+  "title": "Weapon slot probe: three short runs, slot 1 bat, slot 1 pistol, bat in slot 2",
+  "summary": "Three separate short game runs in the Map Maker. In each run you put one weapon in one slot of the weapon set, enter the preview and take a LIVE dump from a second terminal. Comparing the three dumps shows which bytes of the game follow the chosen weapon and slot (T1598, T1599, T1607). The probe is READ-ONLY, it never pokes. The first probes showed that the dump taken when the game exits is empty (no map data, no owned weapons), so the live dump taken while you are in the preview is the one that counts.",
+  "kind": "live-dump",
+  "duration": "about 10 minutes per run, about 30 minutes in total (my estimate)",
+  "options": {
+    "session": {
+      "free": true,
+      "default": "weaponslot-STAMP"
+    }
+  },
+  "prerequisites": [
+    "Game HDD: tmp/hdds/editor-hdd with your Map Maker level. The script builds the private host first, which can take several minutes.",
+    "You need TWO terminals open in the repo root: this one runs the script and asks 'Enter = start run N, q = stop', the second one runs 'fish tmp/dump_now.fish' while the game is open.",
+    "The dumps go to tmp/owner-profiles/{session}/runN/ (N = 1, 2, 3)."
+  ],
+  "steps": [
+    {
+      "text": "RUN 1: baseball bat in slot 1. Press Enter at 'Enter = start run 1'. In the game: players, profile, Map Maker, load your level, open the editor, Map Settings weapon set page, set slot 1 = Baseball bat, enter the preview and wait until you can move.",
+      "substeps": [
+        "In the SECOND terminal run: fish tmp/dump_now.fish   (it writes runN/guestdump.preview). It prints 'dump taken: ...'.",
+        "If you can, leave the preview back to the editor and run: fish tmp/dump_now.fish left   (it writes runN/guestdump.left).",
+        "Write down what you did: echo \"run 1: slot 1 = baseball bat\" >> tmp/owner-profiles/{session}/notes.txt",
+        "Close the game window. The script goes on to run 2."
+      ]
+    },
+    {
+      "text": "RUN 2: pistol in slot 1. Press Enter at 'Enter = start run 2'. Same as run 1 but set slot 1 = Pistol 9mm. Enter the preview, wait until you can move.",
+      "substeps": [
+        "Second terminal: fish tmp/dump_now.fish, and if you can fish tmp/dump_now.fish left after leaving the preview.",
+        "Notes: echo \"run 2: slot 1 = pistol\" >> tmp/owner-profiles/{session}/notes.txt",
+        "Close the game window."
+      ]
+    },
+    {
+      "text": "RUN 3: baseball bat in slot 2. Press Enter at 'Enter = start run 3'. Same again but set slot 2 = Baseball bat and leave slot 1 alone. Enter the preview, wait until you can move.",
+      "substeps": [
+        "Second terminal: fish tmp/dump_now.fish, and if you can fish tmp/dump_now.fish left after leaving the preview.",
+        "Notes: echo \"run 3: slot 2 = baseball bat\" >> tmp/owner-profiles/{session}/notes.txt",
+        "Close the game window. The script prints 'done: compare with ...'."
+      ]
+    }
+  ],
+  "note_at_end": [
+    "In notes.txt: for every run which weapon was in which slot, and whether you could take the second dump after leaving the preview."
+  ],
+  "stop": [
+    "Answer q at any 'Enter = start run N' prompt to stop before that run.",
+    "Close the game window to end a run. The script has no other stop and nothing to type during a run."
+  ],
+  "send_back": [
+    "Tell Claude the probe is done: folder tmp/owner-profiles/{session} with run1, run2, run3 and notes.txt.",
+    "Which runs you skipped or which dump you could not take."
+  ]
+}

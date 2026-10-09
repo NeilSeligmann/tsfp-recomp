@@ -1,0 +1,651 @@
+{
+  "script": "run_forced_weapons",
+  "title": "Forced-state weapon census, batch(es) {batch}, mode {mode}",
+  "summary": "A guest memory poke writes weapons the Map Maker does not offer into the six spawner slots of your Map Maker map (nothing on disk changes), then you census each weapon in the preview: one 20 s phase per weapon, plus an idle control. EVERYTHING measured here is FABRICATED-STATE: callbacks are real observations, but the state is forced, so naming is at most INFERRED and nothing is proof evidence (the session folder gets a FORCED_STATE_NOTE.txt). Session folder tmp/owner-profiles/forced-weapons-b<batches>-<timestamp> (the script prints it).",
+  "kind": "census-session",
+  "duration": "about 10 to 15 minutes per batch after the game is up, plus a few minutes of hands-off route replay",
+  "options": {
+    "batch": {
+      "values": [
+        "1",
+        "2",
+        "3"
+      ],
+      "multi": true,
+      "default": "1"
+    },
+    "mode": {
+      "values": [
+        "auto",
+        "manual",
+        "experiment",
+        "experiment-manual"
+      ],
+      "default": "auto"
+    },
+    "hotkeys": {
+      "values": [
+        "on",
+        "advance",
+        "off"
+      ],
+      "default": "on"
+    }
+  },
+  "prerequisites": [
+    {
+      "text": "Recorded Map Maker route (recorded once with tmp/record_mapmaker_route.fish, the newest tmp/owner-profiles/routes/*.txt unless you passed --route FILE) and the pristine HDD tmp/hdds/route-hdd-pristine. Every run plays on a FRESH COPY of that HDD, so your own HDD is not touched. A route recorded by an older record_mapmaker_route.fish is refused before anything starts: record it again.",
+      "when": {
+        "mode": [
+          "auto",
+          "experiment"
+        ]
+      }
+    },
+    {
+      "text": "Game HDD tmp/hdds/editor-hdd with your Map Maker level (this run writes to it like normal play does). No route replay: you drive to the editor yourself.",
+      "when": {
+        "mode": [
+          "manual",
+          "experiment-manual"
+        ]
+      }
+    },
+    "Your Map Maker map needs six weapon spawners, one per weapon slot. The poke fills the six slots of the map's weapon set, and spawner N gives slot N (INFERRED: which spawner of your map is N is whatever slot you gave it). You never have to open the weapon set page for the poke.",
+    "The script builds the private host first (a few minutes) and refuses an old host that lacks the poke or the route replay, with the rebuild command.",
+    {
+      "text": "Hotkeys on: you can continue every prompt without leaving the game window: {hotkey:advance}. Back is the only chord key that reaches the game, and only for the moment you hold it, the other keys are kept from it.",
+      "when": {
+        "hotkeys": [
+          "on",
+          "advance"
+        ]
+      }
+    },
+    {
+      "text": "Hotkeys are off: continue every prompt with Enter in THIS terminal (click back into the terminal after you used the game window).",
+      "when": {
+        "hotkeys": "off"
+      }
+    }
+  ],
+  "steps": [
+    {
+      "text": "Press Enter in this terminal at 'Enter = start the game'. Then DO NOT TOUCH the keyboard or pad: the game replays your recorded route (start, players, profile, Map Maker, load your map, editor up and idle, no weapon set page). It waits at each slow screen until the game really got there, pokes the first batch by itself when the editor is up (mark 3) and enters the preview.",
+      "when": {
+        "mode": [
+          "auto",
+          "experiment"
+        ]
+      }
+    },
+    {
+      "text": "Wait for the log line 'route: the recorded inputs are exhausted' (play.log in the session folder, the script prints a tail command to watch it live in a second terminal). Only then the keyboard and pad are yours and the first prompt of the session is waiting. If the log says 'route FAILED' nothing after the failed wait was replayed or poked: stop with q and tell Claude, do not play on.",
+      "when": {
+        "mode": [
+          "auto",
+          "experiment"
+        ]
+      }
+    },
+    {
+      "text": "Press Enter in this terminal at 'Enter = start the game'. When the window opens drive to the Map Maker EDITOR yourself (start, players, profile, Map Maker, load your map, open the editor) and wait there. Do NOT open the weapon set page and do NOT enter the preview yet.",
+      "when": {
+        "mode": [
+          "manual",
+          "experiment-manual"
+        ]
+      }
+    },
+    {
+      "text": "The session now shows STEP editor_bN (N = the first batch of this run). Continue ({hotkey:advance}) while you are in the EDITOR: the session pokes the weapon slots by itself (no second terminal), prints RESULT: done, and asks you to enter the PREVIEW. Enter the preview, wait until you can move, then continue again.",
+      "when": {
+        "mode": [
+          "manual",
+          "experiment-manual"
+        ]
+      }
+    },
+    {
+      "text": "Experiment, in the PREVIEW with the batch 1 weapons (nothing is censused, you answer questions and the session takes memory dumps between pokes). Every step first waits for you ({hotkey:advance}, s skips a step, q finishes), then acts. The steps follow in this order.",
+      "when": {
+        "mode": [
+          "experiment",
+          "experiment-manual"
+        ]
+      }
+    },
+    {
+      "text": "STEP exp_before: you are in the PREVIEW with the batch 1 weapons in the six spawners (bat, pistol, Heat Seeker, Rocket Launcher, minigun, K-SMG). Do not move and do not pick anything up. Continue ({hotkey:advance}) and the session takes the BEFORE dump of the pickup records, the chunk words and the editor list.",
+      "when": {
+        "mode": [
+          "experiment",
+          "experiment-manual"
+        ]
+      }
+    },
+    {
+      "text": "STEP exp_pickup, EXPERIMENT 1 of 3, the pickup records: the session sets what the six pickups GIVE to the batch 2 weapons (Time Disrupter, Plasma, TNT, Soviet Rifle, Brick, Temporal Uplink). The drawn model is chosen at spawn and is expected NOT to change, what you are GIVEN may.",
+      "substeps": [
+        "Walk to each spawner (1 to 6) and look at what is DRAWN, then pick it up and check which weapon you GOT.",
+        "QUESTION exp_pickup_saw: type one line, for example '1 bat drawn gave Time Disrupter; 2 ...' (the slot 1 pickup was the bat before the poke)."
+      ],
+      "when": {
+        "mode": [
+          "experiment",
+          "experiment-manual"
+        ]
+      }
+    },
+    {
+      "text": "STEP exp_chunk, EXPERIMENT 2 of 3, the chunk words the preview serialised on entry: no change is expected in the running preview. Look at the spawners again and pick up (or let respawn) one you have not collected yet.",
+      "substeps": [
+        "QUESTION exp_chunk_saw: did anything change for the pickups after this poke (drawn weapon, or the weapon you get)? Type what you saw."
+      ],
+      "when": {
+        "mode": [
+          "experiment",
+          "experiment-manual"
+        ]
+      }
+    },
+    {
+      "text": "STEP exp_roundtrip: leave the preview, go back to the Map Maker EDITOR and LOOK at the weapon set page (the one time it is needed): does it show the chunk-poked weapons (batch 2) or the batch 1 weapons? Then enter the PREVIEW again.",
+      "substeps": [
+        "QUESTION exp_roundtrip_saw: weapon set page after leaving the preview: batch 2 weapons or batch 1 weapons? And in the new preview which weapons do the spawners give?"
+      ],
+      "when": {
+        "mode": [
+          "experiment",
+          "experiment-manual"
+        ]
+      }
+    },
+    {
+      "text": "STEP exp_before2: you are in the preview again. The session takes a second BEFORE dump of the editor list (it is zeroed in the preview). Continue ({hotkey:advance}).",
+      "when": {
+        "mode": [
+          "experiment",
+          "experiment-manual"
+        ]
+      }
+    },
+    {
+      "text": "STEP exp_editor, EXPERIMENT 3 of 3 (last, optional, UNSAFE): the editor list is poked WHILE IN THE PREVIEW. The editor object is not alive there, the pointer is stale and the memory may belong to something else, so a crash or odd behaviour is possible (nothing reads that list in the preview, INFERRED). Answer s at its prompt to skip it.",
+      "substeps": [
+        "QUESTION exp_editor_saw: anything odd after this poke (crash, wrong weapons, frozen)? Type what you saw."
+      ],
+      "when": {
+        "mode": [
+          "experiment",
+          "experiment-manual"
+        ]
+      }
+    },
+    {
+      "text": "How every phase prompt works (idle: you only stand still, weapon phases: you act): the prompt shows Switch to, Go to, Then, Time and Note. FIRST switch weapon (walk over the spawner to pick the weapon up, then D-pad right/left until it is in your hands), THEN continue ({hotkey:advance}) and the 20 s window starts (the prompt says GO NOW). Use ONLY that weapon during the window. The idle phase counts down and stops by itself, a weapon phase shows elapsed time against the suggested 20 s and YOU end it at about 20 s the same way ({hotkey:advance}). Do not switch weapons inside a window, only between. s skips a phase (for example a weapon that did not spawn).",
+      "when": {
+        "mode": [
+          "auto",
+          "manual"
+        ]
+      }
+    },
+    {
+      "text": "Batch {item} (number {n} of this run): {title}. Spawner N gives weapon slot N:",
+      "repeat": {
+        "over": "batch",
+        "table": "batches"
+      },
+      "when": {
+        "mode": [
+          "auto",
+          "manual"
+        ]
+      }
+    },
+    {
+      "text": "Between batches (the game is NOT restarted): after the last weapon phase of a batch the session asks you to leave the preview and go BACK to the Map Maker EDITOR. Do not change the weapon set yourself, do not open the weapon set page. Continue ({hotkey:advance}) when you are back in the editor: the session pokes the next batch by itself, then you enter the PREVIEW again, wait until you can move and continue at the batch idle prompt. The editor list is rebuilt from the map when the preview ends and the poke sets it again for the next preview.",
+      "when": {
+        "mode": [
+          "auto",
+          "manual"
+        ],
+        "batch#": "2+"
+      }
+    }
+  ],
+  "note_at_end": [
+    {
+      "text": "For every spawner of every batch: what was DRAWN (the model you saw lying there) and what you GOT on pickup (the weapon name on screen), and whether it could be equipped and used. The session cannot see this, only you can.",
+      "when": {
+        "mode": [
+          "auto",
+          "manual"
+        ]
+      }
+    },
+    {
+      "text": "Whether batch 1 matched its list (bat, pistol, Heat Seeker, Rocket Launcher, minigun, K-SMG). If it did not, the poke did not work and the other batches mean nothing.",
+      "when": {
+        "mode": [
+          "auto",
+          "manual"
+        ],
+        "batch": "1"
+      }
+    },
+    {
+      "text": "The button you pressed for any alternative behaviour (secondary fire, detonate, Uplink pull) and any weapon that crashed the game, froze it or could not be switched to.",
+      "when": {
+        "mode": [
+          "auto",
+          "manual"
+        ]
+      }
+    },
+    {
+      "text": "Your typed answers to the experiment questions are saved in session.json under observations. Add anything odd you saw that the questions did not ask for.",
+      "when": {
+        "mode": [
+          "experiment",
+          "experiment-manual"
+        ]
+      }
+    }
+  ],
+  "stop": [
+    "At any prompt: q finishes the session, s skips the current phase or step. A phase that is in progress when you finish is NOT saved.",
+    {
+      "text": "STOP the whole session from the game window, cleanly like closing the window (irreversible, so it is a longer hold): {hotkey:stop}.",
+      "when": {
+        "hotkeys": "on"
+      }
+    },
+    "Closing the game window also ends the session. Close it only after the last phase or step (or after q), the profile of a phase in progress is lost.",
+    "If the game stops by itself: the script ends with the last 'unimplemented instruction' / STOP lines of play.log, copy them."
+  ],
+  "send_back": [
+    "Tell Claude the session finished: the folder tmp/owner-profiles/forced-weapons-... printed by the script (the analysis tables are printed at the end).",
+    {
+      "text": "Which weapons actually appeared per batch (drawn versus got), and whether batch 1 matched.",
+      "when": {
+        "mode": [
+          "auto",
+          "manual"
+        ]
+      }
+    },
+    {
+      "text": "The diff output at the end and your typed answers (session.json observations).",
+      "when": {
+        "mode": [
+          "experiment",
+          "experiment-manual"
+        ]
+      }
+    },
+    {
+      "text": "The 'route FAILED' line if the log has one.",
+      "when": {
+        "mode": [
+          "auto",
+          "experiment"
+        ]
+      }
+    },
+    "The 'unimplemented instruction' / STOP lines if the game stopped."
+  ],
+  "phases": {
+    "ingame-fire:control_bat": {
+      "title": "Batch 1, spawner 1: Baseball bat (entry 0x36)",
+      "go_to": "The Map Maker PREVIEW of batch 1, you can move, standing at spawner 1 (the Baseball bat pickup)",
+      "switch": "the Baseball bat from spawner 1 (walk over it to pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Swing the bat only (RT swings it, B is the melee button, INFERRED from the older bat phase). Do not move or switch weapon.",
+      "seconds": 20,
+      "note": "whether it is a bat in your hands and whether it swings; what spawner 1 DREW (its model) versus what you GOT on pickup (the name on the screen)"
+    },
+    "ingame-fire:control_pistol": {
+      "title": "Batch 1, spawner 2: Pistol 9mm (entry 0x02)",
+      "go_to": "The Map Maker PREVIEW of batch 1, you can move, standing at spawner 2 (the Pistol 9mm pickup)",
+      "switch": "the Pistol 9mm from spawner 2 (walk over it to pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Fire the pistol only (hold or tap RT). Do not move, reload, melee or switch weapon.",
+      "seconds": 20,
+      "note": "whether it fired normally; what spawner 2 DREW (its model) versus what you GOT on pickup (the name on the screen)"
+    },
+    "ingame-fire:control_heatseeker_1d": {
+      "title": "Batch 1, spawner 3: Heat Seeker (entry 0x1D)",
+      "go_to": "The Map Maker PREVIEW of batch 1, you can move, standing at spawner 3 (the Heat Seeker pickup)",
+      "switch": "the Heat Seeker from spawner 3 (walk over it to pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Fire rockets only (RT), a few at a wall or a bot, wait for them to hit, repeat. If it locks on a target let it. Do not move or switch weapon.",
+      "seconds": 20,
+      "note": "whether the rockets homed (the game lists this entry as Heat Seeker); what spawner 3 DREW (its model) versus what you GOT on pickup (the name on the screen)"
+    },
+    "ingame-fire:control_rocket_1e": {
+      "title": "Batch 1, spawner 4: Rocket Launcher (entry 0x1E)",
+      "go_to": "The Map Maker PREVIEW of batch 1, you can move, standing at spawner 4 (the Rocket Launcher pickup)",
+      "switch": "the Rocket Launcher from spawner 4 (walk over it to pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Fire rockets only (RT), a few at a wall or a bot, wait for them to hit, repeat. Do not move or switch weapon.",
+      "seconds": 20,
+      "note": "whether these rockets home or fly straight (the game lists this entry as Rocket Launcher); what spawner 4 DREW (its model) versus what you GOT on pickup (the name on the screen)"
+    },
+    "ingame-fire:control_minigun": {
+      "title": "Batch 1, spawner 5: Minigun (entry 0x10)",
+      "go_to": "The Map Maker PREVIEW of batch 1, you can move, standing at spawner 5 (the Minigun pickup)",
+      "switch": "the Minigun from spawner 5 (walk over it to pick it up, then D-pad right/left until it is in your hands)",
+      "do": "From rest HOLD fire (RT) for about 5 s so the spin-up delay before the first shot is included, release, wait 3 s, repeat once. The minigun has no reload (T1527). Do not move or switch weapon.",
+      "seconds": 20,
+      "note": "whether it spun up and fired, and whether it overheated; what spawner 5 DREW (its model) versus what you GOT on pickup (the name on the screen)"
+    },
+    "ingame-fire:control_ksmg": {
+      "title": "Batch 1, spawner 6: K-SMG (entry 0x30)",
+      "go_to": "The Map Maker PREVIEW of batch 1, you can move, standing at spawner 6 (the K-SMG pickup)",
+      "switch": "the K-SMG from spawner 6 (walk over it to pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Fire in normal mode only (RT). Do not switch to its rocket mode, do not move or switch weapon.",
+      "seconds": 20,
+      "note": "whether it fired bullets; what spawner 6 DREW (its model) versus what you GOT on pickup (the name on the screen)"
+    },
+    "ingame-fire:time_disrupter_29": {
+      "title": "Batch 2, spawner 1: Time Disrupter Grenades (entry 0x29)",
+      "go_to": "The Map Maker PREVIEW of batch 2, you can move, standing at spawner 1 (the Time Disrupter Grenades pickup)",
+      "switch": "the Time Disrupter Grenades from spawner 1 (walk over it to pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Throw the grenade only (RT), wait until it goes off, throw the next one, repeat. Do not move or switch weapon.",
+      "seconds": 20,
+      "note": "what the grenade did when it went off (any time effect) and how many you had; what spawner 1 DREW (its model) versus what you GOT on pickup (the name on the screen)"
+    },
+    "ingame-fire:plasma_grenade_2a": {
+      "title": "Batch 2, spawner 2: Plasma Grenades (entry 0x2A)",
+      "go_to": "The Map Maker PREVIEW of batch 2, you can move, standing at spawner 2 (the Plasma Grenades pickup)",
+      "switch": "the Plasma Grenades from spawner 2 (walk over it to pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Throw the grenade only (RT), wait until it goes off, throw the next one, repeat. Do not move or switch weapon.",
+      "seconds": 20,
+      "note": "what the grenade did when it went off and how many you had; what spawner 2 DREW (its model) versus what you GOT on pickup (the name on the screen)"
+    },
+    "ingame-fire:tnt": {
+      "title": "Batch 2, spawner 3: TNT (entry 0x2F)",
+      "go_to": "The Map Maker PREVIEW of batch 2, you can move, standing at spawner 3 (the TNT pickup)",
+      "switch": "the TNT from spawner 3 (walk over it to pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Place the TNT and detonate it the way it normally works, then do it again. Do not move far or switch weapon.",
+      "seconds": 20,
+      "note": "the button you used to place it and the button to detonate it; what spawner 3 DREW (its model) versus what you GOT on pickup (the name on the screen)"
+    },
+    "ingame-fire:soviet_rifle_16": {
+      "title": "Batch 2, spawner 4: Soviet Rifle (entry 0x16)",
+      "go_to": "The Map Maker PREVIEW of batch 2, you can move, standing at spawner 4 (the Soviet Rifle pickup)",
+      "switch": "the Soviet Rifle from spawner 4 (walk over it to pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Fire the rifle only (hold or tap RT). Do not move, reload, melee or switch weapon.",
+      "seconds": 20,
+      "note": "whether it fires single shots or bursts and whether it has an alternative mode (do not use it in this window); what spawner 4 DREW (its model) versus what you GOT on pickup (the name on the screen)"
+    },
+    "ingame-fire:brick": {
+      "title": "Batch 2, spawner 5: Brick (entry 0x37)",
+      "go_to": "The Map Maker PREVIEW of batch 2, you can move, standing at spawner 5 (the Brick pickup)",
+      "switch": "the Brick from spawner 5 (walk over it to pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Throw bricks only (RT), repeat while you have any. Do not move or switch weapon.",
+      "seconds": 20,
+      "note": "how many bricks you had and what a thrown brick did; what spawner 5 DREW (its model) versus what you GOT on pickup (the name on the screen)"
+    },
+    "ingame-fire:temporal_uplink_38": {
+      "title": "Batch 2, spawner 6: Temporal Uplink (entry 0x38)",
+      "go_to": "The Map Maker PREVIEW of batch 2, you can move, standing at spawner 6 (the Temporal Uplink pickup)",
+      "switch": "the Temporal Uplink from spawner 6 (walk over it to pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Use the Uplink only: aim at a nearby movable object, pull it towards you, hold it, let it go, repeat. The Uplink throws a held object by itself when you stop pressing (owner-reported, Story), so end the window with nothing held. Do not switch weapon.",
+      "seconds": 20,
+      "note": "the button for pull, hold and throw, and whether it pulled anything in the Map Maker preview; what spawner 6 DREW (its model) versus what you GOT on pickup (the name on the screen)"
+    },
+    "ingame-fire:monkey_gun_26": {
+      "title": "Batch 3, spawner 1: Monkey Gun (entry 0x26)",
+      "go_to": "The Map Maker PREVIEW of batch 3, you can move, standing at spawner 1 (the Monkey Gun pickup)",
+      "switch": "the Monkey Gun from spawner 1 (walk over it to pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Fire the Monkey Gun only (hold or tap RT). Do not move, reload, melee or switch weapon.",
+      "seconds": 20,
+      "note": "how it looks in your hands and what it fires; if the game stops, the 'unimplemented instruction' line; what spawner 1 DREW (its model) versus what you GOT on pickup (the name on the screen)"
+    },
+    "ingame-fire:monkey_gun_x2_27": {
+      "title": "Batch 3, spawner 2: Monkey Gun (x2) (entry 0x27)",
+      "go_to": "The Map Maker PREVIEW of batch 3, you can move, standing at spawner 2 (the Monkey Gun (x2) pickup)",
+      "switch": "the Monkey Gun (x2) from spawner 2 (walk over it to pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Fire with both guns (RT, and the second trigger if the guns have one each). Do not move or switch weapon.",
+      "seconds": 20,
+      "note": "whether you had two guns, one hand or nothing, and what each fired; what spawner 2 DREW (its model) versus what you GOT on pickup (the name on the screen)"
+    },
+    "ingame-fire:remote_mines_2d": {
+      "title": "Batch 3, spawner 3: Remote Mines, 2nd entry (entry 0x2D)",
+      "go_to": "The Map Maker PREVIEW of batch 3, you can move, standing at spawner 3 (the Remote Mines, 2nd entry pickup)",
+      "switch": "the Remote Mines, 2nd entry from spawner 3 (walk over it to pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Use whatever you got ONLY: place a few mines (RT) and then try the secondary fire to detonate them, repeat. Do not move far or switch weapon.",
+      "seconds": 20,
+      "note": "what you actually got (mines, the remote, or nothing usable) and the button for the secondary fire; what spawner 3 DREW (its model) versus what you GOT on pickup (the name on the screen)"
+    },
+    "ingame-fire:lx18_08": {
+      "title": "Batch 3, spawner 4: LX-18 (entry 0x08)",
+      "go_to": "The Map Maker PREVIEW of batch 3, you can move, standing at spawner 4 (the LX-18 pickup)",
+      "switch": "the LX-18 from spawner 4 (walk over it to pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Fire the LX-18 only (hold or tap RT). Do not move, reload, melee or switch weapon.",
+      "seconds": 20,
+      "note": "how it LOOKS in your hands (pistol or rifle) and how it fires; what spawner 4 DREW (its model) versus what you GOT on pickup (the name on the screen)"
+    },
+    "ingame-fire:lx18_x2_0a": {
+      "title": "Batch 3, spawner 5: LX-18 (x2) (entry 0x0A)",
+      "go_to": "The Map Maker PREVIEW of batch 3, you can move, standing at spawner 5 (the LX-18 (x2) pickup)",
+      "switch": "the LX-18 (x2) from spawner 5 (walk over it to pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Fire with both guns (RT, and the second trigger if the guns have one each). Do not move or switch weapon.",
+      "seconds": 20,
+      "note": "whether you had two guns and how they look; what spawner 5 DREW (its model) versus what you GOT on pickup (the name on the screen)"
+    },
+    "ingame-fire:control_grenade_28": {
+      "title": "Batch 3, spawner 6: Grenades (entry 0x28)",
+      "go_to": "The Map Maker PREVIEW of batch 3, you can move, standing at spawner 6 (the Grenades pickup)",
+      "switch": "the Grenades from spawner 6 (walk over it to pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Throw grenades only (RT), wait until each goes off, repeat. Do not move or switch weapon.",
+      "seconds": 20,
+      "note": "whether it behaves like the normal Map Maker grenade; what spawner 6 DREW (its model) versus what you GOT on pickup (the name on the screen)"
+    },
+    "ingame-idle:idle_b1": {
+      "title": "Idle control, batch 1",
+      "go_to": "The Map Maker PREVIEW of batch 1, you can move, nothing picked up yet",
+      "do": "Stand still. Press no button, do not move the stick, do not pick up a weapon. The session stops this phase by itself after 20 s.",
+      "seconds": 20
+    },
+    "ingame-idle:idle_b2": {
+      "title": "Idle control, batch 2",
+      "go_to": "The Map Maker PREVIEW of batch 2, you can move, nothing picked up yet",
+      "do": "Stand still. Press no button, do not move the stick, do not pick up a weapon. The session stops this phase by itself after 20 s.",
+      "seconds": 20
+    },
+    "ingame-idle:idle_b3": {
+      "title": "Idle control, batch 3",
+      "go_to": "The Map Maker PREVIEW of batch 3, you can move, nothing picked up yet",
+      "do": "Stand still. Press no button, do not move the stick, do not pick up a weapon. The session stops this phase by itself after 20 s.",
+      "seconds": 20
+    },
+    "ingame-idle": {
+      "title": "Idle control, batch {batch}",
+      "go_to": "The Map Maker PREVIEW of batch {batch}, you can move, nothing picked up yet",
+      "do": "Stand still. Press no button, do not move the stick, do not pick up a weapon. The session stops this phase by itself after 20 s.",
+      "seconds": 20
+    }
+  },
+  "tables": {
+    "batches": {
+      "1": {
+        "title": "CONTROL (already measured weapons, proves the mechanism)",
+        "items": [
+          {
+            "label": "control_bat",
+            "entry": "0x36",
+            "name": "Baseball bat",
+            "use": "swing it (melee)"
+          },
+          {
+            "label": "control_pistol",
+            "entry": "0x02",
+            "name": "Pistol 9mm",
+            "use": "fire it"
+          },
+          {
+            "label": "control_heatseeker_1d",
+            "entry": "0x1D",
+            "name": "Heat Seeker",
+            "use": "fire rockets"
+          },
+          {
+            "label": "control_rocket_1e",
+            "entry": "0x1E",
+            "name": "Rocket Launcher",
+            "use": "fire rockets"
+          },
+          {
+            "label": "control_minigun",
+            "entry": "0x10",
+            "name": "Minigun",
+            "use": "hold fire in bursts (no reload)"
+          },
+          {
+            "label": "control_ksmg",
+            "entry": "0x30",
+            "name": "K-SMG",
+            "use": "fire it, normal mode only"
+          }
+        ],
+        "steps": [
+          {
+            "text": "Idle control FIRST, before you pick anything up (phase ingame-idle:idle_b{item}): stand still, press nothing. It stops by itself after 20 s.",
+            "when": {
+              "batch#": "2+"
+            }
+          },
+          {
+            "text": "Idle control FIRST, before you pick anything up (phase ingame-idle): stand still, press nothing. It stops by itself after 20 s.",
+            "when": {
+              "batch#": "1"
+            }
+          }
+        ],
+        "item_step": "Spawner {slot}: {name} (entry {entry}, phase ingame-fire@{label}): {use}, 20 s.",
+        "steps_after": [
+          "NOTE, CONTROL CHECK: these six are weapons the Map Maker offers and that were measured before. If a spawner draws or gives something else (not bat, pistol, Heat Seeker, Rocket Launcher, minigun, K-SMG), the poke did not work: finish with q and tell Claude before you run batches 2 or 3."
+        ]
+      },
+      "2": {
+        "title": "UNMEASURED Map-Maker-absent weapons (display names measured, T1615)",
+        "items": [
+          {
+            "label": "time_disrupter_29",
+            "entry": "0x29",
+            "name": "Time Disrupter Grenades",
+            "use": "throw it"
+          },
+          {
+            "label": "plasma_grenade_2a",
+            "entry": "0x2A",
+            "name": "Plasma Grenades",
+            "use": "throw it"
+          },
+          {
+            "label": "tnt",
+            "entry": "0x2F",
+            "name": "TNT",
+            "use": "place it and detonate it"
+          },
+          {
+            "label": "soviet_rifle_16",
+            "entry": "0x16",
+            "name": "Soviet Rifle",
+            "use": "fire it"
+          },
+          {
+            "label": "brick",
+            "entry": "0x37",
+            "name": "Brick",
+            "use": "throw it"
+          },
+          {
+            "label": "temporal_uplink_38",
+            "entry": "0x38",
+            "name": "Temporal Uplink",
+            "use": "pull, hold and throw an object"
+          }
+        ],
+        "steps": [
+          {
+            "text": "Idle control FIRST, before you pick anything up (phase ingame-idle:idle_b{item}): stand still, press nothing. It stops by itself after 20 s.",
+            "when": {
+              "batch#": "2+"
+            }
+          },
+          {
+            "text": "Idle control FIRST, before you pick anything up (phase ingame-idle): stand still, press nothing. It stops by itself after 20 s.",
+            "when": {
+              "batch#": "1"
+            }
+          }
+        ],
+        "item_step": "Spawner {slot}: {name} (entry {entry}, phase ingame-fire@{label}): {use}, 20 s.",
+        "steps_after": [
+          "NOTE: none of these six is in the Map Maker weapon list, so the game never loaded their models or sounds for this map: a spawner may draw nothing or the wrong model, a pickup may give nothing, and the game may stop (INFERRED, unknown until you try). Write down exactly what you saw and got."
+        ]
+      },
+      "3": {
+        "title": "More unmeasured entries (display names measured, T1615)",
+        "items": [
+          {
+            "label": "monkey_gun_26",
+            "entry": "0x26",
+            "name": "Monkey Gun",
+            "use": "fire it"
+          },
+          {
+            "label": "monkey_gun_x2_27",
+            "entry": "0x27",
+            "name": "Monkey Gun (x2)",
+            "use": "fire both guns"
+          },
+          {
+            "label": "remote_mines_2d",
+            "entry": "0x2D",
+            "name": "Remote Mines, 2nd entry",
+            "use": "place mines and detonate them"
+          },
+          {
+            "label": "lx18_08",
+            "entry": "0x08",
+            "name": "LX-18",
+            "use": "fire it"
+          },
+          {
+            "label": "lx18_x2_0a",
+            "entry": "0x0A",
+            "name": "LX-18 (x2)",
+            "use": "fire both guns"
+          },
+          {
+            "label": "control_grenade_28",
+            "entry": "0x28",
+            "name": "Grenades",
+            "use": "throw it (known control)"
+          }
+        ],
+        "steps": [
+          {
+            "text": "Idle control FIRST, before you pick anything up (phase ingame-idle:idle_b{item}): stand still, press nothing. It stops by itself after 20 s.",
+            "when": {
+              "batch#": "2+"
+            }
+          },
+          {
+            "text": "Idle control FIRST, before you pick anything up (phase ingame-idle): stand still, press nothing. It stops by itself after 20 s.",
+            "when": {
+              "batch#": "1"
+            }
+          }
+        ],
+        "item_step": "Spawner {slot}: {name} (entry {entry}, phase ingame-fire@{label}): {use}, 20 s.",
+        "steps_after": [
+          "NOTE: spawner 3 is the second Remote Mines entry (0x2D). The game lists it as a companion of the first (0x2C, the left-hand part), so what it gives is unknown: say exactly what you got.",
+          "NOTE: spawner 6 (Grenades) is a known control: it should throw a grenade like the Map Maker grenade."
+        ]
+      }
+    }
+  }
+}

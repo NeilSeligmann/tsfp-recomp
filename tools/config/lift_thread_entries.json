@@ -1,0 +1,193 @@
+[
+  {
+    "start": "0x00030160",
+    "observed": true,
+    "xbe_sha256": "3cfd001a84fc3e08175d6c4b2e42ebf49577a089b5d0bd87ac724f61a41816bc",
+    "original_span": "0x00030160..0x000301B0",
+    "original_sha256": "cf48a40611e9112c12ef076cdc0bc7dbbfa6c09312c94fd5e8f6a651a91b4c01",
+    "note": "T556/T549 observed loader thread start; creator301B0 pushes30160 at301DD and calls CreateThread37FEB5 at301E6. Noreturn entry calls ExitThread37FD71; no synthetic callback or manual body suppression."
+  },
+  {
+    "start": "0x00191B10",
+    "observed": true,
+    "xbe_sha256": "3cfd001a84fc3e08175d6c4b2e42ebf49577a089b5d0bd87ac724f61a41816bc",
+    "original_span": "0x00191B10..0x00191B97",
+    "original_sha256": "34937a6df92c51d93a7b719a939fdac73f680054555a1092bed67f802b58167e",
+    "note": "T803 observed indirect call target. The title screen's A press (state function 0x2D2260) reaches an indirect call to 0x191B10 and the lifted dispatcher stops with 'indirect call to an unresolved target'. The only reference is the dword 0x191B10 at 0x4E8D64 in the screen state record table at 0x4E8D44..0x4E8D80 (siblings 0x194980 0x192770 0x1933C0 0x193120 0x191D70 0x192110 0x191E40 0x193A80 are all lifted); no direct call, jump or immediate names it, so discovery missed it. Real body, ends in jmp 0x75E70, no manual suppression."
+  },
+  {
+    "start": "0x0005FCF0",
+    "observed": true,
+    "xbe_sha256": "3cfd001a84fc3e08175d6c4b2e42ebf49577a089b5d0bd87ac724f61a41816bc",
+    "original_span": "0x0005FCF0..0x0005FDB4",
+    "original_sha256": "0ed79202b0808b3ef6ba169e4838dbbad710254367f354222097f77545d5842d",
+    "note": "T1128 observed indirect call target. The Story level start stops with 'indirect call to an unresolved target 0x0005FCF0 (call/safe)'. The only reference is the immediate 'push 0x5FCF0' at 0xD35F7 (callback argument of registration function 0xA5CE0, which stores it at [obj+0x154+idx*4]); no direct call, jump or table dword names it, so discovery missed it. Real body (prologue at 5FCF0, single ret at 5FDB3, int3 padding), no manual suppression."
+  },
+  {
+    "start": "0x00313010",
+    "observed": true,
+    "xbe_sha256": "3cfd001a84fc3e08175d6c4b2e42ebf49577a089b5d0bd87ac724f61a41816bc",
+    "original_span": "0x00313010..0x003132CB",
+    "original_sha256": "6cb83a1ec37884defd49b51878d3602ff315f4ad962dc137c51a5423350d11e7",
+    "note": "T1180 user MapMaker run20261005-222346 stops at unresolved indirect call/safe00313010 after002FC030 and00312B60. Screen record dword0052D464 names entry. Previously unobserved T1144 candidate is now reached. Original699-byte function ends RET003132CA, then INT3 padding; no manual body suppression."
+  },
+  {
+    "start": "0x0021A120",
+    "observed": true,
+    "xbe_sha256": "3cfd001a84fc3e08175d6c4b2e42ebf49577a089b5d0bd87ac724f61a41816bc",
+    "original_span": "0x0021A120..0x0021A708",
+    "original_sha256": "ea6886ab0a65c473b14fc11f76d3c947f3eed7b7743a75ccd7c974aefc820cec",
+    "note": "T1185 observed indirect call target. The Story level start (private replay of tmp/recorded-input) stops with 'indirect call to an unresolved target 0x0021A120 (call/safe)'. References: immediate 'push 0x21A120' at 0x21A870 (callback argument of registrar 0xA5CE0, call at 0x21A891, args cb,3,esi) and at 0x20C6E0 (same registrar pattern); no direct call, jump or table dword names it, so discovery missed it (T1152 class). Real body: 'sub esp, 0xf4' at 0x21A120, ends add esp,0xf4 / ret at 0x21A707, int3 padding, no manual suppression."
+  },
+  {
+    "start": "0x0007E800",
+    "observed": true,
+    "xbe_sha256": "3cfd001a84fc3e08175d6c4b2e42ebf49577a089b5d0bd87ac724f61a41816bc",
+    "original_span": "0x0007E800..0x0007EA2F",
+    "original_sha256": "8320606e9383526a533493db7b851337b0224e2ed3a62dca27e61d050ef1d279",
+    "note": "T1200 user Map Maker run 20261005-231320 (SAVE attempt) stops at unresolved indirect call/safe 0x0007E800 after 0032B9C0 and 002FC030. Previously unobserved T1144 candidate (dword 0x4D8D78, text-field record) is now reached. Original 559-byte function: push ecx at 0x7E800, 157 instructions, single ret at 0x7EA2E, int3 padding before and after, no manual body suppression."
+  },
+  {
+    "start": "0x002E9E50",
+    "observed": true,
+    "xbe_sha256": "3cfd001a84fc3e08175d6c4b2e42ebf49577a089b5d0bd87ac724f61a41816bc",
+    "original_span": "0x002E9E50..0x002E9E9D",
+    "original_sha256": "636dcfc85c8a04619c1378010e850d4dc791623906a12525b61ec769ab8bad9f",
+    "note": "T1245 actual Story Controls Accept stops at unresolved indirect call/safe2E9E50 in tmp/t1245-story-route-1800. Original2EA86A loads callback immediate before UI registration79D60 at2EA892; sole raw address reference is immediate operand2EA86B, no direct call/table reference. Complete77byte body copies31dwords of indexed control settings, calls CF2D0 then tail-jumps79C00. Real guest body, no manual suppression or state override."
+  },
+  {
+    "start": "0x002C3500",
+    "observed": true,
+    "xbe_sha256": "3cfd001a84fc3e08175d6c4b2e42ebf49577a089b5d0bd87ac724f61a41816bc",
+    "original_span": "0x002C3500..0x002C360E",
+    "original_sha256": "b6445bb45503804596f6164bdeb00883e216c5094700c50b53ee9cd8f1f982a0",
+    "note": "T1496 observed Settings > Audio/Video selection unresolved call/safe target 002C3500 (exit1). Widget builder 002C3E20 installs this draw callback via mov eax,002C3500 at002C3F80 and002C3FF4. Original270-byte body begins immediately after RET002C34FF (no leading INT3), ends RET002C360D then INT3 padding. cdecl two stack arguments, balanced plain RET; genuine lifted body, no boundary stub or manual suppression. docs/t1496-audio-video-crash.md."
+  },
+  {
+    "start": "0x001E9CC0",
+    "observed": true,
+    "xbe_sha256": "3cfd001a84fc3e08175d6c4b2e42ebf49577a089b5d0bd87ac724f61a41816bc",
+    "original_span": "0x001E9CC0..0x001EA635",
+    "original_sha256": "a77309796f01c1495c35bbaecf9217c93685d5a5f54f4affc398501d3551fdcf",
+    "note": "T1514 owner run 2026-10-07 stopped entering Story level 2 at unresolved indirect call/safe target 001E9CC0 (host exit 1, tmp/play/20261007-132609). T1144 listed it as a ready INFERRED orphan whose address is the record dword at 004FF578. Complete 2421 byte decode, begins after INT3 padding, early RET at 001E9D62 and ends with tail jmp 001E3710 then INT3 padding. Real guest body, no manual suppression. docs/t1514-level2-callback-1e9cc0.md."
+  },
+  {
+    "start": "0x001E8BD0",
+    "observed": true,
+    "xbe_sha256": "3cfd001a84fc3e08175d6c4b2e42ebf49577a089b5d0bd87ac724f61a41816bc",
+    "original_span": "0x001E8BD0..0x001E8C76",
+    "original_sha256": "b4e362bff817e9c885cfc9e4b83077d3344c2af6cf59ff567aea47b8f08062d5",
+    "note": "T1518 owner run 2026-10-07 stopped in Story level 2 at unresolved indirect call/safe target 001E8BD0 after the T1514 seed (host exit 1, tmp/play/20261007-140652, last indirect targets 002532D0 001E4AD0 001E4A10 001E8BD0). Registered only by push 001E8BD0 at 001EA5A2 inside the T1514 body 001E9CC0 (call 00227A50), no direct call. Complete 166 byte decode, begins after INT3 padding, single RET at 001E8C75 then INT3 padding. Real guest body, no manual suppression. docs/t1518-level2-callback-1e8bd0.md."
+  },
+  {
+    "start": "0x000F1A90",
+    "observed": true,
+    "xbe_sha256": "3cfd001a84fc3e08175d6c4b2e42ebf49577a089b5d0bd87ac724f61a41816bc",
+    "original_span": "0x000F1A90..0x000F2907",
+    "original_sha256": "d674ef38ff75c2813eee5b67592595ae0bb9b09a82c78b5170a1a9a0fa7a95a3",
+    "note": "T1530 owner census mm-var-all stopped on the Map Maker Flare Gun at unresolved indirect call/safe target 000F1A90 (host exit 1 after 1128s, last indirect targets 000D8E30 00087260 000F1A90). Record method pointer: dword at 004DF4DC and 004DF59C (records 004DF4D4 and 004DF594, no direct call, no push). func_id sized it as a 32 byte vtable_thunk estimate and the disassembler folded it into the 8256 byte tail_jump_alias 000F08D0..000F2910, so no entry existed. Complete 2935 byte decode (817 instructions), begins after INT3 padding, four RETs (F1DBE F1DD9 F2328 F2906), ends before INT3 padding, every direct callee already a function. Real guest body, no manual suppression. docs/t1530-flare-gun-crash.md.",
+    "data_dwords": [
+      "0x004DF4DC",
+      "0x004DF59C"
+    ]
+  },
+  {
+    "start": "0x00162450",
+    "observed": false,
+    "xbe_sha256": "3cfd001a84fc3e08175d6c4b2e42ebf49577a089b5d0bd87ac724f61a41816bc",
+    "original_span": "0x00162450..0x0016251B",
+    "original_sha256": "bbc324564d32c7798f2cedf3c2a421c3bec63669f8aa08aa21cae4c4ce7e7d1e",
+    "data_dwords": [
+      "0x004D29EC"
+    ],
+    "note": "T1533 audit: data dword(s) 0x004D29EC name this start; uncovered outside every body, real body 203 bytes by ret scan (1 RET)."
+  },
+  {
+    "start": "0x00163220",
+    "observed": false,
+    "xbe_sha256": "3cfd001a84fc3e08175d6c4b2e42ebf49577a089b5d0bd87ac724f61a41816bc",
+    "original_span": "0x00163220..0x001632FA",
+    "original_sha256": "16bd533e5b28d8d0cdeb9a09ede80627059da0b22fd2bf8ea813471e371ad3b3",
+    "data_dwords": [
+      "0x004D2A18"
+    ],
+    "note": "T1533 audit: data dword(s) 0x004D2A18 name this start; swallowed inside 0x001630C0, real body 218 bytes by ret scan (1 RET)."
+  },
+  {
+    "start": "0x001F5A10",
+    "observed": false,
+    "xbe_sha256": "3cfd001a84fc3e08175d6c4b2e42ebf49577a089b5d0bd87ac724f61a41816bc",
+    "original_span": "0x001F5A10..0x001F5FBA",
+    "original_sha256": "b0cf60cf0d261d983055db4eda6f36844a61f97a2fe9807d73c99c048ea26eaf",
+    "data_dwords": [
+      "0x00500A58"
+    ],
+    "note": "T1533 audit: data dword(s) 0x00500A58 name this start; uncovered outside every body, real body 1450 bytes by ret scan (2 RET)."
+  },
+  {
+    "start": "0x00213F50",
+    "observed": false,
+    "xbe_sha256": "3cfd001a84fc3e08175d6c4b2e42ebf49577a089b5d0bd87ac724f61a41816bc",
+    "original_span": "0x00213F50..0x0021421C",
+    "original_sha256": "c9a2e26651f3880511d7558f5a76a6d29384dd4c0e86e317634b4e4d1e9809e7",
+    "data_dwords": [
+      "0x00507850"
+    ],
+    "note": "T1533 audit: data dword(s) 0x00507850 name this start; uncovered outside every body, real body 716 bytes by ret scan (0 RET)."
+  },
+  {
+    "start": "0x00220600",
+    "observed": false,
+    "xbe_sha256": "3cfd001a84fc3e08175d6c4b2e42ebf49577a089b5d0bd87ac724f61a41816bc",
+    "original_span": "0x00220600..0x00220756",
+    "original_sha256": "32c1cc53826643631af199bfb9f7330509d3daf6915f32cbc3ac61a8f1523c27",
+    "data_dwords": [
+      "0x005096D8"
+    ],
+    "note": "T1533 audit: data dword(s) 0x005096D8 name this start; uncovered outside every body, real body 342 bytes by ret scan (1 RET)."
+  },
+  {
+    "start": "0x00251450",
+    "observed": false,
+    "xbe_sha256": "3cfd001a84fc3e08175d6c4b2e42ebf49577a089b5d0bd87ac724f61a41816bc",
+    "original_span": "0x00251450..0x002517F3",
+    "original_sha256": "0bc9be9d62f6cd2a0a7e63aadaadd57213ea29dd4682fa29291ed9402c3d7722",
+    "data_dwords": [
+      "0x004FCAD4"
+    ],
+    "note": "T1533 audit: data dword(s) 0x004FCAD4 name this start; uncovered outside every body, real body 931 bytes by ret scan (1 RET)."
+  },
+  {
+    "start": "0x00315B30",
+    "observed": false,
+    "xbe_sha256": "3cfd001a84fc3e08175d6c4b2e42ebf49577a089b5d0bd87ac724f61a41816bc",
+    "original_span": "0x00315B30..0x00315D07",
+    "original_sha256": "ddedbb19362c620a6cbc8a0a7abe534c44d2dc658cb171a8704643daf292ea5c",
+    "data_dwords": [
+      "0x0052D990"
+    ],
+    "note": "T1533 audit: data dword(s) 0x0052D990 name this start; uncovered outside every body, real body 471 bytes by ret scan (1 RET)."
+  },
+  {
+    "start": "0x00337A50",
+    "observed": false,
+    "xbe_sha256": "3cfd001a84fc3e08175d6c4b2e42ebf49577a089b5d0bd87ac724f61a41816bc",
+    "original_span": "0x00337A50..0x00337B43",
+    "original_sha256": "c0d7057869abef859d19ca60461c0bc7114f59a9bc6841bd077f9cd5ebf2ef9b",
+    "data_dwords": [
+      "0x0052EB9C"
+    ],
+    "note": "T1533 audit: data dword(s) 0x0052EB9C name this start; uncovered outside every body, real body 243 bytes by ret scan (1 RET)."
+  },
+  {
+    "start": "0x00371410",
+    "observed": false,
+    "xbe_sha256": "3cfd001a84fc3e08175d6c4b2e42ebf49577a089b5d0bd87ac724f61a41816bc",
+    "original_span": "0x00371410..0x003716F2",
+    "original_sha256": "84908f0b65d26ca2fdcb33f76402096e954dc0825c6169c1300cb65dbb29ad5a",
+    "data_dwords": [
+      "0x00547984"
+    ],
+    "note": "T1533 audit: data dword(s) 0x00547984 name this start; uncovered outside every body, real body 738 bytes by ret scan (0 RET)."
+  }
+]

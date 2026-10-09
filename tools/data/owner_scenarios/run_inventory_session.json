@@ -1,0 +1,158 @@
+{
+  "script": "run_inventory_session",
+  "title": "Weapon inventory dumps: PART A (pickups), PART B (x2 first), PART C (pokes)",
+  "summary": "One game session in the Map Maker preview in which YOU decide when a dump of the player's weapon inventory is taken, by typing a label in this terminal (or with a pad chord). Each label below names one moment (hands only, pistol picked up, pistol x2 picked up, ...). From the dumps I read which bytes of the inventory block change at a pickup and in which order two weapons of one family may be picked up. PART C (only with forced_state on) grants and revokes weapons by memory pokes, which is FABRICATED-STATE.",
+  "kind": "live-dump",
+  "duration": "about 20 to 30 minutes for parts A and B, plus about 10 minutes for part C (my estimate)",
+  "options": {
+    "forced_state": {
+      "values": ["off", "on"],
+      "default": "off"
+    },
+    "hotkeys": {
+      "values": ["on", "off"],
+      "default": "on"
+    },
+    "session": {
+      "free": true,
+      "default": "inventory-session-STAMP"
+    }
+  },
+  "prerequisites": [
+    "Game HDD: tmp/hdds/editor-hdd with your Map Maker level (it needs weapon spawners 1 to 6). The script builds the private host first, which can take several minutes, and then opens the game WITHOUT a start prompt.",
+    {
+      "text": "READ-ONLY run: nothing is written into the game. Part C cannot be done in this run. Start the script as 'fish tmp/run_inventory_session.fish --forced-state' (or 'env FORCED_STATE=1 fish tmp/run_inventory_session.fish') for part C.",
+      "when": {"forced_state": "off"}
+    },
+    {
+      "text": "FORCED-STATE run: the host may poke guest memory (guarded, logged in guestpoke.log, the folder is marked FORCED_STATE). Only part C pokes. Everything a poke produced is FABRICATED-STATE, never measured evidence.",
+      "when": {"forced_state": "on"}
+    },
+    "Labels are typed in this terminal at the prompt 'label for this dump'. Allowed characters: lowercase letters, digits, underscore, dash. Each dump takes a second or two and prints 'dump taken: ...'."
+  ],
+  "steps": [
+    {
+      "text": "Wait for 'Host is up.' in this terminal (up to 5 minutes). Then in the game window: players, profile, Map Maker, load your level, open the editor and the weapon set page.",
+      "substeps": [
+        "The weapon set is set on the page by hand: slot 1 Pistol 9mm (entry 0x02), slot 2 Pistol 9mm (x2) (0x04), slot 3 Baseball bat (0x36), slot 4 Kruger 9mm (0x05), slot 5 Kruger 9mm (x2) (0x07), slot 6 LX-18 (0x08). That is the same set as the session of 2026-10-08 17:28. Spawner N spawns the weapon of slot N.",
+        "Enter the preview and wait until you can move."
+      ]
+    },
+    {
+      "text": "HOW A DUMP IS TAKEN. Stand still, then click into this terminal, type the label and press Enter. The label records what you just did, so type it exactly as given. The game keeps running while the dump is taken.",
+      "substeps": [
+        {
+          "text": "Pad or keyboard chord instead of typing: {hotkey:dump}. A chord dump is labelled pad1, pad2, ... in order, so write down which label you meant. Typed labels keep working at the same time.",
+          "when": {"hotkeys": "on"}
+        },
+        {
+          "text": "This host has no pad chords (it predates T1632), type every label.",
+          "when": {"hotkeys": "off"}
+        },
+        "Take PART A first, then B, then C, in this order. If a pickup does not happen, skip that label and say so at the end."
+      ]
+    },
+    {
+      "text": "PART A, label invx_hands: right after the spawn, bare hands only, nothing picked up. Type invx_hands.",
+      "substeps": [
+        "Hint (INFERRED, I check the dump): only the hands are owned."
+      ]
+    },
+    {
+      "text": "PART A, spawner 1 (Pistol 9mm): walk onto it, pick it up, press D-pad RIGHT until the pistol is in your hands. Type invx_pistol.",
+      "substeps": [
+        "Hint (INFERRED): the pistol and its left-hand companion become owned, the dual pistol is not."
+      ]
+    },
+    {
+      "text": "PART A, spawner 2 (Pistol 9mm x2): pick it up, equip it with the D-pad. Type invx_pistol_x2.",
+      "substeps": [
+        "Hint (INFERRED): the x2 entry is owned in addition, and the group order byte changes from the plain pistol to the x2 one."
+      ]
+    },
+    {
+      "text": "PART A, spawner 3 (Baseball bat): pick it up, equip it. Type invx_bat."
+    },
+    {
+      "text": "PART A, spawner 4 (Kruger 9mm): pick it up, equip it. Type invx_kruger."
+    },
+    {
+      "text": "PART A, spawner 5 (Kruger 9mm x2): pick it up, equip it. Type invx_kruger_x2."
+    },
+    {
+      "text": "PART A, spawner 6 (LX-18): pick it up, equip it. Type invx_lx18."
+    },
+    {
+      "text": "PART A, label invx_cycle: press the weapon-next button (D-pad RIGHT) ONCE, wait 1 s. Type invx_cycle.",
+      "substeps": [
+        "Hint: the current weapon entry changes with that press."
+      ]
+    },
+    {
+      "text": "PART A, label invx_hands_again: switch back to the bare hands with the D-pad. Type invx_hands_again."
+    },
+    {
+      "text": "PART B, replace order. Leave the preview back to the editor. On the weapon set page set slot 1 = Pistol 9mm (x2) (0x04), slot 2 = Pistol 9mm (0x02), slot 3 = Kruger 9mm (x2) (0x07), slot 4 = Kruger 9mm (0x05). Enter the preview again and wait until you can move. Type invx_b_hands.",
+      "substeps": [
+        "Slots 5 and 6 may stay as they are, you do not pick those spawners up."
+      ]
+    },
+    {
+      "text": "PART B, spawner 1 (the x2 pistol FIRST): pick it up. Type invx_b_x2_first.",
+      "substeps": [
+        "Hint (INFERRED): the x2 pickup alone already owns the whole pistol group."
+      ]
+    },
+    {
+      "text": "PART B, spawner 2 (then the plain pistol): pick it up. Type invx_b_then_x1.",
+      "substeps": [
+        "Hint (INFERRED): the plain pickup after an x2 keeps the x2 as the group's order byte."
+      ]
+    },
+    {
+      "text": "PART B, spawner 3 (the Kruger x2 FIRST): pick it up. Type invx_b_kx2_first."
+    },
+    {
+      "text": "PART B, spawner 4 (then the plain Kruger): pick it up. Type invx_b_k_then_x1."
+    },
+    {
+      "text": "PART C, only when this run is a forced-state run: pokes that grant and revoke weapons. Do it in a FRESH preview (leave the preview and enter it again) and only after the preview has started: the inventory block is rebuilt at every level load, preview start and respawn, which wipes a grant. The write target is UNPROVEN until part A shows the bytes flip, so a REFUSED line, nothing happening or a crash is a valid result.",
+      "when": {"forced_state": "on"},
+      "substeps": [
+        "Type the poke at the same prompt: 'poke ENTRIES on' or 'poke ENTRIES off' (add -n for a dry run that sends nothing). The same thing from a second terminal in the repo root is 'fish tmp/inventory_poke.fish ENTRIES on'. Read the printed lines: REFUSED or READBACK-MISMATCH means the write did not happen.",
+        "Type 'poke 0x36 on' (grants the Baseball bat). Press the weapon-next button (D-pad RIGHT) until you hold it, then type the label invx_c_bat.",
+        "Type 'poke 0x04 on' (grants Pistol 9mm x2, the group also gets entries 0x02 and 0x03). Press the weapon-next button, then type invx_c_pistol_x2.",
+        "Switch to the bare hands FIRST, then type 'poke 0x04 off' (revokes the x2 only). Type invx_c_pistol_x2_off.",
+        "Type 'poke all on' (every weapon, several requests). Press the weapon-next button a few times and watch what happens. Type invx_c_all.",
+        "Every poke request also writes its own dump named inv_on_TIME_bN, you do not type anything for it."
+      ]
+    },
+    {
+      "text": "PART C is not part of this read-only run. Run the script again with --forced-state when parts A and B are done and checked.",
+      "when": {"forced_state": "off"}
+    }
+  ],
+  "note_at_end": [
+    "The order of what you really did if it differs from the labels, and any pickup that did not happen.",
+    "If you set Weapon Change (CONTROLS page of the pause menu) to anything other than the default, say so: it decides whether a pickup selects the weapon by itself."
+  ],
+  "stop": [
+    "Type q and Enter at the label prompt. The script then tells you to close the game window.",
+    {
+      "text": "Or end the run from the pad: {hotkey:stop}. The script finishes by itself.",
+      "when": {"hotkeys": "on"}
+    },
+    "Or close the game window. The script notices and finishes.",
+    "Do not close the terminal before it prints 'done: tell Claude'."
+  ],
+  "send_back": [
+    "Tell Claude the session finished: folder tmp/owner-profiles/{session}.",
+    "The labels you took, in order, and the ones you skipped.",
+    "Which weapons really were in which spawner, if it differs from the set above.",
+    {
+      "text": "Part C: the lines each poke command printed (OK, REFUSED, READBACK-MISMATCH) and what the game did after each (weapon in the cycle or not, melee, crash).",
+      "when": {"forced_state": "on"}
+    },
+    "Any 'unimplemented instruction' or 'STOP' line the game printed."
+  ]
+}

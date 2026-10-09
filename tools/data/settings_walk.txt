@@ -1,0 +1,61 @@
+// T1709 headless regression walk for tools.settings_walk: Settings > Controls from row 0, then Settings list, then Audio/Video.
+// One press per line: BUTTON [xN] [rest=POLLS] [# label]. Cursor order of Controls: Control Layout, Crosshair, Inverse Look, Auto Aim,
+// Auto Lookahead, Aim Mode, Crouch, Weapon Change, Vibration mode, Turn Speed, (divider), Accept, Cancel. After an Accept the Settings list
+// is rebuilt with the cursor on row 0 (Audio/Video Options). MEASURED with the container host, docs/t1709-settings-dump.md.
+DOWN # Crosshair
+RIGHT x3 # Crosshair
+DOWN # Inverse Look
+RIGHT x2 # Inverse Look
+DOWN # Auto Aim
+RIGHT x2 # Auto Aim
+DOWN # Auto Lookahead
+RIGHT x2 # Auto Lookahead
+DOWN # Aim Mode
+RIGHT x2 # Aim Mode
+DOWN # Crouch
+RIGHT x2 # Crouch
+DOWN # Weapon Change
+RIGHT x5 # Weapon Change
+LEFT # Weapon Change
+RIGHT # Weapon Change
+DOWN # Vibration
+RIGHT x4 # Vibration
+DOWN # Turn Speed
+RIGHT x6 # Turn Speed
+LEFT x6 # Turn Speed
+UP x2 # to Weapon Change
+RIGHT # Weapon Change 
+DOWN x3 # to Accept
+A rest=120 # Accept
+DOWN rest=90 # Settings list to Controls
+A rest=120 # reopen Controls
+DOWN x2 # check on reopened Controls
+B rest=150 # back to Settings
+UP rest=90 # Settings list to Audio/Video
+A rest=120 # open Audio/Video
+RIGHT x2 # AV row0
+LEFT x2 # AV row0
+DOWN # AV row1
+RIGHT x2 # AV row1
+LEFT x2 # AV row1
+DOWN # AV row2
+RIGHT x2 # AV row2
+LEFT x2 # AV row2
+DOWN # AV row3
+RIGHT x2 # AV row3
+LEFT x2 # AV row3
+DOWN # AV row4
+RIGHT x2 # AV row4
+LEFT x2 # AV row4
+RIGHT # AV row4 left changed
+UP x2 # to AV row2
+RIGHT # AV row2 toggled off, left changed
+DOWN # AV row3
+LEFT # AV row3 slider while row2 off
+UP x2 # to AV row1
+RIGHT # AV row1 slider left changed
+DOWN x4 # to AV Accept
+A rest=150 # AV Accept
+A rest=10 # reopen AV, transition test
+DOWN rest=140 # press 10 polls after A, during the page transition
+B rest=150 # back

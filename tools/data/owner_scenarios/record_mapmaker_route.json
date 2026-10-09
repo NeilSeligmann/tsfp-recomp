@@ -1,0 +1,74 @@
+{
+  "script": "record_mapmaker_route",
+  "title": "Record the Map Maker route once (game start to the editor with your level loaded, then the preview)",
+  "summary": "You play the same few menu steps once and mark four stages. The host records your pad input by poll index (FABRICATED input, your own play) into tmp/owner-profiles/routes/{name}.txt, and the replay scripts (run_forced_weapons, run_button_dumps) then repeat it by themselves. The poke point of the replay is mark 3, so mark 3 must be the moment the editor is up and idle.",
+  "kind": "recording",
+  "duration": "about 5 to 10 minutes after the game window opens (the host build before it can take several minutes)",
+  "options": {
+    "name": {
+      "free": true,
+      "default": "route-<timestamp>"
+    },
+    "hotkeys": {
+      "values": ["on", "off"],
+      "default": "on"
+    }
+  },
+  "prerequisites": [
+    "Your Map Maker level must already be on tmp/hdds/editor-hdd. The script copies it once to tmp/hdds/route-hdd-pristine and every record and replay starts from a fresh copy of that, so the same level loads every time.",
+    "Do the steps calmly and WAIT for each slow screen to finish before you mark it. Every key you press from the first poll on is replayed later, so press nothing you do not need (no extra menu visits, no weapon settings page, no stick wiggling).",
+    "Terminal and game window: marks are given in THIS terminal (press Enter) or, without leaving the game window, with the MARK chord.",
+    {
+      "text": "Chords (the keys of a chord are not recorded into the route): mark = {hotkey:mark}. Stop the recording = {hotkey:stop}.",
+      "when": {"hotkeys": "on"}
+    },
+    {
+      "text": "Hotkeys are off or your host predates T1632: place each mark by pressing Enter in this terminal, and finish by closing the game window.",
+      "when": {"hotkeys": "off"}
+    }
+  ],
+  "steps": [
+    "Wait until the window shows the game (the intro is skipped). The terminal says 'Host is up'. Now you record.",
+    "Choose the number of players.",
+    {
+      "text": "Select your profile (a slow screen). When it has FINISHED and the menu is showing, place MARK 1.",
+      "substeps": ["Mark 1 means: profile screen finished, menu showing."]
+    },
+    {
+      "text": "Choose Map Maker and load your map (a slow screen, the map file is read from the HDD). When it has FINISHED loading, place MARK 2.",
+      "substeps": ["Mark 2 means: Map Maker map finished loading."]
+    },
+    {
+      "text": "Open the editor, then JUST WAIT about 2 seconds without pressing anything. When the editor is up and idle, place MARK 3.",
+      "seconds": 2,
+      "substeps": [
+        "Do NOT open the weapon settings page (or any settings page) and press nothing in the editor (T1639). The automatic weapon poke of the replay fires at mark 3 and works without the page. A route that visits the page before mark 3 pokes while the page is open, which is not the tested flow."
+      ]
+    },
+    {
+      "text": "Enter the PREVIEW straight from the editor and wait until you can move. Then place MARK 4.",
+      "substeps": ["Mark 4 means: preview running and you can move. Do nothing else after it."]
+    },
+    {
+      "text": "Stop the recording right away.",
+      "substeps": [
+        {"text": "Hold the STOP chord ({hotkey:stop}). The host ends cleanly and the recording gets its trailer.", "when": {"hotkeys": "on"}},
+        "Or close the game window. Close it normally, a recording that is killed has no '# polls:' trailer and is refused later."
+      ]
+    }
+  ],
+  "note_at_end": [
+    "How many marks the script reports (it wants exactly 4: 'recording: ... marks: 4').",
+    "Any WARNING line the script prints (marks not 4, no event waits chosen, no '# nav:' lines, route check failed)."
+  ],
+  "stop": [
+    {"text": "Stop = the STOP chord or closing the game window right after mark 4. q at the start prompt quits before the game launches.", "when": {"hotkeys": "on"}},
+    {"text": "Stop = closing the game window right after mark 4. q at the start prompt quits before the game launches.", "when": {"hotkeys": "off"}},
+    "If the recording is wrong (a mark placed too early, a stray key press), do not edit it: record again under another name."
+  ],
+  "send_back": [
+    "Tell Claude the route name and path: tmp/owner-profiles/routes/{name}.txt (plus .waits, .events, .log, .console next to it).",
+    "The final lines of the script output: 'recording: # polls: ... marks: 4', the event waits and nav steps list, and 'Route saved'.",
+    "Then run the replay yourself: ./tmp/run_forced_weapons.fish 1 --route tmp/owner-profiles/routes/{name}.txt (batch 1 is the control that proves the mechanism)."
+  ]
+}

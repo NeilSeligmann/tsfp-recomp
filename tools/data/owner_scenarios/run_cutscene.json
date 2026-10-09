@@ -1,0 +1,52 @@
+{
+  "script": "run_cutscene",
+  "title": "Story intro cutscene census (data/cutscenes attribution)",
+  "summary": "One Story session. An idle control in a Story level, then the Story intro cutscene from its first frame. The census (indirect call targets) of the cutscene is ranked against the idle control, the game_cutscene_* / data/cutscenes functions are attributed by tools.cutscene_attribution, and the host logs [0x79094C] (the game state word, 0x18 expected while Story loads and the intro plays, then 0x2 in the level) into route-events.log. Session folder tmp/owner-profiles/cutscene-STAMP. The owner session cutscene-20261008-233305 refuted the earlier 0x16 guess; 0x18 is Story load plus intro (INFERRED beyond the owner statements), see docs/t-data-cutscene-scenario.md.",
+  "kind": "census-session",
+  "duration": "about 10 minutes after the game is up",
+  "prerequisites": [
+    "Game HDD tmp/hdds/profile-hdd (your Story profile). The script builds the private host first, which takes a few minutes.",
+    "A way to start the Story intro twice in one session: play Story until you have control, do the idle phase, then restart Story (pause menu restart or quit to the menu and start Story again) so the intro plays again for the cutscene phase."
+  ],
+  "steps": [
+    {
+      "text": "Press Enter at 'Enter = start the game'. When the window opens drive to Story and start it. Nothing is measured until you continue at a phase prompt."
+    },
+    {
+      "phase": "ingame-idle"
+    },
+    {
+      "text": "Now restart Story from the beginning (pause menu restart, or quit to the menu and start Story again) but do NOT press Enter at the next prompt until you are on the Story start screen, just before the intro would play."
+    },
+    {
+      "phase": "ingame-cutscene"
+    }
+  ],
+  "note_at_end": [
+    "Whether the intro played in full, and its approximate length.",
+    "Anything odd: missing sound, wrong picture, a freeze.",
+    "If the game stopped: the 'unimplemented instruction at ...' or STOP line."
+  ],
+  "stop": [
+    "Enter in this terminal starts and again ends a phase. s skips, q finishes. Close the window only after the last phase."
+  ],
+  "send_back": [
+    "Tell Claude the session finished: folder tmp/owner-profiles/cutscene-STAMP (the cutscene attribution table and the [0x79094C] timeline are printed at the end).",
+    "The notes above."
+  ],
+  "phases": {
+    "ingame-idle": {
+      "title": "Idle control in a Story level",
+      "go_to": "Any Story level where you have control and nothing scripted is happening",
+      "do": "Stand still. Do not press any button and do not move the stick.",
+      "seconds": 20
+    },
+    "ingame-cutscene": {
+      "title": "Story intro cutscene",
+      "go_to": "The Story start, just before the intro cutscene plays",
+      "do": "Continue at the prompt, start Story, and watch the whole intro without pressing anything. End the phase when you get control of the character.",
+      "seconds": 90,
+      "note": "how long the intro was and whether it was complete"
+    }
+  }
+}

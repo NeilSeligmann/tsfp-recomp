@@ -1,0 +1,59 @@
+{
+  "script": "poke_now",
+  "title": "poke_now: write guarded values into the running game from a second terminal",
+  "summary": "poke_now writes one or more values into the memory of the running game, on request, from a SECOND terminal. It is FABRICATED-STATE: whatever the game does afterwards is not an unmodified observation. The write is guarded (only places the host allows, every write is read back and logged in guestpoke.log) and the result is dumped to a file with the poke written into its header.",
+  "kind": "helper",
+  "options": {
+    "label": {
+      "free": true,
+      "default": "mypoke"
+    },
+    "target": {
+      "values": ["slot", "policy"],
+      "default": "slot"
+    }
+  },
+  "prerequisites": [
+    "The game must have been started with --forced-state by a dump script: run_weaponslot_session.fish --forced-state, run_inventory_session.fish --forced-state, or run_button_dumps.fish with the poke on (the default, and run_t1642_session4). Without --forced-state the request is REFUSED, logged, and nothing is written.",
+    "Open a second terminal in the repo root. The helper finds the newest session under tmp/owner-profiles whose host process is still alive."
+  ],
+  "steps": [
+    {
+      "text": "Get the game into the right state FIRST. For a weapon set slot that is the Map Maker EDITOR, on the weapon set page, standing idle, BEFORE you enter the preview. The preview copies the editor state when it starts, so a later poke of a slot changes nothing. Do not poke on or after a visit of the weapon settings page (T1639).",
+      "when": {"target": "slot"}
+    },
+    {
+      "text": "Get the game into the right state FIRST. The Weapon Change value can be poked at any time you are in the level, but a poke is overwritten when the CONTROLS page is accepted again in the menu.",
+      "when": {"target": "policy"}
+    },
+    {
+      "text": "Run: fish tmp/poke_now.fish {label} ADDR=VALUE [ADDR=VALUE ...]",
+      "substeps": [
+        "LABEL: lowercase letters, digits, underscore, dash. It names the request and also the dump taken right after (guestdump.LABEL). A label that is still waiting from an earlier request is refused, use a new one.",
+        "ADDR=VALUE writes at an absolute address, ADDR+OFF=VALUE adds an offset, *ADDR+OFF=VALUE treats the dword at ADDR as a pointer and writes at pointer + OFF. VALUE is a 32 bit number (0x.. or decimal), add :1, :2 or :4 for the width in bytes (default 4). At most 16 values per request.",
+        "Quote anything with a star in fish, otherwise fish tries to expand it."
+      ]
+    },
+    {
+      "text": "Example for a weapon set slot (UNPROVEN target, a T1612 inference, entry 0x38 is only an example, entry numbers are in docs/t-weapon-entry-table.md): fish tmp/poke_now.fish poke_slot1 '*0x7844A8+0x1190C=0x38'   Slot N is at +0x1190C + 4*(N-1).",
+      "when": {"target": "slot"}
+    },
+    {
+      "text": "Example for the Weapon Change value of player 0 (Never): fish tmp/poke_now.fish policy_never 0x7BEE2C=1:4   Back to the default (If New and Best): fish tmp/poke_now.fish policy_default 0x7BEE2C=4:4   Values: 0 Always, 1 Never, 2 Best, 3 If New, 4 If New and Best. The address is static, the effect of a poke is not yet measured.",
+      "when": {"target": "policy"}
+    },
+    {
+      "text": "Read the answer. 'request served' followed by lines with OK means the value was written and read back. A REFUSED or READBACK-MISMATCH line means it was NOT written as asked. 'no ack yet' means the game did not answer in 10 s, look at guestpoke.log in the session folder."
+    }
+  ],
+  "note_at_end": [
+    "What you did in the game right after the poke and what you saw."
+  ],
+  "stop": [
+    "Nothing to stop. If a poke crashes the game, that is a result, keep the terminal text."
+  ],
+  "send_back": [
+    "The lines the command printed (request served, OK, REFUSED, READBACK-MISMATCH) and the label you used.",
+    "What the game showed afterwards, and the folder name of the session."
+  ]
+}

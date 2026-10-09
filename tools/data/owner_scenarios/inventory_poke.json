@@ -1,0 +1,75 @@
+{
+  "script": "inventory_poke",
+  "title": "inventory_poke: grant or revoke weapons in the running game from a second terminal",
+  "summary": "inventory_poke writes the bytes that a real pickup writes (ownership, reserve ammo and so on) so that a weapon appears in your inventory without a spawner, or disappears. It builds the poke lines with the tested builder python -m tools.t1628_inventory_entries and sends them through poke_now. It is FABRICATED-STATE and UNPROVEN until a real pickup session shows that the game accepts the poked bytes.",
+  "kind": "helper",
+  "options": {
+    "mode": {
+      "values": ["on", "off"],
+      "default": "on"
+    },
+    "entries": {
+      "free": true,
+      "default": "0x36,0x28"
+    }
+  },
+  "prerequisites": [
+    "The game must have been started with --forced-state: run_inventory_session.fish --forced-state, or run_t1642_session4, or run_button_dumps.fish with the poke on (the default).",
+    "The pinned game file tmp/build-t565/default.xbe must exist (or point INV_XBE at it).",
+    "Open a second terminal in the repo root, with the game open and the level running (after the preview started)."
+  ],
+  "steps": [
+    {
+      "text": "Be IN the level (preview), after the preview has started, not in a menu. The inventory block is rebuilt at every level load, preview start and respawn, which wipes a grant. Grant again after any of those.",
+      "when": {"mode": "on"}
+    },
+    {
+      "text": "Be IN the level and switch to the BARE HANDS with the D-pad first. Revoking a weapon that is in your hands is not safe.",
+      "when": {"mode": "off"}
+    },
+    {
+      "text": "Dry run first: fish tmp/inventory_poke.fish {entries} on -n   It prints the planned poke lines and sends nothing. ENTRIES is a comma list of weapon entry numbers (0x04, 0x36 or decimal, for example 0x04 is Pistol 9mm x2, 0x36 the Baseball bat, 0x28 the Grenades) or the word all (every weapon entry 0x02..0x3B except the story Uplink).",
+      "when": {"mode": "on"}
+    },
+    {
+      "text": "Dry run first: fish tmp/inventory_poke.fish {entries} off -n   It prints the planned poke lines and sends nothing.",
+      "when": {"mode": "off"}
+    },
+    {
+      "text": "Then for real: fish tmp/inventory_poke.fish {entries} on   It grants ownership, reserve ammo for the weapon's ammo types, the clip size words and, for an x2 weapon, the group order byte. The lines go out in requests of at most 15, each with its own label inv_on_TIME_bN.",
+      "when": {"mode": "on"}
+    },
+    {
+      "text": "Then for real: fish tmp/inventory_poke.fish {entries} off   It clears the ownership bytes (a plain weapon clears its whole group, an x2 weapon only its x2 entries so the plain weapon stays).",
+      "when": {"mode": "off"}
+    },
+    {
+      "text": "Read every printed block. 'planned pokes: N' is the list, 'request served' with OK lines means written and read back, a REFUSED or READBACK-MISMATCH line means NOT written. Read the result of EACH request, a later request is still sent after an earlier one was refused. The result file of each request is guestdump.LABEL in the session folder.",
+      "substeps": [
+        "The line 'UNPROVEN until the live inventory session dumps confirm the ownership bytes' is always printed, it is a reminder, not an error."
+      ]
+    },
+    {
+      "text": "In the game press D-pad RIGHT or LEFT, one press per second, around the whole weapon cycle. Is the granted weapon in it? Equip it and try RT, X, B (a grenade entry: LT). The game's own select code equips the weapon, the poke does not touch the current weapon.",
+      "when": {"mode": "on"}
+    },
+    {
+      "text": "In the game press D-pad RIGHT and LEFT around the whole cycle. Is the revoked weapon gone? Does anything else change?",
+      "when": {"mode": "off"}
+    },
+    {
+      "text": "Optional switches, put them after ENTRIES and on or off: -a/--ammo VALUE (default = the record amount capped at the maximum, max, keep = no ammo pokes, or a number), -c/--caps and -C/--no-caps (clip size words, on by default), -l/--loaded N (rounds loaded in the HELD weapon, caps the reserve at maximum minus N), -O/--no-order (do not poke the group order byte), -x/--no-x2 (with all: x1 weapons only), -o/--only-entry (with off: clear only the named entry), -z/--zero-ammo (with off: also zero the reserve ammo, shared ammo types hit other weapons), -s/--slot N (player slot, default 0), -n/--dry-run, -h/--help."
+    }
+  ],
+  "note_at_end": [
+    "For every entry you granted or revoked: whether it showed up in the weapon cycle or disappeared, and what happened when you used it."
+  ],
+  "stop": [
+    "Nothing to stop. To undo a grant, switch to the bare hands and run the same line with off.",
+    "If the game crashes or freezes, that is a result: keep the terminal text and the 'unimplemented instruction' or 'STOP' line."
+  ],
+  "send_back": [
+    "The printed lines (planned pokes, request served, OK, REFUSED, READBACK-MISMATCH) for each call.",
+    "What the game did after each call (weapon in the cycle or not, equip, fire, reload, crash) and the session folder name."
+  ]
+}

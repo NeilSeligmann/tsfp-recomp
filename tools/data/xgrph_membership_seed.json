@@ -1,0 +1,10 @@
+[
+  {
+    "start": "0x003F36F1",
+    "observed": true,
+    "xbe_sha256": "3cfd001a84fc3e08175d6c4b2e42ebf49577a089b5d0bd87ac724f61a41816bc",
+    "original_span": "0x003F36F1..0x003F3703",
+    "original_sha256": "0a56e10d2f485041ac953b48ab9ac635e42b0d5dc14e6803993a463fd4dfe4cd",
+    "note": "T1131 original controlled-execution empty/one-leaf witness and7 static game-text sites; not a current retail reachability claim. Real18-byte vtable store/global membership erase entry, no invented body or canonical metadata mutation."
+  }
+]

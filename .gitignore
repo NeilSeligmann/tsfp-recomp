@@ -1,0 +1,291 @@
+# ============================================================================
+# TSFP-decomp .gitignore
+#
+# HARD RULE: this repository is CODE ONLY.
+# No disc images, no game executables, no game assets, ever.
+# Players supply their own disc; nothing derived from it is distributable.
+#
+# Enforced mechanically by tools/ci/check-no-disc-data.sh (run in CI and as a
+# pre-commit hook). If you genuinely need to commit something matched below,
+# use `git add -f` and explain why in the commit message.
+# ============================================================================
+
+# --- Working scratch space (disc images live here) ---------------------------
+/tmp/
+tmp/
+scratch/
+tsfp-hdd-test-*/
+
+# --- Disc images ------------------------------------------------------------
+*.iso
+*.ISO
+*.rvz
+*.wia
+*.gcz
+*.cso
+*.ciso
+*.chd
+*.wbfs
+*.nrg
+*.mdf
+*.mds
+*.cue
+*.img
+*.gcm
+*.xiso
+
+# --- Archives (disc dumps arrive as these) ----------------------------------
+*.7z
+*.zip
+*.rar
+*.tar
+*.tar.gz
+*.tgz
+*.tar.zst
+
+# --- Console executables ----------------------------------------------------
+# Xbox
+*.xbe
+*.XBE
+default.xbe
+# GameCube / Wii
+*.dol
+*.DOL
+*.rel
+*.REL
+# PS2 boot executables (SLUS_211.48, SLES_508.77, SCUS_971.82, ...)
+SLUS_*
+SLES_*
+SLED_*
+SLPS_*
+SCUS_*
+SCES_*
+SCED_*
+*.irx
+*.IRX
+# Generic
+*.elf
+*.ELF
+*.xex
+*.XEX
+
+# --- Game assets ------------------------------------------------------------
+# Free Radical containers
+*.pak
+*.PAK
+*.p5ck
+*.p4ck
+*.war
+*.WAR
+*.c2n
+*.C2N
+*.tad
+# Textures / models / music (platform-specific FRD formats)
+*.xbt
+*.xbr
+*.xbm
+*.xbg
+*.xbx
+*.raw
+*.RAW
+# Audio
+*.vag
+*.VAG
+*.mib
+*.MIB
+*.adpcm
+# Video
+*.pss
+*.PSS
+*.xmv
+*.XMV
+*.thp
+*.THP
+*.bik
+# Misc disc payloads
+ZDATA*
+*.bnr
+opening.bnr
+SYSTEM.CNF
+system.cnf
+*.sfo
+
+# --- Extracted disc trees ---------------------------------------------------
+/assets/
+/game/
+/game.partial/
+/game.previous/
+/extracted/
+/disc/
+/discs/
+**/ext/
+**/quarantine/
+
+# --- Reverse-engineering intermediates --------------------------------------
+# Ghidra projects (large, machine-specific, regenerable)
+*.gpr
+*.rep/
+# Ghidra writes <project>.lock and .lock~ beside its projects. This must not
+# swallow uv.lock: with a real dependency now pinned, an uncommitted lockfile
+# means a fresh clone resolves capstone to whatever happens to be newest.
+*.lock
+!uv.lock
+ghidra_projects/
+/ghidra/
+
+# PDBs and debug databases
+*.pdb
+*.dbg
+
+# PROVENANCE: signature databases generated from the leaked Xbox XDK or from
+# leaked Microsoft symbol tables must NEVER be committed. Use them as local
+# analysis aids only. See docs/provenance.md.
+*.pat
+*.sig
+*.sig.json
+/signatures/
+/flirt/
+/xdk/
+# Pattern archives arrive as a zip (already covered by *.zip above) and extract to
+# an arbitrary directory name, so block the conventional ones by name too.
+/patterns/
+/Patterns/
+# Output of tools/flirt/cli.py: proposed names derived from those patterns. It
+# normally lands under generated/, which is blocked wholesale below, but the tool
+# takes an arbitrary --out path and a name database must never be committed from
+# anywhere. tools/flirt/cli.py --check-paths refuses to write outside an ignored
+# directory; this is the backstop for a run without that flag.
+flirt_names.csv
+flirt_names.txt
+
+# --- Build output -----------------------------------------------------------
+build/
+build-*/
+out/
+cmake-build*/
+CMakeCache.txt
+CMakeFiles/
+CMakeUserPresets.json
+compile_commands.json
+install_manifest.txt
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.d
+*.gcda
+*.gcno
+*.ilk
+*.exp
+
+# --- Python tooling ---------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# --- Rust tooling -----------------------------------------------------------
+/target/
+
+# --- Logs, dumps, harness artifacts ----------------------------------------
+*.log
+crash-reports/
+*.dmp
+*.mdmp
+/run/
+/replays/
+*.trace
+
+# --- Editors / OS -----------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Local config -----------------------------------------------------------
+.env
+.env.local
+local.cmake
+/config.local.*
+
+# --- Worktrees (isolated implementation checkouts) ---------------------------
+.claude/worktrees/
+
+# --- Disc images (canonical location, never committed) -----------------------
+/discs
+discs/
+
+# --- Decompiler output (regenerable; deliberately NOT committed) --------------
+# `generated/` is raw Ghidra output: a direct machine translation of the user's
+# own executable with no transformative work. It is reproducible with one
+# command, so committing it adds nothing and maximises legal exposure. Precedent
+# agrees: mature decompilation projects commit hand-written matching C, never a
+# raw decompiler dump. Hand-written work goes in `patched/`, which IS committed.
+/generated
+/build/
+
+# --- C build output ---------------------------------------------------------
+/build/
+
+# --- Extracted symbol data (regenerable from your own disc) ------------------
+# Derived from the user-supplied demo disc. Regenerate with stdump; see
+# tools/stabs.py. Same reasoning as generated/: reproducible, so committing it
+# adds nothing and maximises exposure.
+/symbols/
+types.log
+functions.cpp
+types.json
+
+# --- Lifted C (regenerate from your own XBE) ---------------------------------
+# tools/lift writes 2.56 M lines / 101 MB of statically recompiled C derived
+# from the user's own executable. Already covered by /generated/ above; named
+# explicitly because it is by far the largest thing this rule exists to stop,
+# and because `--out-dir` can point anywhere. Same reasoning as generated/:
+# reproducible with one command, so committing it adds nothing and maximises
+# legal exposure. Regenerate with:
+#     uv run python -m tools.lift run <your default.xbe>
+/generated/lifted/
+**/recomp_[0-9][0-9][0-9][0-9].c
+**/recomp_dispatch.c
+**/recomp_funcs.h
+**/recomp_stubs_unresolved.c
+# Kernel stack-argument counts measured from the user's binary; see
+# tools/lift/callsites.py.
+kernel_arity.inc
+!tests/c/fixtures/thunk_arity/kernel_arity.inc
+
+# NOT ignored, deliberately: third_party/xboxrecomp/ is the vendored MIT lifter
+# and IS committed. It is 1.5 MB of pure Python with no disc-derived content.
+# See the tools/lift package docstring for why vendoring rather than a submodule
+# or a build-time fetch, and which upstream files are excluded.
+
+# --- Generated XDK surface table (regenerate from your own XBE) --------------
+# Derived from the user-supplied executable, so not committed; regenerate with
+# tools/gen_d3d8_surface.py. The CMake build expects it to exist.
+src/xbox/xdk_surface.c
+src/xbox/xdk_abi.inc
+src/xbox/xdk_surface.h
+
+
+
+# Ignore secrets folder
+.secrets
+
+# T1651 subsystem placement table: one row per function address (a bulk per-address dump that
+# tools/ci/check-no-disc-data.sh rejects when tracked). Reproducible: python -m tools.subsystems
+# seed (deterministic, needs the local XBE). The tracked outputs are the tree csv, the rules and
+# docs/data/subsystem-coverage.{csv,json}. Exempting this path in the hook is an owner decision.
+/tools/data/function_subsystems.csv

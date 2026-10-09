@@ -1,0 +1,100 @@
+{
+  "script": "run_button_checklist",
+  "title": "All-buttons-and-axes checklist: press every button once and move every stick and trigger, in a fixed order",
+  "summary": "One game session where the terminal tells you what to press next (T1736). The list is {checklist}: 14 digital buttons, then the left and right stick in 8 directions at half and full deflection, then both triggers at 25, 50, 75 and 100 percent. For every step the host reads the game's pad arrays (the raw controller state the game keeps for ports 0 to 3) and the report shows which bytes moved. Nothing in the game is changed, and no weapon poke is made. The value is the fixed order and the discipline of doing exactly one thing per step: a stick step that moves two sticks, or a button that is not pressed, shows up as a flagged line.",
+  "kind": "button-dump",
+  "duration": "up to {minutes} minutes (the game stops by itself then). My estimate: 46 steps at about 10 seconds each is 8 to 10 minutes, plus the route replay of a few minutes.",
+  "options": {
+    "mode": {
+      "values": [
+        "auto",
+        "manual"
+      ],
+      "default": "auto"
+    },
+    "checklist": {
+      "free": true,
+      "default": "tools/data/button_checklist.txt"
+    },
+    "minutes": {
+      "free": true,
+      "default": "40"
+    },
+    "route": {
+      "free": true,
+      "default": "the newest file of tmp/owner-profiles/routes"
+    },
+    "session": {
+      "free": true,
+      "default": "button-dumps-STAMP"
+    }
+  },
+  "prerequisites": [
+    {
+      "text": "AUTO mode: the game replays the route {route} (recorded once with fish tmp/record_mapmaker_route.fish) up to the Map Maker preview, then hands the pad to you. The pad arrays are read in any game state, so the preview is just a convenient place to stand still.",
+      "when": {
+        "mode": "auto"
+      }
+    },
+    {
+      "text": "MANUAL mode: no route. Start the game, go anywhere you can stand still (the main menu is fine) and start the checklist there. Menu presses before the checklist are recorded too and use up dump budget, which is harmless.",
+      "when": {
+        "mode": "manual"
+      }
+    },
+    "A pad or the keyboard. With a pad you need both hands on it, so Enter in the terminal is pressed with the keyboard hand while you keep holding the stick: put the terminal where you can reach it without letting go. With the keyboard source (Z X A S, I K J L and T G F H, 1 and 2, see docs/presentation.md) a stick key is full deflection only, so the half way steps cannot be done with it: skip them with s.",
+    "Disk: at least 3 GB free (the script refuses to start below that)."
+  ],
+  "steps": [
+    {
+      "text": "START. Run: fish tmp/run_button_dumps.fish --checklist   (add a file name after --checklist to use another list). Press Enter at the prompt 'Enter = start the game'. The window opens.",
+      "substeps": [
+        {
+          "text": "AUTO mode: do NOT touch the pad or the keyboard until this terminal prints 'CHECKLIST: ...'. The game replays the route by itself.",
+          "when": {
+            "mode": "auto"
+          }
+        },
+        {
+          "text": "MANUAL mode: get the game to a calm place, then press Enter at the prompt 'Get the game to a calm place, then Enter = start the checklist'. The list starts then.",
+          "when": {
+            "mode": "manual"
+          }
+        }
+      ]
+    },
+    {
+      "text": "THE RULE for a DIGITAL step (the first 14): the terminal prints the button. Tap it ONCE, let go, wait one second, then press Enter in this terminal. Do not press anything else, not even the stick.",
+      "substeps": [
+        "The host button dump writes the dumps by itself at the press. If the terminal prints '!! no host button event', the tap was missed or too short: press s to skip or just tap again and Enter."
+      ]
+    },
+    {
+      "text": "THE RULE for an ANALOG step (stick or trigger): the terminal prints the direction and the amount. First leave everything alone for a second (a rest dump is taken). Then HOLD the stick or trigger steady as described and, while you keep holding, press Enter in this terminal. It prints 'taken, release it now'. Only then let go.",
+      "substeps": [
+        "Half way means about half of the travel, a quarter, three quarters and so on for the triggers are the same idea. Exact amounts do not matter, steady does.",
+        "A diagonal means both axes at the stop at the same time.",
+        "Never hold two controls at once unless the line says diagonal."
+      ]
+    },
+    {
+      "text": "FOLLOW the list to its end: 46 steps. s skips a step you cannot do, q stops the list early. Enter alone goes on."
+    },
+    {
+      "text": "WATCH THIS TERMINAL for lines that start with '!!'. They mean a dump got no answer from the game (the game may be busy): repeat that step with python -m tools.button_checklist run DIR --file {checklist} --start-at STEP_ID if you want, or just tell me."
+    }
+  ],
+  "note_at_end": [
+    "At the end the script prints the checklist report (one table line per step) and its file name checklist_report.md in the session folder. Nothing to type."
+  ],
+  "stop": [
+    "Type q at any prompt (best), or press Ctrl+C in this terminal. The game is stopped and the report written.",
+    "Or let the time limit of {minutes} minutes end it.",
+    "After any of these wait for the report before you close the terminal."
+  ],
+  "send_back": [
+    "Tell Claude the session finished: folder tmp/owner-profiles/{session}. It holds checklist_report.md, checklist.jsonl, README_SESSION.txt, buttons.jsonl and the dumps, no need to retype any of that.",
+    "Which input device you used (Xbox pad, which brand, or the keyboard) and every step you skipped or did differently from the printed order.",
+    "Any line starting with '!!' and any 'unimplemented instruction' or 'STOP' line from the game."
+  ]
+}

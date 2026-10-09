@@ -1,0 +1,883 @@
+entry_va,region,reason
+0x003d0109,library,"T1565 CRT __atodbl: calls ___strgtold12 then the double __ld12tod, callee side of the CRT __fassign family, inside the FLIRT-labelled CRT run; docs/t1565-function-classification.md"
+0x003d0136,library,"T1565 CRT __atoflt: calls ___strgtold12 then the float __ld12tod (0x3d00f3), same CRT run; docs/t1565-function-classification.md"
+0x003d029c,library,"T1565 CRT __fltout: calls ___dtold then $I10_OUTPUT and fills the static STRFLT at 0x772b30, called by CRT __cftog; docs/t1565-function-classification.md"
+0x003d0434,library,"T1565 CRT _ValidateRead: wraps IsBadReadPtr, called only from CRT C++ EH BuildCatchObject, next to FLIRT _ValidateExecute; docs/t1565-function-classification.md"
+0x003d044f,library,"T1565 CRT _ValidateWrite: wraps IsBadWritePtr, called only from CRT C++ EH BuildCatchObject; docs/t1565-function-classification.md"
+0x00019d40,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x0001e680,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x0002a310,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x0002e500,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x0002e510,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x00032070,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x0003b370,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x0003e420,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x000451f0,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x00046270,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x000462b0,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x00055d80,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x00059bf0,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x00062490,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x000624a0,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x000665a0,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x0006f6e0,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x00073e00,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x000823f0,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x0008e3d0,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x0009e380,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x000cb100,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x000d6a90,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x001b6690,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x00227740,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x0023ef70,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x0024a170,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x0025fa40,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x002a62e0,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x002a8370,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x00311900,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x00344270,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x003567f0,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x00357b70,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x0035deb0,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x0035ea20,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x0036cea0,game,"T1565 FLIRT false positive: 10-12 byte leaf accessor of a game global with game-only callers, the FLIRT YaccSet/HasConnectedChild name repeats at many addresses; docs/t1565-function-classification.md"
+0x003801d9,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003847b6,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0038493b,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00385cf0,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00386020,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00386b58,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00387114,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0038711e,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00387674,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0038768b,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00388c4f,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00388c66,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00389440,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003894e0,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0038a3ac,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0039b9f2,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0039bb25,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0039bc63,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0039bdd0,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0039bf20,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0039c030,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0039c312,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0039c443,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0039c581,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a5420,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a6832,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a68a2,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a6913,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a69d2,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a6b44,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a6bdd,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a6c2d,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a94e0,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a95d0,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a97d0,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a9990,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003c910d,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003c9420,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003cbd7c,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003cbdc7,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003ccecd,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003cd1f9,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00395808,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00395828,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00395918,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00395b88,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00395c78,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00395f58,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00396238,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00396568,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00396898,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003968f8,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00396958,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00396a98,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00396b68,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00396ff8,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003972a8,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003978f8,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00397958,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003979c8,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00397ce8,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00397e18,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00398a08,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0039c850,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0039e8d0,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0039ea60,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0039ed60,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0039ee00,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0039eed0,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0039efb0,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0039f620,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a2670,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a3d00,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a5cb0,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a6220,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a6410,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a7f30,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a9290,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a9b90,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003959d8,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00395a98,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003968b8,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003969c8,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00396c58,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00396d48,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003978b8,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00397ab8,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x00397bb8,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0039c180,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0039c6f0,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x0039c960,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a6000,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a6310,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003a86d0,library,T1643 clean scan-all linked-library candidate; original-XBE flow verified; docs/t1643-function-starts.md
+0x003d1920,game,T1644 original unwind map 0x4b7890 state 0 -> FuncInfo 0x4b7898 -> handler 0x3d192b -> game owner(s) 0x39760; docs/t1644-eh-funclet-owners.md
+0x003d1935,library,T1644 original unwind map 0x4b78b4 state 0 -> FuncInfo 0x4b78c4 -> handler 0x3d1948 -> XGRPH owner(s) 0x3eddf6; docs/t1644-eh-funclet-owners.md
+0x003d193d,library,T1644 original unwind map 0x4b78b4 state 1 -> FuncInfo 0x4b78c4 -> handler 0x3d1948 -> XGRPH owner(s) 0x3eddf6; docs/t1644-eh-funclet-owners.md
+0x003d1952,library,"T1644 original unwind map 0x4b7914 state 0 -> FuncInfo 0x4b792c -> handler 0x3d196a -> XGRPH owner(s) 0x3f0440,0x3f04ef,0x3f059e; docs/t1644-eh-funclet-owners.md"
+0x003d195a,library,"T1644 original unwind map 0x4b7914 state 1 -> FuncInfo 0x4b792c -> handler 0x3d196a -> XGRPH owner(s) 0x3f0440,0x3f04ef,0x3f059e; docs/t1644-eh-funclet-owners.md"
+0x003d1962,library,"T1644 original unwind map 0x4b7914 state 2 -> FuncInfo 0x4b792c -> handler 0x3d196a -> XGRPH owner(s) 0x3f0440,0x3f04ef,0x3f059e; docs/t1644-eh-funclet-owners.md"
+0x003d1974,library,"T1644 original unwind map 0x4b7948 state 0 -> FuncInfo 0x4b7950 -> handler 0x3d197c -> XGRPH owner(s) 0x3f1c22,0x3f4708,0x3f4ea7; docs/t1644-eh-funclet-owners.md"
+0x003d1986,library,T1644 original unwind map 0x4b796c state 0 -> FuncInfo 0x4b7974 -> handler 0x3d198e -> XGRPH owner(s) 0x3f1d82; docs/t1644-eh-funclet-owners.md
+0x003d1998,library,T1644 original unwind map 0x4b7990 state 0 -> FuncInfo 0x4b79a8 -> handler 0x3d19b0 -> XGRPH owner(s) 0x3f1fa3; docs/t1644-eh-funclet-owners.md
+0x003d19a0,library,T1644 original unwind map 0x4b7990 state 1 -> FuncInfo 0x4b79a8 -> handler 0x3d19b0 -> XGRPH owner(s) 0x3f1fa3; docs/t1644-eh-funclet-owners.md
+0x003d19a8,library,T1644 original unwind map 0x4b7990 state 2 -> FuncInfo 0x4b79a8 -> handler 0x3d19b0 -> XGRPH owner(s) 0x3f1fa3; docs/t1644-eh-funclet-owners.md
+0x003d19ba,library,"T1644 original unwind map 0x4b79c4 state 0 -> FuncInfo 0x4b79cc -> handler 0x3d19c2 -> XGRPH owner(s) 0x3f2212,0x3f2a06; docs/t1644-eh-funclet-owners.md"
+0x003d19cc,library,T1644 original unwind map 0x4b79e8 state 0 -> FuncInfo 0x4b79f0 -> handler 0x3d19d4 -> XGRPH owner(s) 0x3f2b28; docs/t1644-eh-funclet-owners.md
+0x003d19de,library,"T1644 original unwind map 0x4b7db4 state 0 -> FuncInfo 0x4b7dc4 -> handler 0x3d19ee -> XGRPH owner(s) 0x3f2bee,0x3f6a15; docs/t1644-eh-funclet-owners.md"
+0x003d19e6,library,"T1644 original unwind map 0x4b7db4 state 1 -> FuncInfo 0x4b7dc4 -> handler 0x3d19ee -> XGRPH owner(s) 0x3f2bee,0x3f6a15; docs/t1644-eh-funclet-owners.md"
+0x003d19f8,library,T1644 original unwind map 0x4b7a0c state 0 -> FuncInfo 0x4b7a2c -> handler 0x3d1a1d -> XGRPH owner(s) 0x3f384f; docs/t1644-eh-funclet-owners.md
+0x003d1a00,library,T1644 original unwind map 0x4b7a0c state 1 -> FuncInfo 0x4b7a2c -> handler 0x3d1a1d -> XGRPH owner(s) 0x3f384f; docs/t1644-eh-funclet-owners.md
+0x003d1a08,library,T1644 original unwind map 0x4b7a0c state 2 -> FuncInfo 0x4b7a2c -> handler 0x3d1a1d -> XGRPH owner(s) 0x3f384f; docs/t1644-eh-funclet-owners.md
+0x003d1a13,library,T1644 original unwind map 0x4b7a0c state 3 -> FuncInfo 0x4b7a2c -> handler 0x3d1a1d -> XGRPH owner(s) 0x3f384f; docs/t1644-eh-funclet-owners.md
+0x003d1a27,library,T1644 original unwind map 0x4b7a6c state 0 -> FuncInfo 0x4b7a74 -> handler 0x3d1a2f -> XGRPH owner(s) 0x3f397f; docs/t1644-eh-funclet-owners.md
+0x003d1a39,library,T1644 original unwind map 0x4b7a90 state 0 -> FuncInfo 0x4b7ab0 -> handler 0x3d1a62 -> XGRPH owner(s) 0x3f3b0e; docs/t1644-eh-funclet-owners.md
+0x003d1a41,library,T1644 original unwind map 0x4b7a90 state 1 -> FuncInfo 0x4b7ab0 -> handler 0x3d1a62 -> XGRPH owner(s) 0x3f3b0e; docs/t1644-eh-funclet-owners.md
+0x003d1a4c,library,T1644 original unwind map 0x4b7a90 state 2 -> FuncInfo 0x4b7ab0 -> handler 0x3d1a62 -> XGRPH owner(s) 0x3f3b0e; docs/t1644-eh-funclet-owners.md
+0x003d1a57,library,T1644 original unwind map 0x4b7a90 state 3 -> FuncInfo 0x4b7ab0 -> handler 0x3d1a62 -> XGRPH owner(s) 0x3f3b0e; docs/t1644-eh-funclet-owners.md
+0x003d1a6c,library,T1644 original unwind map 0x4b7acc state 0 -> FuncInfo 0x4b7aec -> handler 0x3d1a94 -> XGRPH owner(s) 0x3f3bec; docs/t1644-eh-funclet-owners.md
+0x003d1a76,library,T1644 original unwind map 0x4b7acc state 1 -> FuncInfo 0x4b7aec -> handler 0x3d1a94 -> XGRPH owner(s) 0x3f3bec; docs/t1644-eh-funclet-owners.md
+0x003d1a80,library,T1644 original unwind map 0x4b7acc state 2 -> FuncInfo 0x4b7aec -> handler 0x3d1a94 -> XGRPH owner(s) 0x3f3bec; docs/t1644-eh-funclet-owners.md
+0x003d1a8a,library,T1644 original unwind map 0x4b7acc state 3 -> FuncInfo 0x4b7aec -> handler 0x3d1a94 -> XGRPH owner(s) 0x3f3bec; docs/t1644-eh-funclet-owners.md
+0x003d1a9e,library,T1644 original unwind map 0x4b7b08 state 0 -> FuncInfo 0x4b7b40 -> handler 0x3d1ae4 -> XGRPH owner(s) 0x3f3d07; docs/t1644-eh-funclet-owners.md
+0x003d1aa8,library,T1644 original unwind map 0x4b7b08 state 1 -> FuncInfo 0x4b7b40 -> handler 0x3d1ae4 -> XGRPH owner(s) 0x3f3d07; docs/t1644-eh-funclet-owners.md
+0x003d1ab2,library,T1644 original unwind map 0x4b7b08 state 2 -> FuncInfo 0x4b7b40 -> handler 0x3d1ae4 -> XGRPH owner(s) 0x3f3d07; docs/t1644-eh-funclet-owners.md
+0x003d1abc,library,T1644 original unwind map 0x4b7b08 state 3 -> FuncInfo 0x4b7b40 -> handler 0x3d1ae4 -> XGRPH owner(s) 0x3f3d07; docs/t1644-eh-funclet-owners.md
+0x003d1ac6,library,T1644 original unwind map 0x4b7b08 state 4 -> FuncInfo 0x4b7b40 -> handler 0x3d1ae4 -> XGRPH owner(s) 0x3f3d07; docs/t1644-eh-funclet-owners.md
+0x003d1ad0,library,T1644 original unwind map 0x4b7b08 state 5 -> FuncInfo 0x4b7b40 -> handler 0x3d1ae4 -> XGRPH owner(s) 0x3f3d07; docs/t1644-eh-funclet-owners.md
+0x003d1ada,library,T1644 original unwind map 0x4b7b08 state 6 -> FuncInfo 0x4b7b40 -> handler 0x3d1ae4 -> XGRPH owner(s) 0x3f3d07; docs/t1644-eh-funclet-owners.md
+0x003d1aee,library,T1644 original unwind map 0x4b7b5c state 2 -> FuncInfo 0x4b7b74 -> handler 0x3d1b06 -> XGRPH owner(s) 0x3f401d; docs/t1644-eh-funclet-owners.md
+0x003d1af6,library,T1644 original unwind map 0x4b7b5c state 0 -> FuncInfo 0x4b7b74 -> handler 0x3d1b06 -> XGRPH owner(s) 0x3f401d; docs/t1644-eh-funclet-owners.md
+0x003d1afe,library,T1644 original unwind map 0x4b7b5c state 1 -> FuncInfo 0x4b7b74 -> handler 0x3d1b06 -> XGRPH owner(s) 0x3f401d; docs/t1644-eh-funclet-owners.md
+0x003d1b10,library,T1644 original unwind map 0x4b7b90 state 0 -> FuncInfo 0x4b7bb8 -> handler 0x3d1b44 -> XGRPH owner(s) 0x3f42a0; docs/t1644-eh-funclet-owners.md
+0x003d1b18,library,T1644 original unwind map 0x4b7b90 state 1 -> FuncInfo 0x4b7bb8 -> handler 0x3d1b44 -> XGRPH owner(s) 0x3f42a0; docs/t1644-eh-funclet-owners.md
+0x003d1b23,library,T1644 original unwind map 0x4b7b90 state 2 -> FuncInfo 0x4b7bb8 -> handler 0x3d1b44 -> XGRPH owner(s) 0x3f42a0; docs/t1644-eh-funclet-owners.md
+0x003d1b2e,library,T1644 original unwind map 0x4b7b90 state 3 -> FuncInfo 0x4b7bb8 -> handler 0x3d1b44 -> XGRPH owner(s) 0x3f42a0; docs/t1644-eh-funclet-owners.md
+0x003d1b39,library,T1644 original unwind map 0x4b7b90 state 4 -> FuncInfo 0x4b7bb8 -> handler 0x3d1b44 -> XGRPH owner(s) 0x3f42a0; docs/t1644-eh-funclet-owners.md
+0x003d1b4e,library,"T1644 original unwind map 0x4b7a48 state 0 -> FuncInfo 0x4b7a50 -> handler 0x3d1b58 -> XGRPH owner(s) 0x3f391b,0x3f4361,0x3f43e1; docs/t1644-eh-funclet-owners.md"
+0x003d1b62,library,T1644 original unwind map 0x4b7bd4 state 0 -> FuncInfo 0x4b7bdc -> handler 0x3d1b6a -> XGRPH owner(s) 0x3f4444; docs/t1644-eh-funclet-owners.md
+0x003d1b74,library,T1644 original unwind map 0x4b7bf8 state 0 -> FuncInfo 0x4b7c08 -> handler 0x3d1b87 -> XGRPH owner(s) 0x3f45f7; docs/t1644-eh-funclet-owners.md
+0x003d1b7c,library,T1644 original unwind map 0x4b7bf8 state 1 -> FuncInfo 0x4b7c08 -> handler 0x3d1b87 -> XGRPH owner(s) 0x3f45f7; docs/t1644-eh-funclet-owners.md
+0x003d1b91,library,T1644 original unwind map 0x4b7c24 state 0 -> FuncInfo 0x4b7c2c -> handler 0x3d1b99 -> XGRPH owner(s) 0x3f483b; docs/t1644-eh-funclet-owners.md
+0x003d1ba3,library,"T1644 original unwind map 0x4b7c48 state 0 -> FuncInfo 0x4b7c58 -> handler 0x3d1bb6 -> XGRPH owner(s) 0x3f372f,0x3f49b7; docs/t1644-eh-funclet-owners.md"
+0x003d1bab,library,"T1644 original unwind map 0x4b7c48 state 1 -> FuncInfo 0x4b7c58 -> handler 0x3d1bb6 -> XGRPH owner(s) 0x3f372f,0x3f49b7; docs/t1644-eh-funclet-owners.md"
+0x003d1bc0,library,T1644 original unwind map 0x4b7c74 state 0 -> FuncInfo 0x4b7c8c -> handler 0x3d1bc8 -> XGRPH owner(s) 0x3f4a25; docs/t1644-eh-funclet-owners.md
+0x003d1bd2,library,T1644 original unwind map 0x4b7ca8 state 0 -> FuncInfo 0x4b7cb0 -> handler 0x3d1bda -> XGRPH owner(s) 0x3f4a3f; docs/t1644-eh-funclet-owners.md
+0x003d1be4,library,T1644 original unwind map 0x4b7ccc state 0 -> FuncInfo 0x4b7cd4 -> handler 0x3d1bec -> XGRPH owner(s) 0x3f4bef; docs/t1644-eh-funclet-owners.md
+0x003d1bf6,library,T1644 original unwind map 0x4b7cf0 state 0 -> FuncInfo 0x4b7d38 -> handler 0x3d1c44 -> XGRPH owner(s) 0x3f51c8; docs/t1644-eh-funclet-owners.md
+0x003d1c01,library,T1644 original unwind map 0x4b7cf0 state 1 -> FuncInfo 0x4b7d38 -> handler 0x3d1c44 -> XGRPH owner(s) 0x3f51c8; docs/t1644-eh-funclet-owners.md
+0x003d1c0c,library,T1644 original unwind map 0x4b7cf0 state 2 -> FuncInfo 0x4b7d38 -> handler 0x3d1c44 -> XGRPH owner(s) 0x3f51c8; docs/t1644-eh-funclet-owners.md
+0x003d1c14,library,T1644 original unwind map 0x4b7cf0 state 3 -> FuncInfo 0x4b7d38 -> handler 0x3d1c44 -> XGRPH owner(s) 0x3f51c8; docs/t1644-eh-funclet-owners.md
+0x003d1c1c,library,T1644 original unwind map 0x4b7cf0 state 4 -> FuncInfo 0x4b7d38 -> handler 0x3d1c44 -> XGRPH owner(s) 0x3f51c8; docs/t1644-eh-funclet-owners.md
+0x003d1c24,library,T1644 original unwind map 0x4b7cf0 state 5 -> FuncInfo 0x4b7d38 -> handler 0x3d1c44 -> XGRPH owner(s) 0x3f51c8; docs/t1644-eh-funclet-owners.md
+0x003d1c2c,library,T1644 original unwind map 0x4b7cf0 state 6 -> FuncInfo 0x4b7d38 -> handler 0x3d1c44 -> XGRPH owner(s) 0x3f51c8; docs/t1644-eh-funclet-owners.md
+0x003d1c34,library,T1644 original unwind map 0x4b7cf0 state 7 -> FuncInfo 0x4b7d38 -> handler 0x3d1c44 -> XGRPH owner(s) 0x3f51c8; docs/t1644-eh-funclet-owners.md
+0x003d1c3c,library,T1644 original unwind map 0x4b7cf0 state 8 -> FuncInfo 0x4b7d38 -> handler 0x3d1c44 -> XGRPH owner(s) 0x3f51c8; docs/t1644-eh-funclet-owners.md
+0x003d1c4e,library,T1644 original unwind map 0x4b7d54 state 0 -> FuncInfo 0x4b7d5c -> handler 0x3d1c67 -> XGRPH owner(s) 0x3f5b0d; docs/t1644-eh-funclet-owners.md
+0x003d1c71,library,T1644 original unwind map 0x4b7d78 state 0 -> FuncInfo 0x4b7d98 -> handler 0x3d1c91 -> XGRPH owner(s) 0x3f5c59; docs/t1644-eh-funclet-owners.md
+0x003d1c79,library,T1644 original unwind map 0x4b7d78 state 1 -> FuncInfo 0x4b7d98 -> handler 0x3d1c91 -> XGRPH owner(s) 0x3f5c59; docs/t1644-eh-funclet-owners.md
+0x003d1c81,library,T1644 original unwind map 0x4b7d78 state 2 -> FuncInfo 0x4b7d98 -> handler 0x3d1c91 -> XGRPH owner(s) 0x3f5c59; docs/t1644-eh-funclet-owners.md
+0x003d1c89,library,T1644 original unwind map 0x4b7d78 state 3 -> FuncInfo 0x4b7d98 -> handler 0x3d1c91 -> XGRPH owner(s) 0x3f5c59; docs/t1644-eh-funclet-owners.md
+0x003d1c9b,library,T1644 original unwind map 0x4b7de0 state 0 -> FuncInfo 0x4b7e38 -> handler 0x3d1d0a -> XGRPH owner(s) 0x3f6db9; docs/t1644-eh-funclet-owners.md
+0x003d1ca3,library,T1644 original unwind map 0x4b7de0 state 1 -> FuncInfo 0x4b7e38 -> handler 0x3d1d0a -> XGRPH owner(s) 0x3f6db9; docs/t1644-eh-funclet-owners.md
+0x003d1cae,library,T1644 original unwind map 0x4b7de0 state 2 -> FuncInfo 0x4b7e38 -> handler 0x3d1d0a -> XGRPH owner(s) 0x3f6db9; docs/t1644-eh-funclet-owners.md
+0x003d1cb9,library,T1644 original unwind map 0x4b7de0 state 3 -> FuncInfo 0x4b7e38 -> handler 0x3d1d0a -> XGRPH owner(s) 0x3f6db9; docs/t1644-eh-funclet-owners.md
+0x003d1cc4,library,T1644 original unwind map 0x4b7de0 state 4 -> FuncInfo 0x4b7e38 -> handler 0x3d1d0a -> XGRPH owner(s) 0x3f6db9; docs/t1644-eh-funclet-owners.md
+0x003d1cce,library,T1644 original unwind map 0x4b7de0 state 5 -> FuncInfo 0x4b7e38 -> handler 0x3d1d0a -> XGRPH owner(s) 0x3f6db9; docs/t1644-eh-funclet-owners.md
+0x003d1cd8,library,T1644 original unwind map 0x4b7de0 state 6 -> FuncInfo 0x4b7e38 -> handler 0x3d1d0a -> XGRPH owner(s) 0x3f6db9; docs/t1644-eh-funclet-owners.md
+0x003d1ce2,library,T1644 original unwind map 0x4b7de0 state 7 -> FuncInfo 0x4b7e38 -> handler 0x3d1d0a -> XGRPH owner(s) 0x3f6db9; docs/t1644-eh-funclet-owners.md
+0x003d1cec,library,T1644 original unwind map 0x4b7de0 state 8 -> FuncInfo 0x4b7e38 -> handler 0x3d1d0a -> XGRPH owner(s) 0x3f6db9; docs/t1644-eh-funclet-owners.md
+0x003d1cf6,library,T1644 original unwind map 0x4b7de0 state 9 -> FuncInfo 0x4b7e38 -> handler 0x3d1d0a -> XGRPH owner(s) 0x3f6db9; docs/t1644-eh-funclet-owners.md
+0x003d1d00,library,T1644 original unwind map 0x4b7de0 state 10 -> FuncInfo 0x4b7e38 -> handler 0x3d1d0a -> XGRPH owner(s) 0x3f6db9; docs/t1644-eh-funclet-owners.md
+0x003d1d14,library,T1644 original unwind map 0x4b7e54 state 0 -> FuncInfo 0x4b7e94 -> handler 0x3d1d66 -> XGRPH owner(s) 0x3f7340; docs/t1644-eh-funclet-owners.md
+0x003d1d1c,library,T1644 original unwind map 0x4b7e54 state 1 -> FuncInfo 0x4b7e94 -> handler 0x3d1d66 -> XGRPH owner(s) 0x3f7340; docs/t1644-eh-funclet-owners.md
+0x003d1d27,library,T1644 original unwind map 0x4b7e54 state 2 -> FuncInfo 0x4b7e94 -> handler 0x3d1d66 -> XGRPH owner(s) 0x3f7340; docs/t1644-eh-funclet-owners.md
+0x003d1d32,library,T1644 original unwind map 0x4b7e54 state 3 -> FuncInfo 0x4b7e94 -> handler 0x3d1d66 -> XGRPH owner(s) 0x3f7340; docs/t1644-eh-funclet-owners.md
+0x003d1d3d,library,T1644 original unwind map 0x4b7e54 state 4 -> FuncInfo 0x4b7e94 -> handler 0x3d1d66 -> XGRPH owner(s) 0x3f7340; docs/t1644-eh-funclet-owners.md
+0x003d1d48,library,T1644 original unwind map 0x4b7e54 state 5 -> FuncInfo 0x4b7e94 -> handler 0x3d1d66 -> XGRPH owner(s) 0x3f7340; docs/t1644-eh-funclet-owners.md
+0x003d1d52,library,T1644 original unwind map 0x4b7e54 state 6 -> FuncInfo 0x4b7e94 -> handler 0x3d1d66 -> XGRPH owner(s) 0x3f7340; docs/t1644-eh-funclet-owners.md
+0x003d1d5c,library,T1644 original unwind map 0x4b7e54 state 7 -> FuncInfo 0x4b7e94 -> handler 0x3d1d66 -> XGRPH owner(s) 0x3f7340; docs/t1644-eh-funclet-owners.md
+0x003d1d70,library,T1644 original unwind map 0x4b7eb0 state 0 -> FuncInfo 0x4b7ec0 -> handler 0x3d1d86 -> XGRPH owner(s) 0x3f7534; docs/t1644-eh-funclet-owners.md
+0x003d1d78,library,T1644 original unwind map 0x4b7eb0 state 1 -> FuncInfo 0x4b7ec0 -> handler 0x3d1d86 -> XGRPH owner(s) 0x3f7534; docs/t1644-eh-funclet-owners.md
+0x003d1d90,library,T1644 original unwind map 0x4b7edc state 0 -> FuncInfo 0x4b7eec -> handler 0x3d1da0 -> XGRPH owner(s) 0x3f760f; docs/t1644-eh-funclet-owners.md
+0x003d1d98,library,T1644 original unwind map 0x4b7edc state 1 -> FuncInfo 0x4b7eec -> handler 0x3d1da0 -> XGRPH owner(s) 0x3f760f; docs/t1644-eh-funclet-owners.md
+0x003d1daa,library,"T1644 original unwind map 0x4b7f08 state 0 -> FuncInfo 0x4b7f10 -> handler 0x3d1db2 -> XGRPH owner(s) 0x3f77bb,0x3f780f; docs/t1644-eh-funclet-owners.md"
+0x003d1dbc,library,T1644 original unwind map 0x4b7f2c state 0 -> FuncInfo 0x4b7f3c -> handler 0x3d1dcc -> XGRPH owner(s) 0x3f791d; docs/t1644-eh-funclet-owners.md
+0x003d1dc4,library,T1644 original unwind map 0x4b7f2c state 1 -> FuncInfo 0x4b7f3c -> handler 0x3d1dcc -> XGRPH owner(s) 0x3f791d; docs/t1644-eh-funclet-owners.md
+0x003d1dd6,library,T1644 original unwind map 0x4b7f58 state 0 -> FuncInfo 0x4b7f60 -> handler 0x3d1dde -> XGRPH owner(s) 0x3f7e70; docs/t1644-eh-funclet-owners.md
+0x003d1de8,library,T1644 original unwind map 0x4b7f7c state 1 -> FuncInfo 0x4b7fd0 -> handler 0x3d1e10 -> XGRPH owner(s) 0x3f8037; docs/t1644-eh-funclet-owners.md
+0x003d1df2,library,T1644 original unwind map 0x4b7f7c state 2 -> FuncInfo 0x4b7fd0 -> handler 0x3d1e10 -> XGRPH owner(s) 0x3f8037; docs/t1644-eh-funclet-owners.md
+0x003d1dfc,library,T1644 original unwind map 0x4b7f7c state 3 -> FuncInfo 0x4b7fd0 -> handler 0x3d1e10 -> XGRPH owner(s) 0x3f8037; docs/t1644-eh-funclet-owners.md
+0x003d1e06,library,T1644 original unwind map 0x4b7f7c state 4 -> FuncInfo 0x4b7fd0 -> handler 0x3d1e10 -> XGRPH owner(s) 0x3f8037; docs/t1644-eh-funclet-owners.md
+0x003d1e1a,library,T1644 original unwind map 0x4b7fec state 0 -> FuncInfo 0x4b801c -> handler 0x3d1e4c -> XGRPH owner(s) 0x3f81ec; docs/t1644-eh-funclet-owners.md
+0x003d1e22,library,T1644 original unwind map 0x4b7fec state 1 -> FuncInfo 0x4b801c -> handler 0x3d1e4c -> XGRPH owner(s) 0x3f81ec; docs/t1644-eh-funclet-owners.md
+0x003d1e2a,library,T1644 original unwind map 0x4b7fec state 2 -> FuncInfo 0x4b801c -> handler 0x3d1e4c -> XGRPH owner(s) 0x3f81ec; docs/t1644-eh-funclet-owners.md
+0x003d1e32,library,T1644 original unwind map 0x4b7fec state 3 -> FuncInfo 0x4b801c -> handler 0x3d1e4c -> XGRPH owner(s) 0x3f81ec; docs/t1644-eh-funclet-owners.md
+0x003d1e3a,library,T1644 original unwind map 0x4b7fec state 4 -> FuncInfo 0x4b801c -> handler 0x3d1e4c -> XGRPH owner(s) 0x3f81ec; docs/t1644-eh-funclet-owners.md
+0x003d1e42,library,T1644 original unwind map 0x4b7fec state 5 -> FuncInfo 0x4b801c -> handler 0x3d1e4c -> XGRPH owner(s) 0x3f81ec; docs/t1644-eh-funclet-owners.md
+0x003d1e56,library,"T1644 original unwind map 0x4b8038 state 0 -> FuncInfo 0x4b8068 -> handler 0x3d1e95 -> XGRPH owner(s) 0x3fc826,0x3fc8a8; docs/t1644-eh-funclet-owners.md"
+0x003d1e5e,library,"T1644 original unwind map 0x4b8038 state 1 -> FuncInfo 0x4b8068 -> handler 0x3d1e95 -> XGRPH owner(s) 0x3fc826,0x3fc8a8; docs/t1644-eh-funclet-owners.md"
+0x003d1e69,library,"T1644 original unwind map 0x4b8038 state 2 -> FuncInfo 0x4b8068 -> handler 0x3d1e95 -> XGRPH owner(s) 0x3fc826,0x3fc8a8; docs/t1644-eh-funclet-owners.md"
+0x003d1e74,library,"T1644 original unwind map 0x4b8038 state 3 -> FuncInfo 0x4b8068 -> handler 0x3d1e95 -> XGRPH owner(s) 0x3fc826,0x3fc8a8; docs/t1644-eh-funclet-owners.md"
+0x003d1e7f,library,"T1644 original unwind map 0x4b8038 state 4 -> FuncInfo 0x4b8068 -> handler 0x3d1e95 -> XGRPH owner(s) 0x3fc826,0x3fc8a8; docs/t1644-eh-funclet-owners.md"
+0x003d1e8a,library,"T1644 original unwind map 0x4b8038 state 5 -> FuncInfo 0x4b8068 -> handler 0x3d1e95 -> XGRPH owner(s) 0x3fc826,0x3fc8a8; docs/t1644-eh-funclet-owners.md"
+0x003d1e9f,library,T1644 original unwind map 0x4b8084 state 0 -> FuncInfo 0x4b8094 -> handler 0x3d1eaf -> XGRPH owner(s) 0x3ffd84; docs/t1644-eh-funclet-owners.md
+0x003d1ea7,library,T1644 original unwind map 0x4b8084 state 1 -> FuncInfo 0x4b8094 -> handler 0x3d1eaf -> XGRPH owner(s) 0x3ffd84; docs/t1644-eh-funclet-owners.md
+0x003d1eb9,library,T1644 original unwind map 0x4b80b0 state 0 -> FuncInfo 0x4b80c0 -> handler 0x3d1ecf -> XGRPH owner(s) 0x400d9d; docs/t1644-eh-funclet-owners.md
+0x003d1ec4,library,T1644 original unwind map 0x4b80b0 state 1 -> FuncInfo 0x4b80c0 -> handler 0x3d1ecf -> XGRPH owner(s) 0x400d9d; docs/t1644-eh-funclet-owners.md
+0x003d1ed9,library,T1644 original unwind map 0x4b80dc state 0 -> FuncInfo 0x4b80fc -> handler 0x3d1f13 -> XGRPH owner(s) 0x400e13; docs/t1644-eh-funclet-owners.md
+0x003d1ee4,library,T1644 original unwind map 0x4b80dc state 1 -> FuncInfo 0x4b80fc -> handler 0x3d1f13 -> XGRPH owner(s) 0x400e13; docs/t1644-eh-funclet-owners.md
+0x003d1eef,library,T1644 original unwind map 0x4b80dc state 2 -> FuncInfo 0x4b80fc -> handler 0x3d1f13 -> XGRPH owner(s) 0x400e13; docs/t1644-eh-funclet-owners.md
+0x003d1f05,library,T1644 original unwind map 0x4b80dc state 3 -> FuncInfo 0x4b80fc -> handler 0x3d1f13 -> XGRPH owner(s) 0x400e13; docs/t1644-eh-funclet-owners.md
+0x003d1f1d,library,"T1644 original unwind map 0x4b8118 state 0 -> FuncInfo 0x4b8120 -> handler 0x3d1f25 -> XGRPH owner(s) 0x400e80,0x400fc1; docs/t1644-eh-funclet-owners.md"
+0x003d1f2f,library,T1644 original unwind map 0x4b813c state 0 -> FuncInfo 0x4b814c -> handler 0x3d1f3f -> XGRPH owner(s) 0x4015f8; docs/t1644-eh-funclet-owners.md
+0x003d1f37,library,T1644 original unwind map 0x4b813c state 1 -> FuncInfo 0x4b814c -> handler 0x3d1f3f -> XGRPH owner(s) 0x4015f8; docs/t1644-eh-funclet-owners.md
+0x003d1f49,library,T1644 original unwind map 0x4b8168 state 0 -> FuncInfo 0x4b8178 -> handler 0x3d1f59 -> XGRPH owner(s) 0x401872; docs/t1644-eh-funclet-owners.md
+0x003d1f51,library,T1644 original unwind map 0x4b8168 state 1 -> FuncInfo 0x4b8178 -> handler 0x3d1f59 -> XGRPH owner(s) 0x401872; docs/t1644-eh-funclet-owners.md
+0x003d1f63,library,T1644 original unwind map 0x4b8194 state 0 -> FuncInfo 0x4b819c -> handler 0x3d1f6b -> XGRPH owner(s) 0x401aca; docs/t1644-eh-funclet-owners.md
+0x003d1f75,library,"T1644 original unwind map 0x4b81b8 state 0 -> FuncInfo 0x4b81c0 -> handler 0x3d1f7d -> XGRPH owner(s) 0x4013e9,0x401b24; docs/t1644-eh-funclet-owners.md"
+0x003d1f87,library,T1644 original unwind map 0x4b81dc state 0 -> FuncInfo 0x4b81e4 -> handler 0x3d1f8f -> XGRPH owner(s) 0x401ce3; docs/t1644-eh-funclet-owners.md
+0x003d1f99,library,"T1644 original unwind map 0x4b8200 state 0 -> FuncInfo 0x4b8208 -> handler 0x3d1fa1 -> XGRPH owner(s) 0x4011a4,0x402178; docs/t1644-eh-funclet-owners.md"
+0x003d1fab,library,T1644 original unwind map 0x4b8224 state 0 -> FuncInfo 0x4b822c -> handler 0x3d1fb5 -> XGRPH owner(s) 0x402394; docs/t1644-eh-funclet-owners.md
+0x003d1fbf,library,T1644 original unwind map 0x4b8248 state 0 -> FuncInfo 0x4b8250 -> handler 0x3d1fc9 -> XGRPH owner(s) 0x4029c4; docs/t1644-eh-funclet-owners.md
+0x0037d81c,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x0037e7c2,library,"T1641 libsig full-body match, xapilib (22 fixed bytes, alias_group) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0037fe9b,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x0038125a,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00382097,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00383de0,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00383fd4,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003846ff,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003847d2,library,"T1641 libsig full-body match, xapilib (46 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00384834,library,"T1641 libsig full-body match, xapilib (33 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00384859,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00384861,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00385619,library,"T1641 libsig full-body match, xvoice (24 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385631,library,"T1641 libsig full-body match, xvoice (64 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385671,library,"T1641 libsig full-body match, xvoice (163 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385714,library,"T1641 libsig full-body match, xvoice (109 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385781,library,"T1641 libsig full-body match, xvoice (31 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003857a4,library,"T1641 libsig full-body match, xvoice (58 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003857de,library,"T1641 libsig full-body match, xvoice (44 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038580a,library,"T1641 libsig full-body match, xvoice (44 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385836,library,"T1641 libsig full-body match, xvoice (52 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038586a,library,"T1641 libsig full-body match, xvoice (38 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385890,library,"T1641 libsig full-body match, xvoice (52 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003858c4,library,"T1641 libsig full-body match, xvoice (52 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003858f8,library,"T1641 libsig full-body match, xvoice (32 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385918,library,"T1641 libsig full-body match, xvoice (83 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038596b,library,"T1641 libsig full-body match, xvoice (63 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003859be,library,"T1641 libsig full-body match, xvoice (68 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385a2e,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00385a39,library,"T1641 libsig full-body match, xvoice (30 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385a63,library,"T1641 libsig full-body match, xvoice (141 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385b08,library,"T1641 libsig full-body match, xvoice (44 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385b38,library,"T1641 libsig full-body match, xvoice (65 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385b7d,library,T1641 library run: 5 function(s) between libsig-strong library functions with no other game function between (each with a libsig match in a linked library); docs/t1641-libsig-rematch.md
+0x00385b82,library,T1641 library run: 5 function(s) between libsig-strong library functions with no other game function between (each with a libsig match in a linked library); docs/t1641-libsig-rematch.md
+0x00385b91,library,T1641 library run: 5 function(s) between libsig-strong library functions with no other game function between (each with a libsig match in a linked library); docs/t1641-libsig-rematch.md
+0x00385b96,library,T1641 library run: 5 function(s) between libsig-strong library functions with no other game function between (each with a libsig match in a linked library); docs/t1641-libsig-rematch.md
+0x00385b9b,library,T1641 library run: 5 function(s) between libsig-strong library functions with no other game function between (each with a libsig match in a linked library); docs/t1641-libsig-rematch.md
+0x00385ba0,library,"T1641 libsig full-body match, xvoice (24 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385bbc,library,"T1641 libsig full-body match, xvoice (24 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385bd8,library,"T1641 libsig full-body match, xvoice (32 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385bfc,library,"T1641 libsig full-body match, xvoice (24 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385c18,library,"T1641 libsig full-body match, xvoice (32 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385c3c,library,"T1641 libsig full-body match, xvoice (32 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385c60,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00385c65,library,"T1641 libsig full-body match, xvoice (40 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385c91,library,"T1641 libsig full-body match, xvoice (46 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385ccb,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00385cd0,library,"T1641 libsig full-body match, xvoice (24 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385d0b,library,"T1641 libsig full-body match, xvoice (154 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385df9,library,"T1641 libsig full-body match, xvoice (80 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385e69,library,"T1641 libsig full-body match, xvoice (47 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385edd,library,"T1641 libsig full-body match, xvoice (52 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385f15,library,"T1641 libsig full-body match, xvoice (91 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385f70,library,"T1641 libsig full-body match, xvoice (61 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385fb5,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00385fc8,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00385fd4,library,"T1641 libsig full-body match, xvoice (27 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00385ff3,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00385fff,library,"T1641 libsig full-body match, xvoice (25 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386062,library,"T1641 libsig full-body match, xvoice (40 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038608a,library,"T1641 libsig full-body match, xvoice (39 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003860b1,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003860c8,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003860d4,library,"T1641 libsig full-body match, xvoice (121 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386155,library,"T1641 libsig full-body match, xvoice (90 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003861b3,library,"T1641 libsig full-body match, xvoice (25 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003861d4,library,"T1641 libsig full-body match, xvoice (67 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386217,library,"T1641 libsig full-body match, xvoice (55 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038624e,library,"T1641 libsig full-body match, xvoice (53 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386283,library,"T1641 libsig full-body match, xvoice (105 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386300,library,"T1641 libsig full-body match, xvoice (49 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386331,library,"T1641 libsig full-body match, xvoice (111 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003863a8,library,"T1641 libsig full-body match, xvoice (69 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003863f9,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00386405,library,"T1641 libsig full-body match, xvoice (60 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386451,library,"T1641 libsig full-body match, xvoice (193 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386526,library,"T1641 libsig full-body match, xvoice (85 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386593,library,"T1641 libsig full-body match, xvoice (33 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003865b8,library,"T1641 libsig full-body match, xvoice (40 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003865e0,library,"T1641 libsig full-body match, xvoice (73 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386631,library,"T1641 libsig full-body match, xvoice (46 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386667,library,"T1641 libsig full-body match, xvoice (45 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003866a4,library,"T1641 libsig full-body match, xvoice (33 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003866c9,library,"T1641 libsig full-body match, xvoice (46 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003866ff,library,"T1641 libsig full-body match, xvoice (44 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386733,library,"T1641 libsig full-body match, xvoice (182 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003867fd,library,"T1641 libsig full-body match, xvoice (123 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386878,library,"T1641 libsig full-body match, xvoice (122 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003868f2,library,"T1641 libsig full-body match, xvoice (35 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386919,library,"T1641 libsig full-body match, xvoice (35 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386940,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00386944,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00386954,library,"T1641 libsig full-body match, xvoice (19 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038696f,library,"T1641 libsig full-body match, xvoice (21 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386990,library,"T1641 libsig full-body match, xvoice (92 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386a08,library,"T1641 libsig full-body match, xvoice (79 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386a73,library,"T1641 libsig full-body match, xvoice (193 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386b66,library,"T1641 libsig full-body match, xvoice (215 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386c69,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00386c75,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00386c81,library,"T1641 libsig full-body match, xvoice (49 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386cba,library,"T1641 libsig full-body match, xvoice (25 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386cdb,library,"T1641 libsig full-body match, xvoice (190 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386db5,library,"T1641 libsig full-body match, xvoice (60 fixed bytes, ambiguous) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386e01,library,"T1641 libsig full-body match, xvoice (21 fixed bytes, alias_group) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386e1a,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00386e1e,library,"T1641 libsig full-body match, xvoice (38 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386e50,library,"T1641 libsig full-body match, xvoice (35 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386e73,library,"T1641 libsig full-body match, xvoice (18 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386e89,library,"T1641 libsig full-body match, xvoice (52 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386ec1,library,"T1641 libsig full-body match, xvoice (36 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386ee9,library,"T1641 libsig full-body match, xvoice (48 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386f19,library,"T1641 libsig full-body match, xvoice (65 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386f5a,library,"T1641 libsig full-body match, xvoice (21 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386f73,library,"T1641 libsig full-body match, xvoice (24 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386f8f,library,"T1641 libsig full-body match, xvoice (20 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386fab,library,"T1641 libsig full-body match, xvoice (16 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386fbb,library,"T1641 libsig full-body match, xvoice (16 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00386fcf,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00386fdb,library,"T1641 libsig full-body match, xvoice (33 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387000,library,"T1641 libsig full-body match, xvoice (57 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387041,library,"T1641 libsig full-body match, xvoice (24 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387061,library,"T1641 libsig full-body match, xvoice (42 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387093,library,"T1641 libsig full-body match, xvoice (19 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003870aa,library,"T1641 libsig full-body match, xvoice (73 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387178,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00387180,library,"T1641 libsig full-body match, xvoice (27 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003871a7,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003871b4,library,"T1641 libsig full-body match, xvoice (23 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003871d3,library,"T1641 libsig full-body match, xvoice (51 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038720e,library,"T1641 libsig full-body match, xvoice (58 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387248,library,"T1641 libsig full-body match, xvoice (29 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038726d,library,"T1641 libsig full-body match, xvoice (30 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038728b,library,"T1641 libsig full-body match, xvoice (49 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003872bc,library,"T1641 libsig full-body match, xvoice (49 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003872ed,library,"T1641 libsig full-body match, xvoice (98 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387367,library,"T1641 libsig full-body match, xvoice (223 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387452,library,"T1641 libsig full-body match, xvoice (51 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387489,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00387491,library,"T1641 libsig full-body match, xvoice (55 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003874d0,library,"T1641 libsig full-body match, xvoice (84 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387528,library,"T1641 libsig full-body match, xvoice (62 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038756e,library,"T1641 libsig full-body match, xvoice (65 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003875b3,library,"T1641 libsig full-body match, xvoice (109 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038762c,library,"T1641 libsig full-body match, xvoice (44 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003876a2,library,"T1641 libsig full-body match, xvoice (50 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003876e0,library,"T1641 libsig full-body match, xvoice (95 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038774f,library,"T1641 libsig full-body match, xvoice (24 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038776f,library,"T1641 libsig full-body match, xvoice (22 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387789,library,"T1641 libsig full-body match, xvoice (69 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003877d2,library,"T1641 libsig full-body match, xvoice (106 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387848,library,"T1641 libsig full-body match, xvoice (40 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387880,library,"T1641 libsig full-body match, xvoice (104 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387918,library,"T1641 libsig full-body match, xvoice (87 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387987,library,"T1641 libsig full-body match, xvoice (121 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387a28,library,"T1641 libsig full-body match, xvoice (33 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387a55,library,"T1641 libsig full-body match, xvoice (65 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387ab9,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00387aba,library,"T1641 libsig full-body match, xvoice (18 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387ad0,library,"T1641 libsig full-body match, xvoice (26 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387aee,library,"T1641 libsig full-body match, xvoice (45 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387b27,library,"T1641 libsig full-body match, xvoice (32 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387b4b,library,"T1641 libsig full-body match, xvoice (32 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387b83,library,"T1641 libsig full-body match, xvoice (88 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387bef,library,"T1641 libsig full-body match, xvoice (60 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387c3b,library,"T1641 libsig full-body match, xvoice (86 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387c99,library,"T1641 libsig full-body match, xvoice (169 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387d46,library,"T1641 libsig full-body match, xvoice (42 fixed bytes, alias_group) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387d70,library,"T1641 libsig full-body match, xvoice (57 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387da9,library,"T1641 libsig full-body match, xvoice (145 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387e3a,library,"T1641 libsig full-body match, xvoice (40 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387e66,library,"T1641 libsig full-body match, xvoice (72 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387eb6,library,"T1641 libsig full-body match, xvoice (26 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00387ed0,library,"T1641 libsig full-body match, xvoice (411 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00388097,library,"T1641 libsig full-body match, xvoice (43 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003880d2,library,"T1641 libsig full-body match, xvoice (498 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00388300,library,"T1641 libsig full-body match, xvoice (134 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038839a,library,"T1641 libsig full-body match, xvoice (88 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003883fa,library,"T1641 libsig full-body match, xvoice (228 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003884ee,library,"T1641 libsig full-body match, xvoice (16 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00388502,library,"T1641 libsig full-body match, xvoice (280 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038864e,library,"T1641 libsig full-body match, xvoice (92 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003886aa,library,"T1641 libsig full-body match, xvoice (66 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003886f0,library,"T1641 libsig full-body match, xvoice (80 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00388750,library,"T1641 libsig full-body match, xvoice (24 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00388770,library,"T1641 libsig full-body match, xvoice (24 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00388790,library,"T1641 libsig full-body match, xvoice (54 fixed bytes, alias_group) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003887da,library,"T1641 libsig full-body match, xvoice (49 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038880f,library,"T1641 libsig full-body match, xvoice (56 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00388847,library,"T1641 libsig full-body match, xvoice (34 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038886d,library,"T1641 libsig full-body match, xvoice (22 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00388887,library,"T1641 libsig full-body match, xvoice (165 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00388940,library,"T1641 libsig full-body match, xvoice (38 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00388972,library,"T1641 libsig full-body match, xvoice (26 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038898c,library,"T1641 libsig full-body match, xvoice (157 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00388a35,library,"T1641 libsig full-body match, xvoice (149 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00388ad6,library,"T1641 libsig full-body match, xvoice (94 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00388b40,library,"T1641 libsig full-body match, xvoice (44 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00388b78,library,"T1641 libsig full-body match, xvoice (117 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00388c05,library,"T1641 libsig full-body match, xvoice (70 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00388c7d,library,"T1641 libsig full-body match, xvoice (292 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00388dbd,library,"T1641 libsig full-body match, xvoice (180 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00388e95,library,"T1641 libsig full-body match, xvoice (238 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00388fab,library,"T1641 libsig full-body match, xvoice (24 fixed bytes, alias_group) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00388fc3,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00388fd6,library,"T1641 libsig full-body match, xvoice (52 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038900a,library,"T1641 libsig full-body match, xvoice (129 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003890a3,library,"T1641 libsig full-body match, xvoice (71 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003890ee,library,"T1641 libsig full-body match, xvoice (34 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00389118,library,"T1641 libsig full-body match, xvoice (104 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00389184,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00389197,library,"T1641 libsig full-body match, xvoice (118 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00389225,library,"T1641 libsig full-body match, xvoice (26 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00389247,library,"T1641 libsig full-body match, xvoice (39 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038926e,library,"T1641 libsig full-body match, xvoice (33 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038928f,library,"T1641 libsig full-body match, xvoice (269 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003893c0,library,"T1641 libsig full-body match, xvoice (20 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003893e0,library,"T1641 libsig full-body match, xvoice (17 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00389400,library,"T1641 libsig full-body match, xvoice (17 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00389420,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00389430,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x00389650,library,"T1641 libsig full-body match, xvoice (344 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003897c0,library,"T1641 libsig full-body match, xvoice (665 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00389a90,library,"T1641 libsig full-body match, xvoice (107 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00389b10,library,"T1641 libsig full-body match, xvoice (115 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00389ba0,library,"T1641 libsig full-body match, xvoice (119 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00389c30,library,"T1641 libsig full-body match, xvoice (143 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00389ce0,library,"T1641 libsig full-body match, xvoice (62 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00389d3e,library,"T1641 libsig full-body match, xvoice (569 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00389f8f,library,"T1641 libsig full-body match, xvoice (359 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038a0fe,library,"T1641 libsig full-body match, xvoice (46 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038a12c,library,"T1641 libsig full-body match, xvoice (318 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038a27a,library,"T1641 libsig full-body match, xvoice (62 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038a2b8,library,"T1641 libsig full-body match, xvoice (57 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038a2f1,library,"T1641 libsig full-body match, xvoice (91 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038a34c,library,"T1641 libsig full-body match, xvoice (96 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038a411,library,"T1641 libsig full-body match, xvoice (105 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038a47e,library,"T1641 libsig full-body match, xvoice (75 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038a4cd,library,"T1641 libsig full-body match, xvoice (438 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038a69f,library,"T1641 libsig full-body match, xvoice (226 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038a789,library,"T1641 libsig full-body match, xvoice (247 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038a88c,library,"T1641 libsig full-body match, xvoice (131 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038a913,library,"T1641 libsig full-body match, xvoice (90 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038a971,library,"T1641 libsig full-body match, xvoice (130 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038a9f7,library,"T1641 libsig full-body match, xvoice (81 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038aa4c,library,"T1641 libsig full-body match, xvoice (560 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038ac98,library,"T1641 libsig full-body match, xvoice (410 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038ae50,library,"T1641 libsig full-body match, xvoice (86 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038aeb0,library,"T1641 libsig full-body match, xvoice (93 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038af20,library,"T1641 libsig full-body match, xvoice (100 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038af90,library,"T1641 libsig full-body match, xvoice (148 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038b040,library,"T1641 libsig full-body match, xvoice (106 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038b0d0,library,"T1641 libsig full-body match, xvoice (175 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038b1b0,library,"T1641 libsig full-body match, xvoice (59 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038b210,library,"T1641 libsig full-body match, xvoice (102 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038b2a0,library,"T1641 libsig full-body match, xvoice (130 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038b340,library,"T1641 libsig full-body match, xvoice (653 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038b620,library,"T1641 libsig full-body match, xvoice (87 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038b690,library,"T1641 libsig full-body match, xvoice (342 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038b810,library,"T1641 libsig full-body match, xvoice (290 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038b9a0,library,"T1641 libsig full-body match, xvoice (108 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038ba10,library,"T1641 libsig full-body match, xvoice (149 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038bab0,library,"T1641 libsig full-body match, xvoice (162 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038bb60,library,"T1641 libsig full-body match, xvoice (216 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038bc50,library,"T1641 libsig full-body match, xvoice (94 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038bcc0,library,"T1641 libsig full-body match, xvoice (38 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038bcf0,library,"T1641 libsig full-body match, xvoice (26 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038bd10,library,"T1641 libsig full-body match, xvoice (236 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038be20,library,"T1641 libsig full-body match, xvoice (72 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038be90,library,"T1641 libsig full-body match, xvoice (78 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038bee0,library,"T1641 libsig full-body match, xvoice (96 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038bf40,library,"T1641 libsig full-body match, xvoice (181 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038c010,library,"T1641 libsig full-body match, xvoice (104 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038c080,library,"T1641 libsig full-body match, xvoice (233 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038c170,library,T1641 library run: 3 function(s) between libsig-strong library functions with no other game function between (each with a libsig match in a linked library); docs/t1641-libsig-rematch.md
+0x0038c180,library,T1641 library run: 3 function(s) between libsig-strong library functions with no other game function between (each with a libsig match in a linked library); docs/t1641-libsig-rematch.md
+0x0038c190,library,T1641 library run: 3 function(s) between libsig-strong library functions with no other game function between (each with a libsig match in a linked library); docs/t1641-libsig-rematch.md
+0x0038c1a0,library,"T1641 libsig full-body match, xvoice (197 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038c270,library,"T1641 libsig full-body match, xvoice (47 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038c2b0,library,"T1641 libsig full-body match, xvoice (34 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038c2e0,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x0038c300,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x0038c315,library,"T1641 libsig full-body match, xvoice (557 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038c542,library,"T1641 libsig full-body match, xvoice (104 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038c5aa,library,"T1641 libsig full-body match, xvoice (1048 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038c9ca,library,"T1641 libsig full-body match, xvoice (1029 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038cdd7,library,"T1641 libsig full-body match, xvoice (62 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038ce19,library,"T1641 libsig full-body match, xvoice (148 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038ceb5,library,"T1641 libsig full-body match, xvoice (95 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038cf2c,library,"T1641 libsig full-body match, xvoice (329 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038d085,library,"T1641 libsig full-body match, xvoice (221 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038d182,library,"T1641 libsig full-body match, xvoice (49 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038d1b7,library,"T1641 libsig full-body match, xvoice (74 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038d225,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x0038d236,library,"T1641 libsig full-body match, xvoice (131 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038d2c1,library,"T1641 libsig full-body match, xvoice (726 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038d5cb,library,"T1641 libsig full-body match, xvoice (177 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038d68c,library,"T1641 libsig full-body match, xvoice (722 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038d96a,library,"T1641 libsig full-body match, xvoice (306 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038dac8,library,"T1641 libsig full-body match, xvoice (232 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038dbbc,library,"T1641 libsig full-body match, xvoice (151 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038dc53,library,"T1641 libsig full-body match, xvoice (326 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038dda5,library,"T1641 libsig full-body match, xvoice (71 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038ddec,library,"T1641 libsig full-body match, xvoice (90 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038de4e,library,"T1641 libsig full-body match, xvoice (233 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038df3f,library,"T1641 libsig full-body match, xvoice (360 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038e0b3,library,"T1641 libsig full-body match, xvoice (761 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038e3e4,library,"T1641 libsig full-body match, xvoice (173 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038e491,library,"T1641 libsig full-body match, xvoice (92 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038e4f9,library,"T1641 libsig full-body match, xvoice (2489 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038ef86,library,"T1641 libsig full-body match, xvoice (315 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038f0d9,library,"T1641 libsig full-body match, xvoice (323 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038f234,library,"T1641 libsig full-body match, xvoice (173 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038f2e9,library,"T1641 libsig full-body match, xvoice (118 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038f367,library,"T1641 libsig full-body match, xvoice (28 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038f387,library,"T1641 libsig full-body match, xvoice (160 fixed bytes, alias_group) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038f427,library,"T1641 libsig full-body match, xvoice (35 fixed bytes, alias_group) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038f44a,library,"T1641 libsig full-body match, xvoice (45 fixed bytes, alias_group) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038f477,library,"T1641 libsig full-body match, xvoice (38 fixed bytes, alias_group) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038f49d,library,"T1641 libsig full-body match, xvoice (24 fixed bytes, alias_group) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038f4b5,library,"T1641 libsig full-body match, xvoice (44 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038f4e1,library,"T1641 libsig full-body match, xvoice (26 fixed bytes, alias_group) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038f4fb,library,"T1641 libsig full-body match, xvoice (17 fixed bytes, ambiguous) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038f510,library,"T1641 libsig full-body match, xvoice (85 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038f565,library,"T1641 libsig full-body match, xvoice (114 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038f5db,library,"T1641 libsig full-body match, xvoice (107 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038f650,library,"T1641 libsig full-body match, xvoice (145 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038f6f0,library,"T1641 libsig full-body match, xvoice (219 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038f7d0,library,"T1641 libsig full-body match, xvoice (211 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038f8b0,library,"T1641 libsig full-body match, xvoice (633 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038fb70,library,"T1641 libsig full-body match, xvoice (415 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038fd50,library,"T1641 libsig full-body match, xvoice (59 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038fdb0,library,"T1641 libsig full-body match, xvoice (31 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038fde0,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x0038fdf0,library,"T1641 libsig full-body match, xvoice (68 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038fe40,library,"T1641 libsig full-body match, xvoice (53 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038fe80,library,"T1641 libsig full-body match, xvoice (188 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0038ff80,library,"T1641 libsig full-body match, xvoice (381 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00390190,library,"T1641 libsig full-body match, xvoice (391 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003903e0,library,"T1641 libsig full-body match, xvoice (81 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003904b0,library,"T1641 libsig full-body match, xvoice (26 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003904d0,library,"T1641 libsig full-body match, xvoice (124 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00390550,library,"T1641 libsig full-body match, xvoice (42 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00390580,library,"T1641 libsig full-body match, xvoice (413 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00390740,library,"T1641 libsig full-body match, xvoice (73 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00390790,library,"T1641 libsig full-body match, xvoice (24 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003907b0,library,"T1641 libsig full-body match, xvoice (125 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00390860,library,"T1641 libsig full-body match, xvoice (569 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00390b10,library,"T1641 libsig full-body match, xvoice (86 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00390b70,library,"T1641 libsig full-body match, xvoice (36 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00390ba0,library,"T1641 libsig full-body match, xvoice (247 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00390cd0,library,"T1641 libsig full-body match, xvoice (17 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00390cf0,library,"T1641 libsig full-body match, xvoice (45 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00390d30,library,"T1641 libsig full-body match, xvoice (24 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00390d50,library,"T1641 libsig full-body match, xvoice (212 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00390e30,library,"T1641 libsig full-body match, xvoice (357 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00390fd0,library,"T1641 libsig full-body match, xvoice (653 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00391270,library,"T1641 libsig full-body match, xvoice (49 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003912b0,library,"T1641 libsig full-body match, xvoice (22 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003912d0,library,"T1641 libsig full-body match, xvoice (90 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00391340,library,"T1641 libsig full-body match, xvoice (29 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00391370,library,"T1641 libsig full-body match, xvoice (156 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00391410,library,"T1641 libsig full-body match, xvoice (129 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003914a0,library,"T1641 libsig full-body match, xvoice (146 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00391540,library,"T1641 libsig full-body match, xvoice (227 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00391630,library,"T1641 libsig full-body match, xvoice (154 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003916d0,library,"T1641 libsig full-body match, xvoice (376 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00391850,library,"T1641 libsig full-body match, xvoice (37 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00391890,library,"T1641 libsig full-body match, xvoice (117 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00391910,library,"T1641 libsig full-body match, xvoice (135 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003919c0,library,"T1641 libsig full-body match, xvoice (101 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00391a50,library,"T1641 libsig full-body match, xvoice (164 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00391b30,library,"T1641 libsig full-body match, xvoice (526 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00391d80,library,"T1641 libsig full-body match, xvoice (132 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00391e20,library,"T1641 libsig full-body match, xvoice (361 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00391fa0,library,"T1641 libsig full-body match, xvoice (37 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00391fd0,library,"T1641 libsig full-body match, xvoice (33 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00392000,library,"T1641 libsig full-body match, xvoice (175 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003920d0,library,"T1641 libsig full-body match, xvoice (347 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00392240,library,"T1641 libsig full-body match, xvoice (420 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00392400,library,"T1641 libsig full-body match, xvoice (386 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003925c0,library,"T1641 libsig full-body match, xvoice (362 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00392760,library,"T1641 libsig full-body match, xvoice (172 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00392830,library,"T1641 libsig full-body match, xvoice (192 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00392910,library,"T1641 libsig full-body match, xvoice (43 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00392940,library,"T1641 libsig full-body match, xvoice (21 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00392960,library,"T1641 libsig full-body match, xvoice (587 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00392bc0,library,"T1641 libsig full-body match, xvoice (148 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00392c60,library,"T1641 libsig full-body match, xvoice (722 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00392f80,library,"T1641 libsig full-body match, xvoice (155 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00393030,library,"T1641 libsig full-body match, xvoice (54 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00393070,library,"T1641 libsig full-body match, xvoice (298 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003931a0,library,"T1641 libsig full-body match, xvoice (290 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003932e0,library,"T1641 libsig full-body match, xvoice (121 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00393380,library,"T1641 libsig full-body match, xvoice (243 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00393480,library,"T1641 libsig full-body match, xvoice (28 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039349c,library,T1641 library run: 4 function(s) between libsig-strong library functions with no other game function between (each with a libsig match in a linked library); docs/t1641-libsig-rematch.md
+0x003934a3,library,T1641 library run: 4 function(s) between libsig-strong library functions with no other game function between (each with a libsig match in a linked library); docs/t1641-libsig-rematch.md
+0x003934aa,library,T1641 library run: 4 function(s) between libsig-strong library functions with no other game function between (each with a libsig match in a linked library); docs/t1641-libsig-rematch.md
+0x003934b8,library,T1641 library run: 4 function(s) between libsig-strong library functions with no other game function between (each with a libsig match in a linked library); docs/t1641-libsig-rematch.md
+0x003934bf,library,"T1641 libsig full-body match, xvoice (78 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039350d,library,"T1641 libsig full-body match, xvoice (119 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039358c,library,"T1641 libsig full-body match, xvoice (253 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00393699,library,"T1641 libsig full-body match, xvoice (675 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039397c,library,"T1641 libsig full-body match, xvoice (1986 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039419e,library,"T1641 libsig full-body match, xvoice (97 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00394227,library,"T1641 libsig full-body match, xvoice (281 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003943ec,library,"T1641 libsig full-body match, xvoice (270 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00394562,library,"T1641 libsig full-body match, xvoice (439 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00394801,library,"T1641 libsig full-body match, xvoice (412 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003949a5,library,"T1641 libsig full-body match, xvoice (187 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00394a64,library,"T1641 libsig full-body match, xvoice (230 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00394b56,library,"T1641 libsig full-body match, xvoice (79 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00394ba5,library,"T1641 libsig full-body match, xvoice (276 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00394ccd,library,"T1641 libsig full-body match, xvoice (435 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00394e9c,library,"T1641 libsig full-body match, xvoice (170 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00394f4e,library,"T1641 libsig full-body match, xvoice (137 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00394fd7,library,"T1641 libsig full-body match, xvoice (171 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00395090,library,"T1641 libsig full-body match, xvoice (317 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003951d0,library,"T1641 libsig full-body match, xvoice (35 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00395200,library,"T1641 libsig full-body match, xvoice (183 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003952d0,library,"T1641 libsig full-body match, xvoice (402 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00395470,library,"T1641 libsig full-body match, xvoice (419 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00395628,library,"T1641 libsig full-body match, xvoice (148 fixed bytes, alias_group) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003956c8,library,"T1641 libsig full-body match, xvoice (300 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00395858,library,"T1641 libsig full-body match, xvoice (80 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003958a8,library,"T1641 libsig full-body match, xvoice (112 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00397598,library,"T1641 libsig full-body match, xvoice (744 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00397888,library,"T1641 libsig full-body match, xvoice (48 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00397a38,library,"T1641 libsig full-body match, xvoice (128 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00397f68,library,"T1641 libsig full-body match, xvoice (248 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00398078,library,"T1641 libsig full-body match, xvoice (156 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00398148,library,"T1641 libsig full-body match, xvoice (548 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00398398,library,"T1641 libsig full-body match, xvoice (704 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00398688,library,"T1641 libsig full-body match, xvoice (724 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00398988,library,"T1641 libsig full-body match, xvoice (64 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003989c8,library,"T1641 libsig full-body match, xvoice (60 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00398a48,library,"T1641 libsig full-body match, xvoice (108 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00398ac0,library,"T1641 libsig full-body match, xvoice (494 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00398cd0,library,"T1641 libsig full-body match, xvoice (377 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00398e70,library,"T1641 libsig full-body match, xvoice (35 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00398ea0,library,"T1641 libsig full-body match, xvoice (133 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00398f40,library,"T1641 libsig full-body match, xvoice (220 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00399040,library,"T1641 libsig full-body match, xvoice (229 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00399150,library,"T1641 libsig full-body match, xvoice (189 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00399220,library,"T1641 libsig full-body match, xvoice (156 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003992e0,library,"T1641 libsig full-body match, xvoice (403 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003994a0,library,"T1641 libsig full-body match, xvoice (149 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00399540,library,"T1641 libsig full-body match, xvoice (477 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00399730,library,"T1641 libsig full-body match, xvoice (539 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00399960,library,"T1641 libsig full-body match, xvoice (295 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00399ab4,library,"T1641 libsig full-body match, xvoice (148 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00399b54,library,"T1641 libsig full-body match, xvoice (384 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00399cf0,library,"T1641 libsig full-body match, xvoice (187 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00399db0,library,"T1641 libsig full-body match, xvoice (179 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00399e70,library,"T1641 libsig full-body match, xvoice (527 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039a0d0,library,"T1641 libsig full-body match, xvoice (1282 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039a5f0,library,"T1641 libsig full-body match, xvoice (88 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039a660,library,"T1641 libsig full-body match, xvoice (99 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039a6e0,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x0039a6f0,library,"T1641 libsig full-body match, xvoice (70 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039a740,library,"T1641 libsig full-body match, xvoice (522 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039a970,library,"T1641 libsig full-body match, xvoice (108 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039a9e0,library,"T1641 libsig full-body match, xvoice (31 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039aa20,library,"T1641 libsig full-body match, xvoice (106 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039aa90,library,"T1641 libsig full-body match, xvoice (574 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039ad20,library,"T1641 libsig full-body match, xvoice (58 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039ad70,library,"T1641 libsig full-body match, xvoice (98 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039adf0,library,"T1641 libsig full-body match, xvoice (110 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039ae80,library,"T1641 libsig full-body match, xvoice (164 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039af30,library,"T1641 libsig full-body match, xvoice (1240 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039b550,library,"T1641 libsig full-body match, xvoice (299 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039b6b0,library,"T1641 libsig full-body match, xvoice (290 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039b7e0,library,"T1641 libsig full-body match, xvoice (530 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039c130,library,"T1641 libsig full-body match, xvoice (80 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039c1d0,library,"T1641 libsig full-body match, xvoice (322 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039ca54,library,"T1641 libsig full-body match, xvoice (252 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039cb54,library,"T1641 libsig full-body match, xvoice (172 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039cc04,library,"T1641 libsig full-body match, xvoice (184 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039ccc4,library,"T1641 libsig full-body match, xvoice (556 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039cef4,library,"T1641 libsig full-body match, xvoice (292 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039d034,library,"T1641 libsig full-body match, xvoice (292 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039d174,library,"T1641 libsig full-body match, xvoice (76 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039d1c4,library,"T1641 libsig full-body match, xvoice (76 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039d214,library,"T1641 libsig full-body match, xvoice (1208 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039d704,library,"T1641 libsig full-body match, xvoice (144 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039d7a4,library,"T1641 libsig full-body match, xvoice (704 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039da94,library,"T1641 libsig full-body match, xvoice (100 fixed bytes, ambiguous) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039db04,library,"T1641 libsig full-body match, xvoice (704 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039ddf4,library,"T1641 libsig full-body match, xvoice (100 fixed bytes, ambiguous) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039de64,library,"T1641 libsig full-body match, xvoice (1244 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039e344,library,"T1641 libsig full-body match, xvoice (60 fixed bytes, alias_group) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039e384,library,"T1641 libsig full-body match, xvoice (60 fixed bytes, alias_group) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039e3c4,library,"T1641 libsig full-body match, xvoice (44 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039e3f4,library,"T1641 libsig full-body match, xvoice (532 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039e624,library,"T1641 libsig full-body match, xvoice (428 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039e7e0,library,"T1641 libsig full-body match, xvoice (240 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039ebf0,library,"T1641 libsig full-body match, xvoice (368 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039f110,library,"T1641 libsig full-body match, xvoice (592 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039f360,library,"T1641 libsig full-body match, xvoice (192 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039f420,library,"T1641 libsig full-body match, xvoice (512 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039f6e0,library,"T1641 libsig full-body match, xvoice (333 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x0039f830,library,"T1641 libsig full-body match, xvoice (2900 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a03a0,library,"T1641 libsig full-body match, xvoice (2964 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a0f50,library,"T1641 libsig full-body match, xvoice (2900 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a1ac0,library,"T1641 libsig full-body match, xvoice (2964 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a30e0,library,"T1641 libsig full-body match, xvoice (3076 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a4770,library,"T1641 libsig full-body match, xvoice (3065 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a5390,library,"T1641 libsig full-body match, xvoice (144 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a5640,library,"T1641 libsig full-body match, xvoice (624 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a58b0,library,"T1641 libsig full-body match, xvoice (695 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a5b70,library,"T1641 libsig full-body match, xvoice (320 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a5db0,library,"T1641 libsig full-body match, xvoice (264 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a610e,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003a6520,library,"T1641 libsig full-body match, xvoice (241 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a6630,library,"T1641 libsig full-body match, xvoice (248 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a6750,library,"T1641 libsig full-body match, xvoice (134 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a67dc,library,"T1641 libsig full-body match, xvoice (76 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a6a31,library,"T1641 libsig full-body match, xvoice (98 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a6a93,library,"T1641 libsig full-body match, xvoice (173 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a6b8d,library,"T1641 libsig full-body match, xvoice (80 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a6c80,library,"T1641 libsig full-body match, xvoice (343 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a6de0,library,"T1641 libsig full-body match, xvoice (52 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a6e40,library,"T1641 libsig full-body match, xvoice (53 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a6e80,library,"T1641 libsig full-body match, xvoice (334 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a6fe0,library,"T1641 libsig full-body match, xvoice (311 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a7120,library,"T1641 libsig full-body match, xvoice (217 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a7230,library,"T1641 libsig full-body match, xvoice (259 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a7340,library,"T1641 libsig full-body match, xvoice (41 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a7380,library,"T1641 libsig full-body match, xvoice (536 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a75b0,library,"T1641 libsig full-body match, xvoice (530 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a77f0,library,"T1641 libsig full-body match, xvoice (438 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a79b0,library,"T1641 libsig full-body match, xvoice (1408 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a8520,library,"T1641 libsig full-body match, xvoice (432 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a87c0,library,"T1641 libsig full-body match, xvoice (1088 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a8c00,library,"T1641 libsig full-body match, xvoice (1088 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a9040,library,"T1641 libsig full-body match, xvoice (592 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a98a0,library,"T1641 libsig full-body match, xvoice (240 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003a9c60,library,"T1641 libsig full-body match, xvoice (77 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003c848c,library,"T1641 libsig full-body match, libc/libcmt (117 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003c8a84,library,"T1641 libsig full-body match, libc (82 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003c8b18,library,"T1641 libsig full-body match, libc/libcmt (24 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003c8b8a,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003c8bf5,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003c8c48,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003c8c64,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003c8c66,library,"T1641 libsig full-body match, libc/libcmt (25 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003c8c88,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003c8e4d,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003c8f64,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003c9352,library,"T1641 libsig full-body match, libc (23 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003c94d6,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003c9540,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003c9546,library,"T1641 libsig full-body match, libc/libcmt (184 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003c9b80,library,"T1641 libsig full-body match, libc (149 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003c9c6f,library,"T1641 libsig full-body match, libc (66 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003c9cc4,library,"T1641 libsig full-body match, libc/libcmt (16 fixed bytes, alias_group) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003c9ce1,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003c9d90,library,"T1641 libsig full-body match, libc/libcmt (65 fixed bytes, alias_group) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003c9dde,library,"T1641 libsig full-body match, libc/libcmt (16 fixed bytes, ambiguous) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003c9de8,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003c9df8,library,"T1641 libsig full-body match, libc/libcmt (16 fixed bytes, alias_group) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003c9e15,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003c9f04,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003ca586,library,"T1641 libsig full-body match, libc/libcmt (23 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003caab4,library,"T1641 libsig full-body match, libc/libcmt (31 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003caad3,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003caae8,library,"T1641 libsig full-body match, libc/libcmt/xgraphics (20 fixed bytes, resolved) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003cae12,library,"T1641 libsig full-body match, libc (114 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003caecc,library,"T1641 libsig full-body match, libc (23 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003caeef,library,"T1641 libsig full-body match, libc (119 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003cafd0,library,"T1641 libsig full-body match, libc (129 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003cb1ba,library,"T1641 libsig full-body match, libc (104 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003cb252,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003cb375,library,"T1641 libsig full-body match, libc (358 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003cbe42,library,"T1641 libsig full-body match, libc (204 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003cbf2e,library,"T1641 libsig full-body match, libc (183 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003cc96b,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003cc97d,library,"T1641 libsig full-body match, libc (36 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003cc9f1,library,"T1641 libsig full-body match, libc/libcmt (75 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003ccb21,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003ccb2e,library,"T1641 libsig full-body match, libc/libcmt (153 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003cccd0,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003cccea,library,"T1641 libsig full-body match, libc/libcmt (39 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003ccd15,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003ccd3f,library,"T1641 libsig full-body match, libc/libcmt (63 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003ccd7e,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003ccda4,library,"T1641 libsig full-body match, libc/libcmt (23 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003ccdf8,library,"T1641 libsig full-body match, libc/libcmt (21 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003cce0d,library,"T1641 libsig full-body match, libc/libcmt (23 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003cce24,library,"T1641 libsig full-body match, libc/libcmt (21 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003cce80,library,"T1641 libsig full-body match, libc/libcmt (22 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003cce96,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003ccee1,library,"T1641 libsig full-body match, libc/libcmt (131 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003cd2bf,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003cd303,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003cd30c,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003cd46b,library,T1641 library run: 1 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003cd639,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003cd63d,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003cd768,library,"T1641 libsig full-body match, libc (426 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003ce6c5,library,"T1641 libsig full-body match, libc (123 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003ce7fa,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003ce801,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003cf354,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003cf366,library,T1641 library run: 2 function(s) between libsig-strong library functions with no other game function between (position); docs/t1641-libsig-rematch.md
+0x003cf544,library,"T1641 libsig full-body match, libc (106 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003cf5ce,library,"T1641 libsig full-body match, libc (77 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003cf7b2,library,"T1641 libsig full-body match, libc (446 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003cfbde,library,"T1641 libsig full-body match, libc (52 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003cfc5e,library,"T1641 libsig full-body match, libc (57 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003cfd1e,library,"T1641 libsig full-body match, libc (125 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003cfdbb,library,"T1641 libsig full-body match, libc (38 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x003d099b,library,"T1641 libsig full-body match, libc (169 fixed bytes, high) in the 5849 libs; docs/t1641-libsig-rematch.md"
+0x00031310,game,"T1641 FLIRT false positive: 4 byte leaf (or eax,-1; ret) in the game band, one game caller and no library caller, the FLIRT D3D name and the short libsig match name different functions; docs/t1641-libsig-rematch.md"
+0x00070e30,game,"T1641 FLIRT false positive: 9 byte leaf reading field +4 of the game UI context pointer at 0x7bb1e0, one game caller and no library caller, FLIRT names an XOnline function that cannot live in the game band; docs/t1641-libsig-rematch.md"

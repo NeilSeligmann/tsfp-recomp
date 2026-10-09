@@ -1,0 +1,129 @@
+{
+  "script": "run_weapon_census",
+  "title": "Weapon census, round 2 (sniper, flamethrower, minigun, mine, bat) in ONE Map Maker map",
+  "summary": "One game session in a Map Maker preview. Each weapon gets its own labelled phase so the host can attribute its indirect-call targets to that weapon (T1502 census). Session folder tmp/owner-profiles/mm-weapons2. NOTE: the owner reported earlier that sniper, flamethrower, mine and bat could not be added in the Map Maker weapon set (docs/t1474-census-weapon-session.md), so this older script may only be able to cover the weapons your map offers: use ./tmp/run_forced_weapons.fish for weapons the editor does not list.",
+  "kind": "census-session",
+  "duration": "about 10 minutes after the game is up",
+  "prerequisites": [
+    "Game HDD: tmp/hdds/editor-hdd (it holds your Map Maker level). The script builds the private host first, which can take several minutes.",
+    "Decide the map BEFORE the first phase: one Map Maker map whose weapon set holds Sniper Rifle, Flamethrower, Minigun, a Mine and the Baseball Bat (leave out any you cannot add and press s at its phase). The SAME map stays loaded for every phase."
+  ],
+  "steps": [
+    {
+      "text": "When the window opens, drive to the Map Maker yourself: players, profile, Map Maker, load your map, open the editor, set the weapon set page to the weapons above, then enter the PREVIEW and wait until you can move. Nothing is measured until you continue at a phase prompt ({hotkey:advance})."
+    },
+    {
+      "phase": "ingame-idle"
+    },
+    {
+      "phase": "ingame-fire:sniper"
+    },
+    {
+      "phase": "ingame-reload:sniper"
+    },
+    {
+      "phase": "ingame-fire:flamethrower"
+    },
+    {
+      "phase": "ingame-fire:minigun"
+    },
+    {
+      "phase": "ingame-reload:minigun"
+    },
+    {
+      "phase": "ingame-fire:mine"
+    },
+    {
+      "phase": "ingame-melee:bat"
+    },
+    {
+      "phase": "ingame-pause"
+    }
+  ],
+  "phases": {
+    "ingame-idle": {
+      "title": "Idle control in the Map Maker preview",
+      "go_to": "The Map Maker PREVIEW of your map, standing still where you can move",
+      "do": "Stand still. Do not press any button and do not move the stick.",
+      "seconds": 20
+    },
+    "ingame-fire:sniper": {
+      "title": "Fire the sniper rifle",
+      "go_to": "The Map Maker preview, the sniper rifle picked up",
+      "switch": "the Sniper Rifle (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the sniper rifle only (hold or tap RT). Do not move, reload, melee or change weapon.",
+      "seconds": 20
+    },
+    "ingame-reload:sniper": {
+      "title": "Reload the sniper rifle",
+      "go_to": "The Map Maker preview, the sniper rifle in your hands",
+      "switch": "the Sniper Rifle (already in your hands)",
+      "do": "Reload the sniper rifle only (X), wait for the reload to finish, repeat. Do not fire or move.",
+      "seconds": 20
+    },
+    "ingame-fire:flamethrower": {
+      "title": "Fire the flamethrower",
+      "go_to": "The Map Maker preview, the flamethrower picked up",
+      "switch": "the Flamethrower (pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Fire the flamethrower only (hold RT). Do not move, reload or melee.",
+      "seconds": 20
+    },
+    "ingame-fire:minigun": {
+      "title": "Fire the minigun",
+      "go_to": "The Map Maker preview, the minigun picked up",
+      "switch": "the Minigun (pick it up, then D-pad right/left until it is in your hands)",
+      "do": "From rest HOLD fire (RT) for about 5 s so the spin-up delay before the first shot is included, release, wait 3 s, repeat. Do not move or melee.",
+      "seconds": 25,
+      "note": "any overheating or an alternative spin mode, and the button you pressed for it"
+    },
+    "ingame-reload:minigun": {
+      "title": "Minigun reload (probably none)",
+      "go_to": "The Map Maker preview, the minigun in your hands",
+      "switch": "the Minigun (already in your hands)",
+      "do": "The minigun has no reload (T1527): press X once. If nothing reloads, answer s at the next prompt (skip) and say so in your report.",
+      "seconds": 15
+    },
+    "ingame-fire:mine": {
+      "title": "Place mines",
+      "go_to": "The Map Maker preview, the mine weapon picked up",
+      "switch": "the Mine (pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Place mines only (tap RT a few times). Do not detonate, move or melee.",
+      "seconds": 20,
+      "note": "which mine type it was (remote, proximity or timed)"
+    },
+    "ingame-melee:bat": {
+      "title": "Swing the baseball bat",
+      "go_to": "The Map Maker preview, the baseball bat picked up",
+      "switch": "the Baseball Bat (pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Melee with the bat only (RT swings it, B is the melee button). Do not move or fire another weapon.",
+      "seconds": 20
+    },
+    "ingame-pause": {
+      "title": "Pause menu in the preview",
+      "go_to": "The Map Maker preview, any weapon in your hands",
+      "do": "Open the pause menu (Start), wait a moment, close it, repeat. Do not change any setting.",
+      "seconds": 20
+    }
+  },
+  "note_at_end": [
+    "Which weapons you could NOT put in the Map Maker weapon set (and their exact list names if you saw alternatives).",
+    "If the game stopped: copy the 'unimplemented instruction at ...' or 'STOP' line it prints."
+  ],
+  "stop": [
+    "At every phase prompt: continue with {hotkey:advance}, which starts and again ends the phase; s skips it, q finishes the session. The idle phase stops by itself.",
+    "Close the game window only after the last phase (or q): the profile of a phase in progress is lost."
+  ],
+  "send_back": [
+    "Tell Claude the session finished: folder tmp/owner-profiles/mm-weapons2 (analysis tables are printed at the end, python -m tools.action_compare ... --by-label).",
+    "Which phases you skipped and why."
+  ],
+  "options": {
+    "hotkeys": {
+      "values": [
+        "on",
+        "off"
+      ],
+      "default": "off"
+    }
+  }
+}

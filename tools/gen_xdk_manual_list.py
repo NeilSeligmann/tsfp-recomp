@@ -1,0 +1,429 @@
+#!/usr/bin/env python3
+"""Emit the two inputs a re-lift needs to route XDK calls through the dispatcher.
+
+WHY THIS EXISTS. `src/host/xdk_thunk.c` is the address-keyed dispatcher, and
+`recomp_lookup_manual` is the seam the lifter's own indirect-dispatch macros consult
+first. But a DIRECT call is not emitted as an indirect dispatch: the lifter writes
+`RECOMP_ABI_CALL(0x003D57D0u, sub_003D57D0)`, which with `RECOMP_ABI_CHECK` off expands
+to `(fn)()` -- the VA is discarded and the lifted body is called by symbol. A tail jump
+is worse: a bare `sub_XXXX(); return;` with no VA at all.
+
+MEASURED over the whole lifted tree in `generated/lifted/gen`, for the 236 addresses in
+the generated surface:
+
+    reached by a DIRECT RECOMP_ABI_CALL   225 addresses, 1625 sites
+    reached by a bare tail jmp             25 addresses, 6665 sites
+    reached by RECOMP_ICALL / _SAFE / _AT   0 addresses,    0 sites
+    reached by RECOMP_ITAIL                 0 addresses,    0 sites
+
+So nothing in the lift as it stands reaches `recomp_lookup_manual` at all, and the
+dispatcher is unreachable from production code until a re-lift changes that. All 236 are
+reached by one of the two literal-address forms, so a re-lift covers all 236.
+
+THE LIFTER ALREADY HAS THE MECHANISM, and it is the same one the decompilation phase
+runs on. `--manual-functions FILE` makes the lifter emit no body for an address and
+re-emit every DIRECT call to it as
+
+    PUSH32(esp, <retva>); RECOMP_ICALL_SAFE(<addr>, _icall_esp);  /* manual call */
+
+and every tail jump to it as `RECOMP_ITAIL(<addr>)`. Both consult
+`recomp_lookup_manual`. That path is also the one `docs/lifter-patches/07` fixed a hard
+compile failure in, so it is exercised rather than theoretical.
+
+TWO OUTPUTS, BECAUSE ONE IS NOT ENOUGH.
+
+  1. The JSON address list for `--manual-functions`. Emitted in the `{address: name}`
+     shape rather than as a bare list, because in that shape the NAME IS BINDING: the
+     generated declaration and every call site use it regardless of what the function
+     database calls the address. With a bare list the lifter takes the name from the
+     database, so re-running the naming tools would silently rename the symbol and the
+     hand-written definition would stop matching.
+
+  2. A C file defining those symbols. Suppressing a body does NOT remove the address
+     from the generated dispatch table, so `sub_XXXXXXXX` must still be defined or the
+     link fails. Each definition is one line that calls `xdk_thunk_dispatch_at`, so the
+     dispatch-table route and the `recomp_lookup_manual` route behave identically. The
+     alternative -- 236 empty functions -- would be a silent no-op reachable from the
+     dispatch table, which is the exact failure the whole boundary exists to prevent.
+
+NOTHING HERE IS COMMITTED OUTPUT. Both files are derived from
+`src/xbox/xdk_surface.c`, which is itself generated from the user's own executable and
+is gitignored. Write them under a scratch directory and pass them to the lifter.
+
+    uv run python -m tools.gen_xdk_manual_list \\
+        --surface src/xbox/xdk_surface.c \\
+        --json tmp/xdk-manual.json \\
+        --trampolines generated/lifted/gen/recomp_xdk_manual.c
+    uv run python -m tools.lift run <your default.xbe> \\
+        --manual-functions tmp/xdk-manual.json
+
+THE TRAMPOLINE FILENAME IS LOAD-BEARING. `CMakeLists.txt` builds the lifted tree from
+`file(GLOB ... "recomp_*.c")` over `TSFP_LIFTED_DIR`, so a trampoline file written there
+under any other name is never compiled and the link fails on 227 undefined symbols with
+nothing to say why. Writing it beside the chunks also means it cannot be forgotten
+separately from the lift it belongs to. `recomp_[0-9]*.c` is what counts chunks, so the
+name must not start with a digit either.
+
+WHAT THIS DOES NOT DO, on the record. It does not make the GPU boundary complete.
+`docs/d3d8-usage.md` section 9 measured that `D3DDevice_SetRenderState` is INLINED into
+game `.text` and writes D3D8's own globals directly, so render state never crosses a
+call boundary and no dispatcher can intercept it. See `docs/xdk-dispatch.md`.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import re
+import sys
+
+#: One row of the generated surface table. The generator writes exactly this shape, and
+#: matching it with a regex rather than compiling the C is deliberate: this tool has to
+#: work from a checkout where nothing has been built.
+ROW = re.compile(r'\{\s*0x([0-9a-fA-F]{1,8})\s*,\s*"(\w+)"\s*,\s*(NULL|"[^"]*")\s*,\s*(\d+)\s*\}')
+
+#: Sections whose addresses an HLE module can actually answer. The others are measured
+#: boundaries with nothing behind them, and routing them to a module would be a wrong
+#: answer from a subsystem with no business seeing the call. Must agree with
+#: `xdk_module_for_section` in src/host/xdk_thunk.c.
+ROUTED_SECTIONS = ("D3D", "DSOUND", "XPP", "XGRPH")
+
+TRAMPOLINE_HEADER = """\
+/* SPDX-License-Identifier: GPL-3.0-or-later
+ *
+ * GENERATED by tools/gen_xdk_manual_list.py. Do not edit; regenerate instead.
+ *
+ * One definition per measured XDK address, for a lift run with --manual-functions.
+ *
+ * WHY THESE EXIST AT ALL. --manual-functions suppresses the lifted BODY for an address
+ * but leaves the address in the generated dispatch table, so the symbol still has to be
+ * defined or the link fails. Every body here is one call to xdk_thunk_dispatch_at, so
+ * the dispatch-table route behaves exactly like the recomp_lookup_manual route --
+ * including the stop-on-missing policy and the refusal to call anything whose calling
+ * convention has not been established.
+ *
+ * NONE OF THESE IS A STUB. An empty function reachable from the dispatch table would be
+ * a silent no-op, which is the failure this boundary exists to prevent.
+ *
+ * %(routed)d of the %(total)d addresses are in a section an HLE module owns (%(sections)s).
+ * The other %(unrouted)d are measured boundaries with no module, and calling one STOPS the
+ * run with a message saying so rather than returning a fabricated value.
+ */
+
+#include <stdint.h>
+
+/* WHY THE DECLARATION IS CONDITIONAL. This file has to be compiled as part of the
+ * LIFTED tree: CMakeLists globs `recomp_*.c` out of TSFP_LIFTED_DIR, and that target's
+ * only include directory is the generated one, so `src/host` is not on the path. When
+ * it is on the path -- a standalone syntax check, or any target that carries it -- the
+ * real header wins and the signature is checked against the dispatcher rather than
+ * restated. A bare local declaration in both cases would silently diverge.
+ */
+#if defined(__has_include)
+#  if __has_include("xdk_thunk.h")
+#    include "xdk_thunk.h"
+#    define XDK_TRAMPOLINE_HAVE_HEADER 1
+#  endif
+#endif
+#ifndef XDK_TRAMPOLINE_HAVE_HEADER
+void xdk_thunk_dispatch_at(uint32_t address);
+#endif
+
+"""
+
+
+def parse_surface(path: pathlib.Path) -> list[tuple[int, str, str | None, int]]:
+    """Read (address, section, name, sites) out of the generated surface table."""
+    rows: list[tuple[int, str, str | None, int]] = []
+    for match in ROW.finditer(path.read_text(encoding="utf-8")):
+        name = match.group(3)
+        rows.append(
+            (
+                int(match.group(1), 16),
+                match.group(2),
+                None if name == "NULL" else name.strip('"'),
+                int(match.group(4)),
+            )
+        )
+    return rows
+
+
+def symbol_for(address: int) -> str:
+    """The symbol name the lifter uses for an address, pinned rather than looked up.
+
+    `sub_%08X` is the lifter's own default spelling. Emitting it explicitly in the JSON
+    map is what stops the function database's name for the address from winning, which
+    would rename the symbol out from under the definitions this tool also writes.
+    """
+    return f"sub_{address:08X}"
+
+
+def parse_stop_boundaries(
+    path: pathlib.Path, surface_addresses: set[int]
+) -> list[tuple[int, str, str]]:
+    """Validate independent safety stops without adding measured surface rows."""
+
+    def unique_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
+        result: dict[str, object] = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError(f"duplicate JSON object key {key}")
+            result[key] = value
+        return result
+
+    data = json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=unique_object)
+    if not isinstance(data, list):
+        raise ValueError("stop boundaries must be an array")
+    rows = []
+    seen: set[int] = set()
+    for item in data:
+        if not isinstance(item, dict) or set(item) != {"address", "label", "reason"}:
+            raise ValueError("each stop boundary requires exactly address, label, reason")
+        address = item["address"]
+        if type(address) is not int or not 0 < address <= 0xFFFFFFFF:
+            raise ValueError("stop address must be a nonzero uint32 integer")
+        # kernel_thunk.h: the entire 4096-byte synthetic callable window,
+        # including monitor_thunk.h's notify slot, belongs to the host.
+        if 0xFE000000 <= address < 0xFE001000:
+            raise ValueError("stop address collides with the synthetic kernel/monitor window")
+        if address in seen or address in surface_addresses:
+            raise ValueError(
+                "stop address duplicates a boundary or collides with the normal surface"
+            )
+        for field, limit in (("label", 128), ("reason", 256)):
+            value = item[field]
+            if not isinstance(value, str) or not 0 < len(value) < limit:
+                raise ValueError(f"stop {field} must contain 1..{limit - 1} ASCII characters")
+            if any(not 0x20 <= ord(character) <= 0x7E for character in value):
+                raise ValueError(f"stop {field} must be printable ASCII without controls")
+        seen.add(address)
+        rows.append((address, item["label"], item["reason"]))
+    return sorted(rows)
+
+
+def c_string(value: str) -> str:
+    """Escape printable ASCII, including question marks that could form C trigraphs."""
+    return '"' + value.replace("\\", "\\\\").replace('"', '\\"').replace("?", "\\?") + '"'
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        description="Emit the --manual-functions list and the matching trampoline "
+        "definitions that route every measured XDK address through "
+        "src/host/xdk_thunk.c."
+    )
+    parser.add_argument(
+        "--surface",
+        default="src/xbox/xdk_surface.c",
+        help="generated surface table to read (default: src/xbox/xdk_surface.c)",
+    )
+    parser.add_argument(
+        "--json", default=None, help="where to write the --manual-functions JSON map"
+    )
+    parser.add_argument(
+        "--trampolines",
+        default=None,
+        help="where to write the C file defining the suppressed symbols",
+    )
+    parser.add_argument(
+        "--sections",
+        default=None,
+        help="comma-separated section names to include. The default is "
+        "every section in the table, because an unrouted address "
+        "that STOPS the run is more useful than one that silently "
+        "runs its lifted XDK body",
+    )
+    parser.add_argument(
+        "--list",
+        action="store_true",
+        help="write the addresses to stdout and exit, writing no files",
+    )
+    parser.add_argument(
+        "--stop-boundaries",
+        action="append",
+        default=None,
+        help="JSON array of independent address/label/reason stop boundaries (repeatable)",
+    )
+    args = parser.parse_args()
+
+    surface = pathlib.Path(args.surface)
+    if not surface.is_file():
+        print(
+            f"no surface table at {surface}. Generate it with:\n"
+            f"    uv run python -m tools.gen_d3d8_surface <your.xbe> --xtlid xtlid.xml",
+            file=sys.stderr,
+        )
+        return 2
+
+    rows = parse_surface(surface)
+    if not rows:
+        # Not an empty answer: an empty parse of a non-empty file means the generator's
+        # row shape changed, and silently emitting nothing would suppress the whole
+        # boundary on the next re-lift.
+        print(
+            f"parsed 0 rows out of {surface}, which has "
+            f"{len(surface.read_text(encoding='utf-8').splitlines())} lines. The "
+            f"generator's row shape has changed; fix ROW rather than ignoring this.",
+            file=sys.stderr,
+        )
+        return 2
+
+    if len({row[0] for row in rows}) != len(rows):
+        print("the surface contains a duplicated address", file=sys.stderr)
+        return 2
+
+    stops: list[tuple[int, str, str]] = []
+    if args.stop_boundaries:
+        try:
+            occupied = {row[0] for row in rows}
+            for stop_path in args.stop_boundaries:
+                additions = parse_stop_boundaries(pathlib.Path(stop_path), occupied)
+                stops.extend(additions)
+                occupied.update(row[0] for row in additions)
+            stops.sort()
+        except (OSError, ValueError) as error:
+            print(f"invalid stop boundaries: {error}", file=sys.stderr)
+            return 2
+
+    wanted = None
+    if args.sections:
+        wanted = {name.strip() for name in args.sections.split(",") if name.strip()}
+        rows = [row for row in rows if row[1] in wanted]
+        if not rows:
+            print(f"no rows in sections {sorted(wanted)}", file=sys.stderr)
+            return 2
+
+    rows.sort(key=lambda row: row[0])
+    addresses = [row[0] for row in rows]
+    if len(set(addresses)) != len(addresses):
+        # The dispatcher refuses a duplicated address for the same reason: the lookup
+        # would become order-dependent.
+        print(
+            "the surface contains a duplicated address; refusing to emit a list that "
+            "would make dispatch order-dependent",
+            file=sys.stderr,
+        )
+        return 2
+
+    if args.list:
+        for address, section, name, sites in rows:
+            print(f"0x{address:08x} {section:8s} {sites:4d} {name or ''}")
+        for address, label, reason in stops:
+            print(f"0x{address:08x} STOP     {label}: {reason}")
+        return 0
+
+    if not args.json and not args.trampolines:
+        parser.error("nothing to do: pass --json, --trampolines or --list")
+
+    routed = sum(1 for row in rows if row[1] in ROUTED_SECTIONS)
+
+    if args.json:
+        destination = pathlib.Path(args.json)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        # The {address: name} shape, so the symbol name is binding. Sorted, so a
+        # regenerated file diffs cleanly against the previous one.
+        mapping = {
+            f"0x{address:08x}": symbol_for(address)
+            for address in sorted(addresses + [row[0] for row in stops])
+        }
+        destination.write_text(json.dumps(mapping, indent=2) + "\n", encoding="utf-8")
+        print(f"{destination}: {len(mapping)} address(es) for --manual-functions")
+
+    if args.trampolines:
+        destination = pathlib.Path(args.trampolines)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        lines = [
+            TRAMPOLINE_HEADER
+            % {
+                "routed": routed,
+                "total": len(rows),
+                "sections": ", ".join(ROUTED_SECTIONS),
+                "unrouted": len(rows) - routed,
+            }
+        ]
+        if stops:
+            lines.append(
+                "#ifndef XDK_TRAMPOLINE_HAVE_HEADER\n"
+                "void xdk_thunk_stop_at(uint32_t address, const char *label, const char *reason);\n"
+                "#endif\n"
+            )
+        for address, section, name, sites in rows:
+            label = name or "unnamed"
+            lines.append(f"/* {section} {label}, {sites} measured site(s) */")
+            lines.append(f"void {symbol_for(address)}(void);")
+            lines.append(f"void {symbol_for(address)}(void)")
+            lines.append("{")
+            lines.append(f"    xdk_thunk_dispatch_at(0x{address:08X}u);")
+            lines.append("}")
+            lines.append("")
+        for address, label, reason in stops:
+            lines.extend(
+                [
+                    "/* Independent safety stop; not a measured XDK surface row. */",
+                    f"void {symbol_for(address)}(void);",
+                    f"void {symbol_for(address)}(void)",
+                    "{",
+                    f"    xdk_thunk_stop_at(0x{address:08X}u, "
+                    f"{c_string(label)}, {c_string(reason)});",
+                    "}",
+                    "",
+                ]
+            )
+        if stops:
+            lines.extend(
+                [
+                    "/* Membership of stop trampolines emitted in this translation unit. */",
+                    "int recomp_has_stop_boundary(uint32_t address);",
+                    "int recomp_has_stop_boundary(uint32_t address)",
+                    "{",
+                    "    switch (address) {",
+                ]
+            )
+            lines.extend(f"    case 0x{address:08X}u: return 1;" for address, _, _ in stops)
+            lines.extend(["    default: return 0;", "    }", "}", ""])
+            lines.extend(
+                [
+                    "/* Membership of normal dispatcher wrappers actually emitted above. */",
+                    "int recomp_has_dispatch_boundary(uint32_t address);",
+                    "int recomp_has_dispatch_boundary(uint32_t address)",
+                    "{",
+                    "    switch (address) {",
+                ]
+            )
+            lines.extend(f"    case 0x{address:08X}u: return 1;" for address in addresses)
+            lines.extend(["    default: return 0;", "    }", "}", ""])
+
+            lines.extend(
+                [
+                    "/* Capability of this compiled chunk's runtime template and flags. */",
+                    "#if defined(__has_include)",
+                    '#  if __has_include("recomp_types.h")',
+                    '#    include "recomp_types.h"',
+                    "#  endif",
+                    "#endif",
+                    "int recomp_has_cooperative_calls(void);",
+                    "int recomp_has_cooperative_calls(void)",
+                    "{",
+                    "#if defined(RECOMP_COOPERATIVE_CALL_VERSION) && "
+                    "RECOMP_COOPERATIVE_CALL_VERSION == 1 && "
+                    "defined(RECOMP_ENABLE_COOPERATIVE_CALLS)",
+                    "    return 1;",
+                    "#else",
+                    "    return 0;",
+                    "#endif",
+                    "}",
+                    "",
+                ]
+            )
+
+        destination.write_text("\n".join(lines), encoding="utf-8")
+        print(f"{destination}: {len(rows)} definition(s), {routed} in a routed section")
+        if stops:
+            print(f"{destination}: {len(stops)} additional independent stop definition(s)")
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

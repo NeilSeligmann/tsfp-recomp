@@ -1,0 +1,49 @@
+{
+  "script": "run_collide",
+  "title": "Collision census (walls, jump, grenade)",
+  "summary": "One Story session. An idle control, then 30 s of walking into walls, jumping and throwing a grenade. The census of the collide phase is ranked against the idle control and the physics/collision functions are attributed by tools.physics_attribution (T1727). Session folder tmp/owner-profiles/collide-STAMP.",
+  "kind": "census-session",
+  "duration": "about 10 minutes after the game is up",
+  "prerequisites": [
+    "Game HDD tmp/hdds/profile-hdd (your Story profile). The script builds the private host first, which takes a few minutes.",
+    "A Story save in a level (the ingame scenarios start at Story 2401) with a wall nearby and open floor, and a grenade available."
+  ],
+  "steps": [
+    {
+      "text": "Press Enter at 'Enter = start the game'. When the window opens drive to Story yourself and load a level. Nothing is measured until you continue at a phase prompt."
+    },
+    {
+      "phase": "ingame-idle"
+    },
+    {
+      "phase": "ingame-collide"
+    }
+  ],
+  "note_at_end": [
+    "Which level you were in.",
+    "Whether the grenade bounced, whether you stuck to or slid along walls, anything odd (falling through floor, clipping).",
+    "If the game stopped: the 'unimplemented instruction at ...' or STOP line."
+  ],
+  "stop": [
+    "Enter in this terminal starts and again ends a phase. s skips, q finishes. Close the window only after the last phase."
+  ],
+  "send_back": [
+    "Tell Claude the session finished: folder tmp/owner-profiles/collide-STAMP (the physics attribution table is printed at the end).",
+    "The level notes above."
+  ],
+  "phases": {
+    "ingame-idle": {
+      "title": "Idle control",
+      "go_to": "A spot next to a wall in the level",
+      "do": "Stand still. Do not press any button and do not move the stick.",
+      "seconds": 20
+    },
+    "ingame-collide": {
+      "title": "Walls, jump, grenade",
+      "go_to": "The same spot, next to a wall with open floor",
+      "do": "Walk into the wall and slide along it, jump several times (also against the wall), then throw a grenade and watch it bounce. Keep going for the whole window.",
+      "seconds": 30,
+      "note": "the level and anything odd"
+    }
+  }
+}

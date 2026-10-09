@@ -1,0 +1,44 @@
+{
+  "script": "dump_now",
+  "title": "dump_now: take one live dump of the running game from a second terminal",
+  "summary": "A dump is a snapshot of the game's memory ranges that the running script chose at start (player record, weapon set, inventory block and so on). It is written to a file next to the session folder and the game goes on, nothing in the game is changed. You run this helper in a SECOND terminal at the moment you want the snapshot, so the label names what was on the screen.",
+  "kind": "helper",
+  "options": {
+    "label": {
+      "free": true,
+      "default": "preview"
+    }
+  },
+  "prerequisites": [
+    "The game must already be running, started by one of the dump scripts (run_weaponslot_probe, run_weaponslot_session, run_inventory_session, run_button_dumps, run_forced_weapons). The helper finds the newest session under tmp/owner-profiles whose host process is still alive.",
+    "Open a second terminal in the repo root. Do not run it in the terminal of the session script."
+  ],
+  "steps": [
+    {
+      "text": "Get the game into the state you want to capture and stand still (for example in the Map Maker preview with the weapon placed, or just after leaving the preview).",
+      "substeps": [
+        "Take the dump while that state is on screen, not later."
+      ]
+    },
+    {
+      "text": "In the second terminal run: fish tmp/dump_now.fish {label}",
+      "substeps": [
+        "Without a label the name is 'preview'. A label may contain lowercase letters, digits, underscore and dash and nothing else. Use a new label each time, a second dump with the same label most likely replaces the first (INFERRED, not tried).",
+        "Good labels say what you see: preview, left, after_pickup, editor_slot2."
+      ]
+    },
+    {
+      "text": "Read the answer. 'dump taken: DIR/guestdump.LABEL' is success and the file is there. 'no ack yet' means the game did not answer within 5 s (it may be busy): wait a few seconds, look whether the file DIR/guestdump.LABEL exists, and run it again if not."
+    }
+  ],
+  "note_at_end": [
+    "What you were doing when you took each label, as one short line per label."
+  ],
+  "stop": [
+    "Nothing to stop, the command ends by itself after a few seconds."
+  ],
+  "send_back": [
+    "The printed line ('dump taken: ...' or 'no ack yet ...') and the folder name.",
+    "Per label, what was on the screen (the file name only carries the label)."
+  ]
+}

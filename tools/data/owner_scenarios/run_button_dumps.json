@@ -1,0 +1,226 @@
+{
+  "script": "run_button_dumps",
+  "title": "Button dump session: play the Map Maker preview, one button at a time, every press is recorded",
+  "summary": "One game session in the Map Maker preview. The host writes a dump of the game's memory just BEFORE and just AFTER every digital button press or release on pad port 0 (T1629, the sticks are never recorded). Afterwards the report shows what each press changed: which weapon you held, the ammo, what a pickup or a switch did. The report only knows button names, so the order in which you do things and the discipline of pressing ONE button at a time are the whole value of this run.",
+  "kind": "button-dump",
+  "duration": "up to {minutes} minutes (the game stops by itself then). My estimate for the weapon plan below is 3 to 5 minutes per weapon.",
+  "options": {
+    "mode": {
+      "values": [
+        "auto",
+        "manual"
+      ],
+      "default": "auto"
+    },
+    "poke": {
+      "values": [
+        "on",
+        "off"
+      ],
+      "default": "on"
+    },
+    "weapons": {
+      "entries": true,
+      "default": "0x02,0x04,0x36,0x05,0x07,0x08"
+    },
+    "minutes": {
+      "free": true,
+      "default": "40"
+    },
+    "idle": {
+      "free": true,
+      "default": "600"
+    },
+    "max_dumps": {
+      "free": true,
+      "default": "2000"
+    },
+    "max_idle": {
+      "free": true,
+      "default": "40"
+    },
+    "route": {
+      "free": true,
+      "default": "the newest file of tmp/owner-profiles/routes"
+    },
+    "session": {
+      "free": true,
+      "default": "button-dumps-STAMP"
+    }
+  },
+  "prerequisites": [
+    {
+      "text": "AUTO mode: the game replays the route you recorded once with fish tmp/record_mapmaker_route.fish, this run uses {route}. The recorded keys are replayed for you up to the Map Maker preview. The HDD is a fresh copy of tmp/hdds/route-hdd-pristine every time, so nothing from an earlier run is in it. A setting you changed in an earlier run (the Weapon Change step below) is NOT there.",
+      "when": {
+        "mode": "auto"
+      }
+    },
+    {
+      "text": "MANUAL mode: no route. You drive to the Map Maker preview yourself with the HDD tmp/hdds/editor-hdd, which keeps profile changes of earlier runs. Recording is on from the very first poll, so your menu presses on the way are recorded too (harmless, but they use up the dump budget).",
+      "when": {
+        "mode": "manual"
+      }
+    },
+    {
+      "text": "POKE ON: the weapon spawner slots of the editor are written by a guest memory poke before the preview (FABRICATED-STATE, marked by FORCED_STATE_NOTE.txt and guestpoke.log in the session folder). Spawner N then holds the weapon of slot N: {weapons}. Everything after the preview starts is unmodified game code, so what a pickup, a switch, a shot and a reload do is xemu-level MEASURED, but of a map with a poked weapon set.",
+      "when": {
+        "poke": "on"
+      }
+    },
+    {
+      "text": "POKE OFF (--no-poke): passive session, nothing is written into the game. The spawners hold whatever your map has, so look at what they show before you start the plan.",
+      "when": {
+        "poke": "off"
+      }
+    },
+    "Disk: at least 3 GB free (the script refuses to start below that). Every recorded button event makes up to 3 dump files of up to about 300 KB each (before, after, after). Cap for this run: {max_dumps} files, time limit {minutes} minutes."
+  ],
+  "steps": [
+    {
+      "text": "START. Press Enter at the prompt 'Enter = start the game'. The window opens and the game replays {route} by itself, which can take a few minutes because it waits at the slow screens. DO NOT touch the keyboard or the pad until this terminal prints the line '[buttons] route finished: the pad is YOURS, dumping is armed.' If it prints 'ROUTE FAILED' instead, press q + Enter and run the script again with --manual.",
+      "when": {
+        "mode": "auto"
+      },
+      "substeps": [
+        {
+          "text": "Where the route passes the Map Maker editor, the game pokes the spawner slots by itself. A table of '[poke] spawner 1: ...' lines appears here soon after. Check that every spawner says OK. A line '!!!! THE POKE DID NOT WORK' means the spawners are NOT as planned: carry on, but tell me.",
+          "when": {
+            "poke": "on"
+          }
+        }
+      ]
+    },
+    {
+      "text": "START. Press Enter at the prompt 'Enter = start the game'. The window opens. Drive to the Map Maker yourself: players, profile, Map Maker, load your level and open the editor.",
+      "when": {
+        "mode": "manual"
+      }
+    },
+    {
+      "text": "POKE THE SPAWNERS yourself. In the editor, on the weapon set page and standing idle, open a SECOND terminal in the repo root and paste the 'fish tmp/poke_now.fish buttons_poke ...' line that this script printed above under MANUAL POKE. It must answer 'request served' with OK lines. A REFUSED line means nothing was written: do not enter the preview then, tell me. After it works, run the printed 'python -m tools.button_dump_poke verify ...' line once and keep its output.",
+      "when": {
+        "mode": "manual",
+        "poke": "on"
+      },
+      "substeps": [
+        "Do this BEFORE you enter the preview. The preview copies the editor state when it starts, so a later poke changes nothing.",
+        "Do not poke on or after a visit of the weapon settings page (T1639: a poke after that visit wedged the game at game mode 0x66 in the headless host)."
+      ]
+    },
+    {
+      "text": "ENTER THE PREVIEW (play your level) and wait until you can walk.",
+      "when": {
+        "mode": "manual"
+      }
+    },
+    {
+      "text": "TURN OFF 'AUTO SWITCH WEAPON ON PICKUP' first, before you pick anything up. In this game that setting is WEAPON CHANGE on the CONTROLS page of the settings, reachable from the pause menu. Its values are Always, Never, Best, If New, If New and Best. The default is If New and Best, which can select a new weapon by itself the moment you pick it up. Set it to NEVER, so that 'picked up' and 'switched' are two separate events in the dumps.",
+      "seconds": 90,
+      "substeps": [
+        "Press START for the pause menu, open the settings and the CONTROLS page. Session 2 of the owner did START, DOWN, DOWN, UP, A and then DOWN seven times to reach the row Weapon Change (T1642). Read the names on screen, they count more than that key list.",
+        "On the row Weapon Change press LEFT three times from the default (If New and Best, If New, Best, Never) or RIGHT twice (Always, Never). The row must read NEVER.",
+        "ACCEPT the CONTROLS page. The value is stored only when you accept, leaving the page another way drops it. Then close the pause menu and stand in the level again.",
+        "One button at a time, 1 s apart. These menu presses are recorded too and the game clock stops during the menu, that is fine. Do not open the pause menu again after this step.",
+        "Write down the exact menu names and the way you went. The script asks for it at the end.",
+        {
+          "text": "AUTO mode: do this in EVERY run, the HDD is a fresh copy and does not remember it.",
+          "when": {
+            "mode": "auto"
+          }
+        },
+        {
+          "text": "MANUAL mode: tmp/hdds/editor-hdd keeps the profile. If an earlier run already left Weapon Change on Never, only check the row and close the menu.",
+          "when": {
+            "mode": "manual"
+          }
+        }
+      ]
+    },
+    {
+      "text": "THE RULE for everything below: press ONE button at a time, release it, wait about 1 second. Two presses less than 3 frames (0.05 s) apart are merged into ONE event and cannot be told apart. The sticks are not recorded, so you may walk freely, but never press a button while you walk.",
+      "substeps": [
+        "Tap, do not hold. A held button is one press at the start and one release at the end, nothing in between.",
+        "Between actions you can simply stand still. Every {idle} quiet polls (a poll is one frame, about 60 per second, 0 means off) the game takes a control dump by itself, up to {max_idle} of them. That is how the noise floor is measured, nothing for you to do.",
+        "Do not open the pause menu again and do not press START. Skip BLACK and WHITE: BLACK did nothing and WHITE never appeared in earlier sessions."
+      ]
+    },
+    {
+      "text": "THE BUTTONS (your earlier sessions confirmed this mapping): RT fire (it also swings the bat and places a mine), X reload, B melee, D-pad RIGHT next weapon, D-pad LEFT previous weapon, D-pad UP alt toggle, D-pad DOWN next grenade type, LT throw the grenade, R3 aim. The weapon cycle wraps around at both ends and the bare hands are one of its stops. A weapon that has no reload or no alt form simply ignores that button: press it anyway and tell me that nothing happened.",
+      "substeps": [
+        "After a switch wait 2 s before you press anything else, a press during the draw animation is ignored.",
+        "Never press B twice quickly, a second B inside the combo window starts the next animation."
+      ]
+    },
+    {
+      "text": "THE PLAN, one spawner after the other, in this order. The plan below follows the weapons you selected, spawner N holds the weapon of slot N. Finish every line of one spawner before you walk to the next.",
+      "when": {
+        "poke": "on"
+      }
+    },
+    {
+      "text": "Spawner {spawner}: {name} (entry {entry}).",
+      "when": {
+        "poke": "on"
+      },
+      "repeat": {
+        "over": "weapons"
+      },
+      "substeps": [
+        "Walk to spawner {spawner} with the stick only and pick up {name}, then stand still 3 s. Do NOT select it: with Weapon Change on Never it stays in your pack and your hands keep their weapon. If the spawner shows nothing or another weapon, write that down and go on.",
+        "Switch with the D-pad, one press per second: RIGHT until {name} is in your hands, then LEFT once, then RIGHT once more (both directions).",
+        "Wait 2 s, then one button at a time with 1 s between: RT once (fire), X once (reload, then wait 2 s), B once (melee, then wait 2 s), D-pad UP once and D-pad UP again (alt toggle on, alt toggle off).",
+        "Ammo: step off the spawner and onto it AGAIN for a second pickup, stand still 3 s, and once more for a third. If it gives nothing, say so. Then press D-pad RIGHT once and walk to the next spawner."
+      ]
+    },
+    {
+      "text": "THE PLAN with the spawners your map already has (no poke). Look at what each weapon spawner shows and go through them one after the other.",
+      "when": {
+        "poke": "off"
+      },
+      "substeps": [
+        "Walk to a spawner with the stick only and pick up its weapon. Write down the weapon name. Stand still 3 s without pressing anything. Do NOT select it (Weapon Change is on Never).",
+        "Switch with the D-pad, one press per second: RIGHT until it is in your hands, then LEFT once, then RIGHT once more.",
+        "Wait 2 s, then one button at a time with 1 s between: RT once (fire), X once (reload, then wait 2 s), B once (melee, then wait 2 s), D-pad UP twice (alt toggle on and off).",
+        "Step off the spawner and onto it again for a second and a third pickup (ammo), standing still 3 s each time, then press D-pad RIGHT once. Go to the next spawner and repeat."
+      ]
+    },
+    {
+      "text": "EXTRAS, once, with any weapon in your hands at the end of the plan: press R3 (the right stick pushed in) once to aim and again to stop aiming. If one of your weapons is a grenade or a mine: D-pad DOWN once (next grenade type), wait 1 s, LT once (throws the selected grenade)."
+    },
+    {
+      "text": "WATCH THIS TERMINAL. About every 3 s, when the count changed, it prints '[buttons] events: N   latest: LABEL'. Every press you make should raise N. If N stays flat while you press, stop pressing and tell me. Enter alone prints the count, only q + Enter stops.",
+      "substeps": [
+        "When the plan is done (or you are out of time) stop the run, see HOW TO STOP."
+      ]
+    }
+  ],
+  "note_at_end": [
+    "When the report is written the script prints 'note>'. Type the menu name of the 'auto switch weapon on pickup' setting and where it is, for example 'Weapon Change, pause menu, Settings, Controls, set to Never'. Type 'none found' if the game has no such row, Enter alone skips. It is appended to OWNER_NOTES.txt in the session folder.",
+    "Keep your own order of actions in mind (or on paper) for the SEND ME list: the report has only button names."
+  ],
+  "stop": [
+    "Type q and Enter in this terminal (best).",
+    "Or press Ctrl+C in this terminal, it runs the same cleanup. A second Ctrl+C during the cleanup is ignored.",
+    "Or let the time limit of {minutes} minutes end it, the game is then stopped for you.",
+    "Or close the game window, then press Enter in this terminal.",
+    "After any of these wait for the report and the 'note>' prompt before you close the terminal."
+  ],
+  "send_back": [
+    "Tell Claude the session finished: folder tmp/owner-profiles/{session}. It holds button_report.md, README_SESSION.txt and OWNER_NOTES.txt, no need to retype those.",
+    "What you did in what order, especially every place where you did not follow the plan.",
+    {
+      "text": "Which weapons were really in which spawner (planned: {weapons}) and any spawner that was empty or showed something else.",
+      "when": {
+        "poke": "on"
+      }
+    },
+    {
+      "text": "The names of the weapons your map really had, in the order you visited the spawners.",
+      "when": {
+        "poke": "off"
+      }
+    },
+    "The exact menu path of the Weapon Change setting and its value after you changed it.",
+    "Any line starting with '!!!!' (poke not verified) and any 'unimplemented instruction' or 'STOP' line from the game."
+  ]
+}

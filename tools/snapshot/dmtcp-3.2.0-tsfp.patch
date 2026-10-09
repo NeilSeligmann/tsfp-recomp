@@ -1,0 +1,106 @@
+diff --git a/src/plugin/ipc/file/fileconnection.cpp b/src/plugin/ipc/file/fileconnection.cpp
+index 5ccefb2..f670c98 100644
+--- a/src/plugin/ipc/file/fileconnection.cpp
++++ b/src/plugin/ipc/file/fileconnection.cpp
+@@ -19,6 +19,7 @@
+  *  <http://www.gnu.org/licenses/>.                                         *
+  ****************************************************************************/
+ 
++#include <sys/syscall.h>
+ #include <arpa/inet.h>
+ #include <fcntl.h>
+ #include <linux/limits.h>
+@@ -482,6 +483,22 @@ FileConnection::postRestart()
+     tempfd = dmtcp_bq_restore_file(_path.c_str(), _savedFilePath.c_str(),
+                                    _fcntlFlags, _rmtype);
+     JTRACE("Restore Resource Manager File") (_path);
++  } else if (Util::strStartsWith(_path.c_str(), "/memfd:")) {
++    // T1153: an anonymous memfd (no path exists). Recreate it with its saved content on the original fd number.
++    string memfdName = _path.substr(7);
++    const string deletedSuffix = " (deleted)";
++    if (Util::strEndsWith(memfdName.c_str(), deletedSuffix.c_str())) {
++      memfdName.resize(memfdName.size() - deletedSuffix.size());
++    }
++    tempfd = (int)syscall(SYS_memfd_create, memfdName.c_str(), 0);
++    JASSERT(tempfd != -1) (_path) (JASSERT_ERRNO);
++    JASSERT(ftruncate(tempfd, _st_size) == 0) (_st_size) (JASSERT_ERRNO);
++    int srcFd = _real_open(_savedFilePath.c_str(), O_RDONLY, 0);
++    JASSERT(srcFd != -1) (_path) (_savedFilePath) (JASSERT_ERRNO);
++    writeFileFromFd(srcFd, tempfd);
++    _real_close(srcFd);
++    JASSERT(lseek(tempfd, _offset, SEEK_SET) == _offset) (_offset) (JASSERT_ERRNO);
++    _fileAlreadyExists = false;
+   } else {
+     refreshPath();
+     JASSERT(FileConnList::createDirectoryTree(_path)) (_path)
+diff --git a/src/plugin/ipc/file/fileconnlist.cpp b/src/plugin/ipc/file/fileconnlist.cpp
+index 111bc62..ab6f91d 100644
+--- a/src/plugin/ipc/file/fileconnlist.cpp
++++ b/src/plugin/ipc/file/fileconnlist.cpp
+@@ -484,6 +484,28 @@ FileConnList::recreateShmFileAndMap(const ProcMapsArea &area)
+   // Recreate file in dmtcp-tmpdir;
+   string filename = removeSuffix(area.name, DELETED_FILE_SUFFIX);
+ 
++  if (strncmp(area.name, "/memfd:", 7) == 0) {
++    // T1153: an anonymous memfd mapping (Mesa lavapipe/llvmpipe sub-allocate one memfd into hundreds of
++    // mappings). FileConnection::postRestart recreated the memfd with its full saved content on the original
++    // fd number, so map THAT object at the area's file offset: every mapping keeps sharing one file.
++    for (iterator it = begin(); it != end(); ++it) {
++      Connection *con = it->second;
++      if (con->conType() != Connection::FILE) {
++        continue;
++      }
++      FileConnection *fileCon = (FileConnection *)con;
++      if (fileCon->inode() == area.inodenum &&
++          strncmp(fileCon->filePath().c_str(), "/memfd:", 7) == 0 && con->numFds() > 0) {
++        int mapFd = con->getFds()[0];
++        // not restoreShmArea: it closes the fd, which stays the process's own memfd here
++        void *addr = mmap(area.addr, area.size, area.prot, MAP_FIXED | area.flags, mapFd, area.offset);
++        JASSERT(addr != MAP_FAILED) (area.flags) (area.prot) (mapFd) (JASSERT_ERRNO).Text("memfd mmap failed");
++        return;
++      }
++    }
++    JASSERT(false) (area.name) (area.inodenum).Text("memfd mapping without a restored memfd connection");
++  }
++
+   JASSERT(createDirectoryTree(area.name)) (area.name)
+   .Text("Unable to create directory in File Path");
+ 
+diff --git a/src/wrappers.cpp b/src/wrappers.cpp
+index 3fe984e..5e8470a 100644
+--- a/src/wrappers.cpp
++++ b/src/wrappers.cpp
+@@ -27,6 +27,8 @@
+ #undef openat
+ #undef openat64
+ 
++#include <dlfcn.h>
++#include <sys/syscall.h>
+ #include "dmtcp.h"
+ #include "jassert.h"
+ #include "jfilesystem.h"
+@@ -162,6 +164,24 @@ dmtcp_openat(int dirfd, const char *path, int flags, mode_t mode)
+   return fd;
+ }
+ 
++// T1153: memfd_create had no wrapper, so a memfd (Mesa lavapipe allocation fd) was never a connection and was
++// closed by a restart. Track it as a file connection (its path is "/memfd:<name> (deleted)").
++extern "C" int
++memfd_create(const char *name, unsigned int flags)
++{
++  WrapperLock wrapperLock;
++  static int (*realMemfd)(const char *, unsigned int) = NULL;
++  if (realMemfd == NULL) {
++    realMemfd = (int (*)(const char *, unsigned int))dlsym(RTLD_NEXT, "memfd_create");
++  }
++  int fd = realMemfd != NULL ? realMemfd(name, flags)
++                             : (int)syscall(SYS_memfd_create, name, flags);
++  if (fd != -1) {
++    processOpenFd(fd, NULL, O_RDWR, 0);
++  }
++  return fd;
++}
++
+ extern "C" int
+ open(const char *path, int flags, ...)
+ {

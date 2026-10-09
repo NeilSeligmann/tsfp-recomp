@@ -1,0 +1,72 @@
+[
+  {
+    "address": 3688537,
+    "label": "SharedSecondaryDestructor",
+    "reason": "Unrecovered stream or shared reference method; original child state is unavailable"
+  },
+  {
+    "address": 4221036,
+    "label": "SharedReferenceAdd",
+    "reason": "Unrecovered stream or shared reference method; original child state is unavailable"
+  },
+  {
+    "address": 4221049,
+    "label": "SharedForceDestroy",
+    "reason": "Unrecovered stream or shared reference method; original child state is unavailable"
+  },
+  {
+    "address": 4221066,
+    "label": "SharedReferenceRelease",
+    "reason": "Unrecovered stream or shared reference method; original child state is unavailable"
+  },
+  {
+    "address": 4223551,
+    "label": "StreamAddRef",
+    "reason": "Unrecovered stream or shared reference method; original child state is unavailable"
+  },
+  {
+    "address": 4223622,
+    "label": "StreamRelease",
+    "reason": "Unrecovered stream or shared reference method; original child state is unavailable"
+  },
+  {
+    "address": 4223700,
+    "label": "StreamGetInfo",
+    "reason": "Unrecovered stream or shared reference method; original child state is unavailable"
+  },
+  {
+    "address": 4223803,
+    "label": "StreamDiscontinuity",
+    "reason": "Unrecovered stream or shared reference method; original child state is unavailable"
+  },
+  {
+    "address": 4223880,
+    "label": "StreamFlush",
+    "reason": "Unrecovered stream or shared reference method; original child state is unavailable"
+  },
+  {
+    "address": 4223955,
+    "label": "StreamGetStatus",
+    "reason": "Unrecovered stream or shared reference method; original child state is unavailable"
+  },
+  {
+    "address": 4224036,
+    "label": "StreamProcess",
+    "reason": "Unrecovered stream or shared reference method; original child state is unavailable"
+  },
+  {
+    "address": 4225155,
+    "label": "StreamSecondaryAddRef",
+    "reason": "Unrecovered stream or shared reference method; original child state is unavailable"
+  },
+  {
+    "address": 4225165,
+    "label": "StreamSecondaryRelease",
+    "reason": "Unrecovered stream or shared reference method; original child state is unavailable"
+  },
+  {
+    "address": 4232109,
+    "label": "SharedDeletingDestructor",
+    "reason": "Unrecovered stream or shared reference method; original child state is unavailable"
+  }
+]

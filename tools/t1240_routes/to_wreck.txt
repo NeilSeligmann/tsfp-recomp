@@ -1,0 +1,12 @@
+# T1240: from the first controllable pose (start (0.81,-2.39,-3.35) yaw 100.7) to the crashed ship firefight at (31.5,25.6)
+# MEASURED waypoint chain (pose = position words of the player record, T1240); every goto turns to the bearing then walks.
+pose
+goto 0 34 9
+goto 1.5 53.5 6
+goto 28 46 8
+turn -119
+tap I 5
+turn -4
+tap I 5
+tap K 1.5
+pose

@@ -1,0 +1,7 @@
+[
+  {
+    "address": 4225612,
+    "label": "DeviceSynchPlayback",
+    "reason": "IDirectSound::SynchPlayback reads the omitted APU object; only the T421 movie route may answer it"
+  }
+]

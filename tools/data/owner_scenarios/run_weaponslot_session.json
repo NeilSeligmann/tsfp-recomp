@@ -1,0 +1,102 @@
+{
+  "script": "run_weaponslot_session",
+  "title": "Map Maker weapon set dumps: editor, preview and back, one label per moment",
+  "summary": "One game session in which you change the Map Maker weapon set slot by slot, enter and leave the preview, and take a labelled dump of the game's memory at each moment by typing a label here (or with a pad chord). From the dumps I read where the chosen weapon of each slot is stored in the editor and in the preview (T1612). The run is READ-ONLY unless forced_state is on.",
+  "kind": "live-dump",
+  "duration": "about 15 to 25 minutes (my estimate)",
+  "options": {
+    "forced_state": {
+      "values": ["off", "on"],
+      "default": "off"
+    },
+    "hotkeys": {
+      "values": ["on", "off"],
+      "default": "on"
+    },
+    "session": {
+      "free": true,
+      "default": "weaponslot-session-STAMP"
+    }
+  },
+  "prerequisites": [
+    "Game HDD: tmp/hdds/editor-hdd with your Map Maker level (spawners 1 to 6 placed). The script builds the private host first, which can take several minutes, and then opens the game WITHOUT a start prompt.",
+    {
+      "text": "READ-ONLY run: no poke is possible. Start the script as 'fish tmp/run_weaponslot_session.fish --forced-state' if you also want to poke a slot (see the poke step).",
+      "when": {"forced_state": "off"}
+    },
+    {
+      "text": "FORCED-STATE run: tmp/poke_now.fish can write guest memory (FABRICATED-STATE, guarded, logged in guestpoke.log, the folder is marked FORCED_STATE). Never a measured result.",
+      "when": {"forced_state": "on"}
+    },
+    "Labels are typed in this terminal at the prompt 'label for this dump (q = stop dumping)'. Allowed characters: lowercase letters, digits, underscore, dash. The label records what you did, so use exactly the names below."
+  ],
+  "steps": [
+    {
+      "text": "Wait for 'Host is up.' in this terminal (up to 5 minutes). In the game window: players, profile, Map Maker, load your level and open the editor. Do NOT enter the preview yet.",
+      "substeps": [
+        {
+          "text": "To take a dump without typing: {hotkey:dump}. A chord dump is labelled pad1, pad2, ... in order, so note which moment it was. Typed labels keep working at the same time.",
+          "when": {"hotkeys": "on"}
+        },
+        {
+          "text": "This host has no pad chords (it predates T1632), type every label.",
+          "when": {"hotkeys": "off"}
+        }
+      ]
+    },
+    {
+      "text": "Label base_editor: the Map Maker editor is open and you have changed nothing yet. This one must be taken BEFORE the first preview (the map chunk buffer is still empty then). Type base_editor."
+    },
+    {
+      "text": "Open the Map Settings weapon set page (6 slots) and set slot 1 = Baseball bat. Enter the preview and wait until you can move. Only now type s1_bat_prev.",
+      "substeps": [
+        "Every label ending in _prev is taken AFTER the preview has started, never before."
+      ]
+    },
+    {
+      "text": "Leave the preview back to the editor. Type s1_bat_left."
+    },
+    {
+      "text": "Set slot 1 = Pistol 9mm. Enter the preview, wait until you can move, type s1_pistol_prev."
+    },
+    {
+      "text": "Leave the preview. Type s1_pistol_left."
+    },
+    {
+      "text": "Set slot 2 = Baseball bat. Slot 1 stays as it was (or cleared, the session of 2026-10-08 cleared it, either is fine, tell me which). Enter the preview, wait until you can move, type s2_bat_prev."
+    },
+    {
+      "text": "Leave the preview. Type s2_bat_left."
+    },
+    {
+      "text": "Any further change you like (a third weapon, slot 3 to 6, removing a weapon, all six slots one weapon): put what you did into the label, for example s3_pistol_prev and s3_pistol_left. Always the same pattern: _prev in the preview after it started, _left after leaving it."
+    },
+    {
+      "text": "Poking a slot (forced-state run only): do it in the Map Maker EDITOR before you enter the preview, in a SECOND terminal in the repo root, for example (slot 1, the entry 0x38 is only an example, entry numbers: docs/t-weapon-entry-table.md): fish tmp/poke_now.fish poke_slot1 '*0x7844A8+0x1190C=0x38'   The star must be quoted in fish. Slot N is at +0x1190C + 4*(N-1). Read the printed answer: REFUSED means nothing was written. Then enter the preview and type poke_slot1_prev.",
+      "when": {"forced_state": "on"},
+      "substeps": [
+        "The poke is FABRICATED-STATE and its target is a T1612 inference, so a slot that stays as before is a valid result."
+      ]
+    }
+  ],
+  "note_at_end": [
+    "The weapon you put in each slot for each label, if it differs from the label names. Whether slot 1 was cleared or kept for s2_bat."
+  ],
+  "stop": [
+    "Type q and Enter at the label prompt. The script then tells you to close the game window.",
+    {
+      "text": "Or end the run from the pad: {hotkey:stop}. The script finishes by itself.",
+      "when": {"hotkeys": "on"}
+    },
+    "Or close the game window. The script notices and finishes.",
+    "Do not close the terminal before it prints 'done: tell Claude'."
+  ],
+  "send_back": [
+    "Tell Claude the session finished: folder tmp/owner-profiles/{session}.",
+    "The labels you took in order, the weapon in each slot for each, and any label you skipped.",
+    {
+      "text": "The lines each poke command printed (OK or REFUSED) and what the preview showed afterwards.",
+      "when": {"forced_state": "on"}
+    }
+  ]
+}

@@ -1,0 +1,191 @@
+{
+  "script": "run_t1642_session4",
+  "title": "Owner session 4 (T1642): six spawners in pairs, an ammo pickup, then the poke test",
+  "summary": "The smallest button dump session that closes the open points of docs/t-button-dump-analysis.md section 11. It is the normal button dump session (every button press is recorded) with a FIXED spawner order, a control dump every {idle} quiet polls (1.5 s at the default 90) so that a pickup is pinned down to a second or two, and one extra memory range, the player settings object that holds the Weapon Change value. Parts 1 to 4 are the unmodified game on a map with a poked weapon set. Part 5 pokes more memory and is FABRICATED-STATE.",
+  "kind": "wrapper",
+  "duration": "up to {minutes} minutes (the game stops by itself then). My estimate is 15 to 25 minutes for the five parts.",
+  "options": {
+    "mode": {
+      "values": ["auto", "manual"],
+      "default": "auto"
+    },
+    "poke": {
+      "values": ["on", "off"],
+      "default": "on"
+    },
+    "weapons": {
+      "entries": true,
+      "default": "0x04,0x02,0x0D,0x0C,0x32,0x30"
+    },
+    "minutes": {
+      "free": true,
+      "default": "40"
+    },
+    "idle": {
+      "free": true,
+      "default": "90"
+    },
+    "max_dumps": {
+      "free": true,
+      "default": "2000"
+    },
+    "max_idle": {
+      "free": true,
+      "default": "150"
+    },
+    "route": {
+      "free": true,
+      "default": "the newest file of tmp/owner-profiles/routes"
+    },
+    "session": {
+      "free": true,
+      "default": "button-dumps-STAMP"
+    }
+  },
+  "tables": {
+    "pairs": {
+      "#1": {
+        "pair": "1",
+        "role": "first of the pair",
+        "closes": "the x2-first pickup order of a family",
+        "steps": []
+      },
+      "#2": {
+        "pair": "1",
+        "role": "second of the pair",
+        "closes": "what the plain pickup after the x2 one does (the default rule on a worse entry: pistol priority 75 against 65 for the x2, so no switch is expected, INFERRED)",
+        "steps": [
+          "Press D-pad RIGHT ONCE and tell me what happened: which weapon came into your hands, or nothing."
+        ]
+      },
+      "#3": {
+        "pair": "2",
+        "role": "first of the pair",
+        "closes": "a family whose plain entry is NOT hidden by its x2 entry",
+        "steps": []
+      },
+      "#4": {
+        "pair": "2",
+        "role": "second of the pair",
+        "closes": "the same for the plain flare gun after the x2 one",
+        "steps": [
+          "Press D-pad RIGHT ONCE and tell me what happened: which weapon came into your hands, or nothing."
+        ]
+      },
+      "#5": {
+        "pair": "3",
+        "role": "first of the pair",
+        "closes": "the x2-first pickup order of a third family",
+        "steps": []
+      },
+      "#6": {
+        "pair": "3",
+        "role": "second of the pair",
+        "closes": "the same for the plain K-SMG after the x2 one",
+        "steps": [
+          "Press D-pad RIGHT ONCE and tell me what happened: which weapon came into your hands, or nothing."
+        ]
+      }
+    }
+  },
+  "prerequisites": [
+    {
+      "text": "AUTO mode: the game replays the route you recorded once with fish tmp/record_mapmaker_route.fish, this run uses {route}, up to the Map Maker preview. The HDD is a fresh copy of tmp/hdds/route-hdd-pristine, so the Weapon Change setting is at its default If New and Best, exactly what this session needs.",
+      "when": {"mode": "auto"}
+    },
+    {
+      "text": "MANUAL mode: no route. You drive to the Map Maker preview yourself with the HDD tmp/hdds/editor-hdd. Its profile must still have the Weapon Change setting on the default If New and Best. If you set it to something else in an earlier run, set it back before you start.",
+      "when": {"mode": "manual"}
+    },
+    {
+      "text": "POKE ON (the wrapper starts the game with --forced-state because part 5 needs it): the six spawner slots are written by a poke before the preview (FABRICATED-STATE). Spawner N holds the weapon of slot N: {weapons}. Everything after the preview starts is unmodified game code until part 5.",
+      "when": {"poke": "on"}
+    },
+    {
+      "text": "WARNING: this session is built around the spawner poke (parts 1 to 4 need the six weapons and part 5 needs --forced-state). Without the poke most steps below have nothing to do. Run it without --no-poke.",
+      "when": {"poke": "off"}
+    },
+    "Disk: at least 3 GB free. Cap for this run: {max_dumps} dump files and at most {max_idle} control dumps, time limit {minutes} minutes."
+  ],
+  "steps": [
+    {
+      "text": "START. Press Enter at the prompt 'Enter = start the game'. The game replays {route} by itself, which can take a few minutes. DO NOT touch the keyboard or the pad until this terminal prints '[buttons] route finished: the pad is YOURS, dumping is armed.' If it prints 'ROUTE FAILED', press q + Enter and run the script again with --manual.",
+      "when": {"mode": "auto"},
+      "substeps": [
+        {
+          "text": "A table of '[poke] spawner 1: ...' lines appears here soon after the route passed the editor. Every spawner must say OK. A line '!!!! THE POKE DID NOT WORK' means the spawners are NOT as planned: carry on, but tell me.",
+          "when": {"poke": "on"}
+        }
+      ]
+    },
+    {
+      "text": "START. Press Enter at the prompt 'Enter = start the game'. Drive to the Map Maker yourself: players, profile, Map Maker, load your level and open the editor.",
+      "when": {"mode": "manual"}
+    },
+    {
+      "text": "POKE THE SPAWNERS yourself. In the editor, on the weapon set page and standing idle, open a SECOND terminal in the repo root and paste the 'fish tmp/poke_now.fish buttons_poke ...' line printed above under MANUAL POKE. It must answer 'request served' with OK lines (REFUSED means nothing was written, do not enter the preview then). Run the printed 'python -m tools.button_dump_poke verify ...' line once afterwards. Do all of this BEFORE you enter the preview, then enter the preview and wait until you can walk.",
+      "when": {"mode": "manual", "poke": "on"}
+    },
+    {
+      "text": "DO NOT OPEN THE PAUSE MENU in this session, not even to look. The Weapon Change setting must stay on its default If New and Best, because parts 1 to 4 measure what that default does at a pickup. This is the opposite of the normal button dump session where you set it to Never. Do not press START at all.",
+      "substeps": [
+        "Part 5 changes the setting from the second terminal, not from the menu."
+      ]
+    },
+    {
+      "text": "THE RULE: press ONE button at a time, release it, wait about 1 second. Presses less than 3 frames apart are merged into ONE event. The sticks are not recorded, so walking is free. Tap, do not hold.",
+      "substeps": [
+        "'Stand still 3 s' below means: no button and no stick for 3 seconds. A control dump is taken every {idle} quiet polls (about 60 polls per second), so 3 s gives two of them. That is how I find out WHEN the pickup happened.",
+        "You do not have to press D-pad to select anything after a pickup unless a line says so. The point is to see what the game does by itself."
+      ]
+    },
+    {
+      "text": "PARTS 1 to 3, the six spawners in three pairs. Walk onto the spawners in the order below with the stick only. Pairs: 1 and 2, 3 and 4, 5 and 6. In each pair the dual (x2) weapon comes FIRST and the plain one of the same family second, and that order is the point of the test. With the default list that is the pistol x2 then the pistol, the flare gun x2 then the flare gun, the K-SMG x2 then the K-SMG. If you gave your own --weapons the order is simply the list below.",
+      "when": {"poke": "on"}
+    },
+    {
+      "text": "Part {pair}, spawner {spawner} ({role}): {name} (entry {entry}). With the default list this decides {closes}.",
+      "when": {"poke": "on"},
+      "repeat": {
+        "over": "weapons",
+        "table": "pairs"
+      },
+      "substeps": [
+        "Walk onto spawner {spawner} and stand still 3 s. Do not press anything, not even to select the weapon. If the spawner shows nothing or another weapon, write that down."
+      ]
+    },
+    {
+      "text": "PART 4, AMMO. Select the pistol with D-pad RIGHT or LEFT, one press per second, until a pistol is in your hands (tell me whether it is the dual one). Then fire with RT taps, 1 s apart, until about 2 rounds are left in TOTAL (loaded plus reserve, read the ammo counter). Do NOT reload (X). Stand still 3 s. Then pick up the map's ammo item. If your map has no ammo item, step off and onto the pistol spawner again instead and say that you did. Stand still 3 s after it.",
+      "substeps": [
+        "This measures an ammo pickup that is not cut down by the ammo maximum. Tell me the counter before and after the pickup."
+      ]
+    },
+    {
+      "text": "PART 5, FABRICATED-STATE from the first command on (the poke test, T1630 part C). Use a SECOND terminal in the repo root and keep every line it prints. Pick up nothing from now on, and do not die or restart the level: the grants are lost at a respawn.",
+      "when": {"poke": "on"},
+      "substeps": [
+        "FIRST command, the policy: fish tmp/poke_now.fish policy_never 0x7BEE2C=1:4   It writes the Weapon Change value Never (1) into the player settings without the menu. It must answer 'request served' and print an OK line. A REFUSED line means nothing was written.",
+        "SECOND command, the grants: fish tmp/inventory_poke.fish 0x36,0x28 on   It grants the Baseball bat (entry 0x36) and the Grenades (entry 0x28). Add -n to see the planned lines without sending anything. The write itself is UNPROVEN, so a REFUSED or READBACK-MISMATCH line is a valid result, tell me.",
+        "In the game: press D-pad RIGHT, one press per second, until the bat is in your hands. Tell me whether the bat appeared in the cycle at all. Then B once (melee, wait 2 s) and LT once (throws a grenade). Say what each did, and copy the line if the game stops.",
+        "Switch back to the bare hands with the D-pad. ONLY THEN run: fish tmp/inventory_poke.fish 0x36,0x28 off   Revoking a weapon that is held is not safe."
+      ]
+    }
+  ],
+  "note_at_end": [
+    "When the report is written the script prints 'note>'. This session never opens the menu, so type: not touched, default If New and Best until the poke of part 5. Enter alone also works.",
+    "Keep your own order of actions in mind, the report only has button names."
+  ],
+  "stop": [
+    "After the last line of part 5 type q and Enter in this terminal.",
+    "Or press Ctrl+C in this terminal (same cleanup), or let the time limit of {minutes} minutes end it, or close the game window and press Enter here.",
+    "Wait for the report and the 'note>' prompt before you close the terminal."
+  ],
+  "send_back": [
+    "Tell Claude the session finished: folder tmp/owner-profiles/{session}.",
+    "After each of the three pairs: what D-pad RIGHT gave you (which weapon, or nothing).",
+    "Part 4: which pistol you held, the ammo counter before and after the pickup, and whether the ammo item was the map's own or the pistol spawner again.",
+    "Part 5: the printed lines of all three commands (OK, REFUSED or READBACK-MISMATCH), whether the bat and the grenades appeared, what B and LT did, whether the game crashed.",
+    "What you did in what order, and any spawner that was empty or showed another weapon (planned: {weapons}).",
+    "Any line starting with '!!!!' and any 'unimplemented instruction' or 'STOP' line."
+  ]
+}

@@ -1,0 +1,235 @@
+{
+  "script": "run_settings_dump",
+  "title": "Settings walk: every CONTROLS and AUDIO/VIDEO option, one at a time, with before and after dumps ({mode} mode)",
+  "summary": "You change each option of Settings > Controls (Control Layout, Crosshair, Inverse Look, Auto Aim, Auto Lookahead, Aim Mode, Crouch, Weapon Change, Vibration mode, Turn Speed) and of Settings > Audio/Video Options by hand, ONE press at a time. The host writes a guest memory dump just before and just after every button press. Afterwards the report lists, for every press, which bytes of the settings block (profile at 0x7BEDC4, UI copy at 0x7BA364) changed with their T1708 field names and the label the screen should show, flags a setting whose byte does not change and a byte that changes without a labelled setting, and shows where the Audio/Video values are stored (not known yet).",
+  "kind": "button-dump",
+  "duration": "about 25 to 35 minutes after the game is up, plus about 2 minutes of hands-off route replay",
+  "options": {
+    "mode": {
+      "values": [
+        "auto",
+        "manual"
+      ],
+      "default": "auto"
+    },
+    "page": {
+      "values": [
+        "controls",
+        "audio-video",
+        "settings"
+      ],
+      "default": "controls"
+    },
+    "hotkeys": {
+      "values": [
+        "on",
+        "off"
+      ],
+      "default": "on"
+    },
+    "minutes": {
+      "free": true,
+      "default": "45"
+    },
+    "idle": {
+      "free": true,
+      "default": "600"
+    },
+    "max_dumps": {
+      "free": true,
+      "default": "3000"
+    },
+    "route": {
+      "free": true,
+      "default": "the newest file of tmp/owner-profiles/routes"
+    },
+    "session": {
+      "free": true,
+      "default": "settings-dump-STAMP"
+    }
+  },
+  "prerequisites": [
+    {
+      "text": "AUTO mode: the game replays the start of the route you recorded once with fish tmp/record_mapmaker_route.fish ({route}): title, profile, Main Menu, then the script adds two closed loop menu steps (Settings, then the {page} page) and hands the pad to you there. You never go near the Map Maker. The HDD is a fresh copy of tmp/hdds/route-hdd-pristine, so whatever you change and accept in this run is thrown away with the copy (your real profile is not touched).",
+      "when": {
+        "mode": "auto"
+      }
+    },
+    {
+      "text": "MANUAL mode: no route. You drive to Settings yourself with the HDD tmp/hdds/editor-hdd, which is your REAL profile: what you accept stays there. The last step of the plan restores your starting values, do not skip it. Dumping is armed from the first poll, so your menu presses on the way are recorded too (harmless, they use up the dump budget).",
+      "when": {
+        "mode": "manual"
+      }
+    },
+    "Settings screens only (front end, game mode 0x65). The pause menu path is not used here: its row node table is bigger and not dumped (INFERRED, docs/t1709-settings-dump.md).",
+    "Disk: at least 5 GB free (the script refuses to start below that). Every button press and every release is one event with up to 3 dump files of about 230 KB (before, after, after). Cap for this run: {max_dumps} files, time limit {minutes} minutes.",
+    {
+      "text": "Hotkeys on: you can stop the run from the pad or keyboard without leaving the game window: {hotkey:stop}. Back is the only chord key that reaches the game, and only while you hold it.",
+      "when": {
+        "hotkeys": "on"
+      }
+    },
+    {
+      "text": "Hotkeys are off: stop with q + Enter in this terminal.",
+      "when": {
+        "hotkeys": "off"
+      }
+    },
+    "Paper or a text file next to you: you write down the label the SCREEN shows after every press (the report knows the label from the option index, but only you can confirm it is what the game really draws)."
+  ],
+  "steps": [
+    {
+      "text": "START. Press Enter at the prompt 'Enter = start the game'. The window opens and the game replays the route by itself, this can take a few minutes. DO NOT touch the keyboard or the pad until this terminal prints '[settings] route finished: the pad is YOURS, dumping is armed.' If it prints 'ROUTE FAILED' instead, press q + Enter and run the script again with --manual.",
+      "when": {
+        "mode": "auto"
+      }
+    },
+    {
+      "text": "START. Press Enter at the prompt 'Enter = start the game'. The window opens. Drive to the Controls page yourself: players, profile, Main Menu, Settings, then Controls. Use the D-pad and A only.",
+      "when": {
+        "mode": "manual"
+      }
+    },
+    {
+      "text": "THE RULE for everything below: ONE button at a time, release it, wait 1 second (count one-thousand-one) before the next press. Two presses less than 3 frames (0.05 s) apart are merged into ONE event and the report cannot tell them apart. TAP, never hold: a held direction repeats. Use the D-pad (UP, DOWN, LEFT, RIGHT) and A. Do not use the sticks, they are not recorded.",
+      "substeps": [
+        "Every press AND every release is its own recorded event, that is expected.",
+        "The first press of the stop chord also records a BACK event, that is fine.",
+        "If you press the wrong button, just carry on and write down what you pressed, the report shows every press."
+      ]
+    },
+    {
+      "text": "WRITE DOWN THE STARTING VALUES. Look at the Controls page before you press anything and write down the label shown on every row. You will restore exactly these at the end. Moving the cursor with DOWN does not change a value, so you may scroll down once with 1 s between presses and then go back up with UP.",
+      "seconds": 60,
+      "substeps": [
+        "Rows in order: Control Layout, Crosshair, Inverse Look, Auto Aim, Auto Lookahead, Aim Mode, Crouch, Weapon Change, Vibration mode, Turn Speed (a bar), Accept, Cancel.",
+        "The route's profile is expected to read Crosshair On and Fixed, Inverse Look On, Auto Aim On, Auto Lookahead On, Aim Mode Toggle, Crouch Toggle, Weapon Change If New and Best, Vibration mode Fire&Hit and Turn Speed about half (MEASURED on the route profile 2026-10-08, your profile may differ, the screen wins).",
+        {
+          "text": "If the page shown is not Controls (for example the Settings list or Audio/Video), go to the Controls page first: Settings list, DOWN to Controls, A.",
+          "when": {
+            "page": [
+              "settings",
+              "audio-video"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "text": "CONTROL LAYOUT (row 1, cursor starts here). LOOK ONLY first: the row shows the name of the current preset. Write it down. Do not press LEFT or RIGHT here (the row does not cycle).",
+      "seconds": 30,
+      "substeps": [
+        "OPTIONAL, only if you are willing to look inside: press A once. A chooser or a warning page opens. Write down the preset names listed and the text of any warning. Then leave it WITHOUT choosing another layout: press B (or pick the preset that is already current). If the screen asks about keeping changes answer so that nothing changes. Tell me exactly what you pressed."
+      ]
+    },
+    {
+      "text": "CROSSHAIR. DOWN once (row 2). Then RIGHT, wait 1 s, RIGHT, wait 1 s, RIGHT. Three presses go through all three values and back to the start (On and Moving, On and Fixed, Off in some order, the list wraps). After EVERY press write the label on screen.",
+      "seconds": 45,
+      "substeps": [
+        "Then ONE press LEFT: write the label (it goes backwards). Then RIGHT once to come back to your starting value."
+      ]
+    },
+    {
+      "text": "INVERSE LOOK. DOWN once. RIGHT, wait, RIGHT: two presses, Off and On. Write the label after each. End on the starting value.",
+      "seconds": 30
+    },
+    {
+      "text": "AUTO AIM. DOWN once. RIGHT, wait, RIGHT. Write the label after each. End on the starting value.",
+      "seconds": 30
+    },
+    {
+      "text": "AUTO LOOKAHEAD. DOWN once. RIGHT, wait, RIGHT. Write the label after each. End on the starting value.",
+      "seconds": 30
+    },
+    {
+      "text": "AIM MODE. DOWN once. RIGHT, wait, RIGHT (Toggle and Hold). Write the label after each. End on the starting value.",
+      "seconds": 30
+    },
+    {
+      "text": "CROUCH. DOWN once. RIGHT, wait, RIGHT (Toggle and Hold). Write the label after each. End on the starting value.",
+      "seconds": 30
+    },
+    {
+      "text": "WEAPON CHANGE. DOWN once. RIGHT five times, waiting 1 s between presses: five values (Always, Never, Best, If New, If New and Best, in a cycle starting from your value). Write the label after EVERY press.",
+      "seconds": 60,
+      "substeps": [
+        "Then ONE press LEFT: write the label. Then RIGHT once to come back to your starting value."
+      ]
+    },
+    {
+      "text": "VIBRATION MODE. DOWN once. RIGHT four times, waiting 1 s: four values (Off, Fire, Hit, Fire&Hit in a cycle). Write the label after EVERY press and end on the starting value. If your pad vibrates, write down when (INFERRED: Fire vibrates on shooting, Hit when hurt).",
+      "seconds": 60
+    },
+    {
+      "text": "TURN SPEED. DOWN once (the row is a bar). RIGHT six times, 1 s apart: each press should move the bar by one small step (0.05 in the file, six steps are 0.30). Write down what the bar did. Then LEFT six times to come back. Then LEFT six more times (below the start) and RIGHT six times to come back to the start.",
+      "seconds": 150,
+      "substeps": [
+        "It does not matter if the bar hits an end (0 or full): write down at which press it stopped moving and press the other direction until it is back at the start."
+      ]
+    },
+    {
+      "text": "ACCEPT AND REOPEN (the profile is only written when you accept). Change FOUR rows on purpose, one press each, then accept: Weapon Change to Never, Crosshair to Off, Vibration mode to Off and Turn Speed six steps up. Write down the label after each. Then DOWN to Accept (row 11) and press A: the page closes to the Settings list.",
+      "seconds": 90,
+      "substeps": [
+        "At the Settings list DOWN to Controls and press A again. Write down what the four rows now show (they must show what you accepted).",
+        "Keep this page open for the next step."
+      ]
+    },
+    {
+      "text": "CANCEL CHECK. Change ONE row, Crosshair, by one press. Do not accept. DOWN to Cancel (the last row) and press A. At the Settings list open Controls again and write down the Crosshair label: it should show the value from BEFORE this step.",
+      "seconds": 60
+    },
+    {
+      "text": "RESTORE THE CONTROLS to your starting values (the list you wrote down), one press at a time, then Accept (A on Accept). Reopen Controls once more and compare every row with the starting list. Write down every row that differs.",
+      "seconds": 120
+    },
+    {
+      "text": "AUDIO/VIDEO. Back at the Settings list put the cursor on Audio/Video Options and press A. Write down every option of the page from top to bottom with its starting value (a name, an on or off state or a slider). Do not press LEFT or RIGHT yet.",
+      "seconds": 60,
+      "substeps": [
+        "Expected from the headless measurement of the same build (MEASURED, docs/t1709-settings-dump.md): FIVE option rows in this order, a two value row, a slider, a two value row, a slider and a two value row, then Accept and Cancel. Your screen names them. A slider may ignore LEFT and RIGHT while the two value row above it is off, and a slider already at its maximum does nothing on RIGHT: write that down, it is not a bug of yours.",
+        "The Audio/Video page is the one whose storage is NOT known (INFERRED: pointer bound rows and the globals 0x5236B4 to 0x5236BC). Your notes are how the report's labels get named later."
+      ]
+    },
+    {
+      "text": "AUDIO/VIDEO, ONE OPTION AT A TIME. For each option from the top: DOWN to it, change it with RIGHT (toggle: one press per value, slider: five presses, 1 s apart), write down the label or the position after every press, then LEFT back to the starting value. Do the options in screen order and do not skip any, also the ones you think are irrelevant.",
+      "seconds": 300,
+      "substeps": [
+        "First option only: after you changed it away from the start and wrote it down, DO NOT restore it yet. Go to Accept and press A. Reopen Audio/Video Options from the Settings list and write down what the first option shows. Then put it back to the start and continue with the second option. (This single accepted change is what lets the report find the profile bytes of the first option.)",
+        "A slider may move more than a step per press or may start sound, write down anything odd.",
+        "If the page has a separate Accept and Cancel row, use them as in the Controls steps."
+      ]
+    },
+    {
+      "text": "AUDIO/VIDEO, ACCEPT ALL. Change every option away from its start by one value, DOWN to Accept and A, reopen, check each value. Then restore every option to your starting values, Accept again, reopen and compare with the starting list.",
+      "seconds": 240
+    },
+    {
+      "text": "LEAVE. B to the Settings list, B to the Main Menu. If a yes or no page asks about unsaved changes, write down the exact text and choose so that nothing unwanted is stored. Then stop the run.",
+      "seconds": 30
+    }
+  ],
+  "phases": {},
+  "note_at_end": [
+    "At the end the script asks for notes: type your written down labels line by line (setting, press number, label shown), an empty line ends the input. You can also type 'on paper' and send the paper.",
+    "Any press that did nothing, any label that looked wrong for the value, any option that changed something else too, and every place where you did not follow the plan."
+  ],
+  "stop": [
+    {
+      "text": "Stop from the pad: {hotkey:stop}",
+      "when": {
+        "hotkeys": "on"
+      }
+    },
+    "Or type q and Enter in this terminal (best).",
+    "Or press Ctrl+C in this terminal, it runs the same cleanup. A second Ctrl+C during the cleanup is ignored.",
+    "Or let the time limit of {minutes} minutes end it, the game is then stopped for you.",
+    "After any of these wait for the report and the 'notes>' prompt before you close the terminal."
+  ],
+  "send_back": [
+    "Tell Claude the session finished: folder tmp/owner-profiles/{session}. It holds settings_report.md, README_SESSION.txt and OWNER_NOTES.txt, no need to retype those.",
+    "Your written labels (or the paper), especially the Audio/Video option names and values.",
+    "Every row that did not come back to the starting value, and every press that visibly did nothing.",
+    "Any line starting with '!!!!' and any 'unimplemented instruction' or 'STOP' line from the game."
+  ]
+}

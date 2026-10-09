@@ -1,0 +1,21 @@
+{
+  "comment": "Expected counts for tools/verify_all.py. A step fails on any failure, on passed below this, or on skipped above this. Rewrite only deliberately with --update-baseline and explain the change in the commit.",
+  "steps": {
+    "full_pytest": {
+      "passed": 8098,
+      "skipped": 14
+    },
+    "gpu_oracle": {
+      "passed": 201,
+      "skipped": 0
+    },
+    "lifted_ctest": {
+      "passed": 176,
+      "skipped": 0
+    },
+    "plain_ctest": {
+      "passed": 140,
+      "skipped": 0
+    }
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "script": "run_uplink_story",
+  "title": "Uplink (Gravity Gun) census in a Story level",
+  "summary": "The Uplink (the Gravity Gun, weapon record 36) is a Story weapon and not in the Map Maker list. One game session in ONE Story level: an idle control, then one phase for each Uplink state (equipped and idle, pull, levitate, throw, map mode). Session folder tmp/owner-profiles/story-uplink. The 2026-10-07 run (docs/t1554-weapon-variants-census-5-story-uplink.md) showed that the Uplink throws a held object by itself when you stop pressing and that one hold ran across three phases, so this time END each phase with nothing held, as the steps say (INFERRED fix).",
+  "kind": "census-session",
+  "duration": "about 10 minutes after the game is up, plus the time to reach the level",
+  "prerequisites": [
+    "Game HDD tmp/hdds/profile-hdd (your Story profile). The script builds the private host first, which takes a few minutes.",
+    "A Story level where the Uplink is available, for example Story 2401 after the crash landing, with movable objects (crates, barrels, items) close by. The same level stays loaded for every phase."
+  ],
+  "steps": [
+    {
+      "text": "Press Enter in this terminal at 'Enter = start the game'. When the window opens drive to the Story level yourself: start, your profile, Story mode, the level, and play until you can move with the Uplink in your hands. Nothing is measured until you continue at a phase prompt."
+    },
+    {
+      "phase": "ingame-idle"
+    },
+    {
+      "phase": "ingame-fire:uplink_equipped"
+    },
+    {
+      "phase": "ingame-fire:uplink_pull"
+    },
+    {
+      "phase": "ingame-fire:uplink_levitate"
+    },
+    {
+      "phase": "ingame-fire:uplink_throw"
+    },
+    {
+      "phase": "ingame-fire:uplink_map"
+    }
+  ],
+  "note_at_end": [
+    "The button for every state: pull, hold, throw and map mode (the console log is saved).",
+    "What objects you used, and whether the Uplink could throw at all.",
+    "If the game stopped: the 'unimplemented instruction at ...' or STOP line it prints."
+  ],
+  "stop": [
+    "At every phase prompt: continue with Enter in this terminal, which starts and again ends a phase. s skips it, q finishes the session. The idle phase stops by itself.",
+    "Close the game window only after the last phase (or q): a phase in progress is lost."
+  ],
+  "send_back": [
+    "Tell Claude the session finished: folder tmp/owner-profiles/story-uplink (the analysis tables are printed at the end).",
+    "The button for each Uplink state, and which phases you skipped."
+  ],
+  "phases": {
+    "ingame-idle": {
+      "title": "Idle control with the Uplink in your hands",
+      "go_to": "The Story level you loaded, standing still where you can move, the Uplink in your hands but NOT in use",
+      "do": "Stand still with the Uplink in your hands. Do not pull, do not hold anything, do not open the map, press no button, do not move the stick. The session stops this phase by itself after 20 s.",
+      "seconds": 20
+    },
+    "ingame-fire:uplink_equipped": {
+      "title": "Uplink equipped and idle",
+      "go_to": "The Story level you loaded (for example Story 2401 after the crash landing), the Uplink (Gravity Gun) in your hands",
+      "switch": "the Uplink (already in your hands, nothing held, map mode off)",
+      "do": "Keep the Uplink equipped and idle: do not pull, do not hold anything, do not open the map. Stand still for the whole window.",
+      "seconds": 20,
+      "note": "that the earlier measurement found this state identical to the idle control, so this is a repeat"
+    },
+    "ingame-fire:uplink_pull": {
+      "title": "Uplink: pull an object",
+      "go_to": "The Story level you loaded (for example Story 2401 after the crash landing), the Uplink (Gravity Gun) in your hands",
+      "switch": "the Uplink, nothing held, a movable object (crate, barrel or item) in front of you",
+      "do": "PULL a movable object towards you with the Uplink, then let go so it is thrown away (the Uplink throws by itself when you stop pressing), repeat with the next object. Do not stay holding an object at the end of the window.",
+      "seconds": 20,
+      "note": "the button that pulls, and what you pulled"
+    },
+    "ingame-fire:uplink_levitate": {
+      "title": "Uplink: hold an object levitating",
+      "go_to": "The Story level you loaded (for example Story 2401 after the crash landing), the Uplink (Gravity Gun) in your hands",
+      "switch": "the Uplink, nothing held yet, a movable object in front of you",
+      "do": "Grab ONE object and keep it LEVITATING in front of you for the whole window. Do not throw it and do not let go. Release it only AFTER the screen says Saved for this phase, because letting go throws it and that must happen outside the window.",
+      "seconds": 20,
+      "note": "the button that grabs and holds, and what you held"
+    },
+    "ingame-fire:uplink_throw": {
+      "title": "Uplink: throw an object",
+      "go_to": "The Story level you loaded (for example Story 2401 after the crash landing), the Uplink (Gravity Gun) in your hands",
+      "switch": "the Uplink, NOTHING held (let go of any object first), a movable object in front of you",
+      "do": "Grab an object and THROW it (let go or use the throw control), then grab the next and throw it, repeat. If the Uplink cannot throw, answer s at the prompt and say so.",
+      "seconds": 20,
+      "note": "the button that throws, and what you threw"
+    },
+    "ingame-fire:uplink_map": {
+      "title": "Uplink: map mode",
+      "go_to": "The Story level you loaded (for example Story 2401 after the crash landing), the Uplink (Gravity Gun) in your hands",
+      "switch": "the Uplink, nothing held, map mode OFF (you switch it on in the next step)",
+      "do": "Switch to MAP mode and STAY in it for the whole window, look at the map, do not move the weapon otherwise. Leave map mode only after the screen says Saved for this phase.",
+      "seconds": 20,
+      "note": "the button that switches map mode on and off"
+    }
+  }
+}

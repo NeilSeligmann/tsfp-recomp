@@ -1,0 +1,49 @@
+[project]
+name = "tsfp-decomp-tools"
+version = "0.1.0"
+description = "Analysis toolchain for the TimeSplitters: Future Perfect decompilation"
+requires-python = ">=3.11"
+dependencies = [
+    "capstone>=5.0.9",
+    "unicorn==2.1.4",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4",
+    "pytest-xdist>=3.8.0",
+    "ruff>=0.9.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["tools"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Pin imports to this checkout: the venv editable install can point at another tree.
+pythonpath = ["."]
+addopts = "-ra --strict-markers"
+markers = [
+    "integration: requires a real disc image; skipped by default",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+# third_party/ is vendored upstream code under its own licence. Linting or
+# reformatting it would make every local adaptation an unreadable diff against
+# upstream and would gate our build on someone else's style. See the tools/lift
+# package docstring for the integration model.
+# T729 temporary format exclusions: files that open task branches edit, formatting would conflict. Remove once those merge (see docs/tasks.md T729).
+extend-exclude = ["third_party", "tools/mutate/sets/dsound.py", "tools/tracegaps/addresstaking.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ANN"]
+ignore = ["ANN401"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["ANN201"]

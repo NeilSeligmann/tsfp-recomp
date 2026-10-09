@@ -1,0 +1,133 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+#include "game_replace.h"
+GAME_REPLACE_EXACT(00190D60,cdecl,0,u32,game_count_local_players_with_nonnegative_pad_mapping_from_one_to_player_count)
+{
+    uint32_t bound=guest_read32(0x5236c4u);
+    g_ecx=1;
+    g_eax=1;
+    while((int32_t)g_ecx<(int32_t)bound)
+    {
+        g_edx=(int32_t)guest_read32(g_ecx*4u+0x74e914u)>=0?1u:0u;
+        g_eax+=g_edx;
+        ++g_ecx;
+    }
+}
+GAME_REPLACE_EXACT(001B2FD0,cdecl,1,u32,game_is_value_in_dword_table_4ea380_27_entries)
+{
+    g_ecx=game_stack_arg(0);
+    g_eax=0;
+    while(g_eax<0x6cu)
+    {
+        if(g_ecx==guest_read32(g_eax+0x4ea380u))
+        {
+            g_eax=1;
+            return;
+        }
+        g_eax+=4u;
+    }
+    g_eax=0;
+}
+GAME_REPLACE_EXACT(001B52B0,cdecl,1,u32,game_struct_init_0xa0_zeroed_with_default_fields_0x54_0x58_0x90)
+{
+    g_edx=game_stack_arg(0);
+    g_eax=0;
+    g_ecx=0x28u;
+    uint32_t dest=g_edx;
+    while(g_ecx)
+    {
+        guest_write32(dest,0);
+        dest+=4u;
+        --g_ecx;
+    }
+    g_ecx=1;
+    guest_write8(g_edx+2u,0);
+    guest_write32(g_edx+0x60u,0);
+    guest_write32(g_edx+0x64u,0);
+    g_eax=0xffffffffu;
+    guest_write8(g_edx+0x54u,0x65);
+    guest_write8(g_edx,1);
+    guest_write8(g_edx+1u,1);
+    guest_write32(g_edx+0x58u,0xd840a);
+    guest_write8(g_edx+0x55u,9);
+    guest_write8(g_edx+0x57u,1);
+    guest_write8(g_edx+0x9bu,0xff);
+    guest_write32(g_edx+0x90u,g_eax);
+}
+GAME_REPLACE_EXACT(001CD090,cdecl,1,u32,game_bitmask_of_entries_in_table_4fcc84_stride_0x1c_whose_flags_match_arg)
+{
+    uint32_t mask=game_stack_arg(0);
+    g_eax=0;
+    g_ecx=0;
+    g_edx=0x4fcc84u;
+    do
+    {
+        if(guest_read32(g_edx)&mask)g_eax|=1u<<(g_ecx&31u);
+        g_edx+=0x1cu;
+        ++g_ecx;
+    }
+    while(g_edx<0x4fcdf0u);
+}
+GAME_REPLACE_EXACT(00227100,cdecl,2,u32,game_init_two_dword_arrays_0_to_0x28_and_0x2c_to_0x78_from_args)
+{
+    g_eax=game_stack_arg(0);
+    g_ecx=game_stack_arg(1);
+    guest_write32(g_eax,g_ecx);
+    g_edx=0;
+    for(uint32_t i=1;i<=10u;++i)
+    {
+        guest_write32(g_eax+i*4u,g_ecx);
+        guest_write32(g_eax+(i-1u)*4u+0x2cu,0);
+        guest_write32(g_eax+(i-1u)*4u+0x54u,0);
+    }
+}
+GAME_REPLACE_EXACT(0022D790,cdecl,1,u32,game_entry_list_0x14_any_entry_byte1_bit1_set)
+{
+    g_ecx=game_stack_arg(0);
+    g_edx=guest_read32(g_ecx+0x20u);
+    g_eax=0;
+    if((int32_t)g_edx<=0)return;
+    g_ecx=guest_read32(g_ecx+0x1cu);
+    do
+    {
+        if(guest_read8(g_ecx+1u)&2u)
+        {
+            g_eax=1;
+            return;
+        }
+        ++g_eax;
+        g_ecx+=0x14u;
+    }
+    while((int32_t)g_eax<(int32_t)g_edx);
+    g_eax=0;
+}
+GAME_REPLACE_EXACT(0023FE50,cdecl,0,u32,game_clear_table_75daf0_stride_16_and_globals_75d318_75ea90)
+{
+    g_eax=0x75daf4u;
+    g_ecx=0;
+    do
+    {
+        guest_write32(g_eax-4u,0);
+        guest_write32(g_eax,0);
+        guest_write32(g_eax+4u,0);
+        g_eax+=0x10u;
+    }
+    while(g_eax<0x75ea94u);
+    guest_write32(0x75d318u,0);
+    guest_write32(0x75ea90u,0);
+}
+GAME_REPLACE_EXACT(00242EE0,cdecl,1,u32,game_object_type_entry_519758_flag_mask_hit_or_kind_9_or_0xc)
+{
+    g_edx=game_stack_arg(0);
+    g_ecx=guest_read32(g_edx+0x7cu);
+    g_eax=guest_read32(g_ecx+12u);
+    g_eax=((int32_t)g_eax>=0&&g_eax<30u)?g_eax*0xb4u+0x519758u:0u;
+    g_edx=guest_read32(g_edx+4u);
+    g_edx=guest_read32(g_edx+0x30u);
+    if(guest_read32(g_eax+0x90u)&g_edx)
+    {
+        g_eax=1;
+        return;
+    }
+    g_ecx=guest_read32(g_ecx+0x10u);
+    g_eax=(g_ecx==9u||g_ecx==12u)?1u:0u;
+}

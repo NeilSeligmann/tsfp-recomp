@@ -1,0 +1,81 @@
+{
+  "script": "run_minigun_mine",
+  "title": "Minigun and mine retest after lifter patch 38",
+  "summary": "A retest of the minigun and the mine in ONE Map Maker preview after lifter patch 38 fixed the minigun pickup crash (T1516). Idle control, minigun fire, a minigun reload check (the minigun has none), a mine and the pause menu, all in the SAME Map Maker level. Session folder tmp/owner-profiles/mm-weapons3. An earlier run of this script is analysed in docs/t1527-minigun-census-and-callback.md (pickup and fire ran). The fuller weapon plan is tmp/run_weapon_variants.fish.",
+  "kind": "census-session",
+  "duration": "about 8 minutes after the game is up",
+  "prerequisites": [
+    "Game HDD tmp/hdds/editor-hdd (it holds your Map Maker level). The script builds the private host first, which takes a few minutes.",
+    "ONE Map Maker map whose weapon set holds the Minigun and a Mine. The SAME map stays loaded for every phase."
+  ],
+  "steps": [
+    {
+      "text": "Press Enter in this terminal at 'Enter = start the game'. When the window opens drive to the Map Maker yourself: start, players, profile, Map Maker, load your map, open the editor, check the weapon set (Minigun and a Mine), enter the PREVIEW and wait until you can move. Nothing is measured until you continue at a phase prompt."
+    },
+    {
+      "phase": "ingame-idle"
+    },
+    {
+      "phase": "ingame-fire:minigun"
+    },
+    {
+      "phase": "ingame-reload:minigun"
+    },
+    {
+      "phase": "ingame-fire:mine"
+    },
+    {
+      "phase": "ingame-pause"
+    }
+  ],
+  "note_at_end": [
+    "Whether the minigun pickup and fire worked, whether it overheated, and which mine type it was.",
+    "If the game stops: copy the 'unimplemented instruction at ...' line it prints."
+  ],
+  "stop": [
+    "At every phase prompt: continue with Enter in this terminal, which starts and again ends a phase. s skips it, q finishes the session. The idle phase stops by itself.",
+    "Close the game window only after the last phase (or q): a phase in progress is lost."
+  ],
+  "send_back": [
+    "Tell Claude the session finished: folder tmp/owner-profiles/mm-weapons3 (the analysis tables are printed at the end).",
+    "Whether the game stopped (and the 'unimplemented instruction' line), and which phases you skipped."
+  ],
+  "phases": {
+    "ingame-idle": {
+      "title": "Idle control, minigun and mine map",
+      "go_to": "The Map Maker PREVIEW of your map (the same map for every phase), you can move, nothing picked up yet",
+      "do": "Stand still. Press no button, do not move the stick, do not pick up or switch to anything. The session stops this phase by itself after 20 s.",
+      "seconds": 20
+    },
+    "ingame-fire:minigun": {
+      "title": "Fire the minigun (retest after patch 38)",
+      "go_to": "The Map Maker PREVIEW of your map (the same map for every phase), you can move, the minigun available to pick up",
+      "switch": "the Minigun (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "From rest (barrel not spinning) HOLD fire (RT) for about 5 s so the spin-up delay before the first shot is included, release, wait 3 s, repeat. Do not move or switch weapon.",
+      "seconds": 25,
+      "note": "any overheating, and how long the barrel took to spin up. If the game stops, copy the 'unimplemented instruction at ...' line"
+    },
+    "ingame-reload:minigun": {
+      "title": "Minigun reload (expected: none)",
+      "go_to": "The Map Maker PREVIEW of your map (the same map for every phase), you can move, the minigun in your hands",
+      "switch": "the Minigun (already in your hands)",
+      "do": "Press the reload button (X) once and watch. The minigun has no reload code (T1527, INFERRED from the code), so nothing should happen. If nothing reloads, stop the phase after a few seconds (or answer s at the prompt) and say so in your report.",
+      "seconds": 15,
+      "note": "whether anything reloaded at all"
+    },
+    "ingame-fire:mine": {
+      "title": "Place mines (retest after patch 38)",
+      "go_to": "The Map Maker PREVIEW of your map (the same map for every phase), you can move, a mine weapon available to pick up",
+      "switch": "the Mine (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Place mines only (tap RT a few times). Do not detonate by hand, do not move far and do not switch weapon.",
+      "seconds": 20,
+      "note": "which mine type it was (remote, proximity or timed). If the game stops, copy the 'unimplemented instruction at ...' line"
+    },
+    "ingame-pause": {
+      "title": "Open and close the pause menu (retest)",
+      "go_to": "The Map Maker PREVIEW of your map (the same map for every phase), you can move, any weapon in your hands",
+      "do": "Open the pause menu (Start), wait a moment, close it again, repeat. Change no setting.",
+      "seconds": 20
+    }
+  }
+}

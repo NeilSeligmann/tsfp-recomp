@@ -1,0 +1,52 @@
+{
+  "script": "run_objective",
+  "title": "First Story objective: census plus script array dumps",
+  "summary": "One Story session. An idle control, then the first Story objective played to its end. The host dumps the mission script context ([0x765E44], 0x1960 bytes) and the mode record ([0x6F32F0], 0x160 bytes) when each phase ends, at exit, and around every button press (--dump-on-button). tools.objective_script_report diffs the start and end dumps and lists the changed script records (group states, condition and action states, point visitation, and since the two level dump form the first 16 rule records and 32 setup entries). The census (indirect call targets) is ranked against the idle control by tools.action_census_diff. Session folder tmp/owner-profiles/objective-STAMP. Layouts are the T1757 static ones, see docs/t-data-objective-scenario.md.",
+  "kind": "census-session",
+  "duration": "about 15 minutes after the game is up",
+  "prerequisites": [
+    "Game HDD tmp/hdds/profile-hdd (your Story profile). The script builds the private host first, which takes a few minutes.",
+    "A fresh start of the first Story level (new game or the first level), so the objective has not been completed yet."
+  ],
+  "steps": [
+    {
+      "text": "Press Enter at 'Enter = start the game'. When the window opens drive to Story and start the first level. Nothing is measured until you continue at a phase prompt."
+    },
+    {
+      "phase": "ingame-idle"
+    },
+    {
+      "text": "Do not restart. Keep playing from where you are towards the first objective."
+    },
+    {
+      "phase": "ingame-objective"
+    }
+  ],
+  "note_at_end": [
+    "What the first objective was (the text on screen) and what completed it.",
+    "Roughly how long it took, and whether anything odd happened: missing sound, wrong picture, a freeze.",
+    "If the game stopped: the 'unimplemented instruction at ...' or STOP line."
+  ],
+  "stop": [
+    "Enter in this terminal starts and again ends a phase. s skips, q finishes. Close the window only after the last phase."
+  ],
+  "send_back": [
+    "Tell Claude the session finished: folder tmp/owner-profiles/objective-STAMP (the script array diff is printed at the end).",
+    "The notes above."
+  ],
+  "phases": {
+    "ingame-idle": {
+      "title": "Idle control at the level start",
+      "go_to": "The first Story level, as soon as you have control and before you do anything towards the objective",
+      "do": "Stand still. Do not press any button and do not move the stick.",
+      "seconds": 20
+    },
+    "ingame-objective": {
+      "title": "Complete the first objective",
+      "go_to": "The same spot, right after the idle phase",
+      "do": "Continue at the prompt and play the first objective at your own pace. Press Enter again the moment it is complete.",
+      "seconds": 300,
+      "note": "what the objective was and how long it took"
+    }
+  }
+}

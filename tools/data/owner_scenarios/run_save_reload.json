@@ -1,0 +1,35 @@
+{
+  "script": "run_save_reload",
+  "title": "Story save, quit, relaunch and reload (two-process receipt)",
+  "summary": "Two launches of the private host on the SAME persistent hard disk directory (tmp/hdds/save-reload-hdd, a copy of your profile-hdd made on first use, your original is never touched). Launch 1: you play Story and make the game write a save or profile (finish or checkpoint a level, or use the pause menu save). Launch 2: a fresh process on the same disk, you load that save from the menu. The host logs every NtCreateFile, NtWriteFile, NtFlushBuffersFile and every read of a file on the hard disk. tools.save_reload_receipt then prints per file path, size and sha256 before and after launch 2, the NT file call summary of both launches and a verdict (the save is listed, loaded in launch 2 and its bytes are identical). Session folder tmp/owner-profiles/save-reload-STAMP. See docs/t-data-save-reload.md.",
+  "kind": "wrapper",
+  "duration": "about 20 minutes plus the host build",
+  "prerequisites": [
+    "Disc tmp/TimeSplitters - Future Perfect (USA) (XBOX).iso and your profile disk tmp/hdds/profile-hdd (copied once to tmp/hdds/save-reload-hdd). The script builds the private host first, which takes a few minutes.",
+    "Delete tmp/hdds/save-reload-hdd if you want to start from a fresh copy of your profile."
+  ],
+  "steps": [
+    {
+      "text": "LAUNCH 1: press Enter at 'Enter = start launch 1'. Drive to Story, start a level, play until the game saves (a level end, a checkpoint, a profile edit or the pause menu save). Note what you did and roughly when the game showed a saving indicator."
+    },
+    {
+      "text": "Quit launch 1 by closing the window (do not kill the terminal). The script lists the disk files with sizes and sha256."
+    },
+    {
+      "text": "LAUNCH 2: press Enter at 'Enter = start launch 2'. In the menu open Story, load the save you made (continue, load game or profile) and look at whether it is listed and what it restores. Then close the window."
+    }
+  ],
+  "note_at_end": [
+    "What you did in launch 1 to make the game save, and whether the game showed a saving indicator.",
+    "In launch 2: whether the save was listed, what it showed (level, progress) and whether loading worked.",
+    "If the game stopped: the 'unimplemented instruction at ...' or STOP line."
+  ],
+  "stop": [
+    "Close the game window to end each launch. Answer q at a prompt to skip the rest."
+  ],
+  "send_back": [
+    "Tell Claude the session finished: folder tmp/owner-profiles/save-reload-STAMP (the receipt receipt.txt is printed at the end).",
+    "The HDD listing with sizes and sha256 (in receipt.txt) and the host logs play1.log and play2.log.",
+    "The notes above."
+  ]
+}

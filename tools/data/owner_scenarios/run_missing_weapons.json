@@ -1,0 +1,111 @@
+{
+  "script": "run_missing_weapons",
+  "title": "Missing weapons census (HeatSeeker, Dispersion Gun, Shotgun, Tactical 12-Gauge, LX-18, Assault Rifle)",
+  "summary": "One game session in ONE Map Maker preview: the six weapon slots of the map hold the six weapons below, the session takes an idle control and then one phase per weapon. Session folder tmp/owner-profiles/mm-missing. Status of the earlier runs (docs/t-weapon-variants.md, T1552 and T1553): heatseeker, dispersion_gun, shotgun, tactical_12 and lx18 already ran and were attributed, assault_rifle was never found in the list and always skipped, so a re-run mostly matters for assault_rifle (INFERRED).",
+  "kind": "census-session",
+  "duration": "about 10 minutes after the game is up",
+  "prerequisites": [
+    "Game HDD tmp/hdds/editor-hdd (it holds your Map Maker level). The script builds the private host first, which takes a few minutes.",
+    "The SAME Map Maker map stays loaded for every phase, with at most 6 weapons in its set."
+  ],
+  "steps": [
+    {
+      "text": "Press Enter in this terminal at 'Enter = start the game'. When the window opens drive to the Map Maker yourself: start, players, profile, Map Maker, load your map, open the editor and set the weapon set (6 slots) to the six weapons of this run. Then enter the PREVIEW and wait until you can move. Nothing is measured until you continue at a phase prompt.",
+      "substeps": [
+        "Weapon set: HeatSeeker, Dispersion Gun, Shotgun, Tactical 12-Gauge, LX-18, Assault Rifle. Make sure each one can be picked up in the preview.",
+        "The list has three shotgun-like entries (Dispersion Gun, Shotgun, Tactical 12-Gauge). The assault rifle may be listed as Soviet Rifle, Scifi Autorifle or M16.",
+        "Any weapon you cannot find: leave it out of the set and answer s at its phase. Nothing is lost."
+      ]
+    },
+    {
+      "phase": "ingame-idle"
+    },
+    {
+      "phase": "ingame-fire:heatseeker"
+    },
+    {
+      "phase": "ingame-fire:dispersion_gun"
+    },
+    {
+      "phase": "ingame-fire:shotgun"
+    },
+    {
+      "phase": "ingame-fire:tactical_12"
+    },
+    {
+      "phase": "ingame-fire:lx18"
+    },
+    {
+      "phase": "ingame-fire:assault_rifle"
+    }
+  ],
+  "note_at_end": [
+    "Which of the six you could NOT find in the weapon list, and the names you searched (alias table: docs/t-weapon-variants.md).",
+    "The button for any alternative fire mode.",
+    "If the game stopped: the 'unimplemented instruction at ...' or STOP line it prints."
+  ],
+  "stop": [
+    "At every phase prompt: continue with Enter in this terminal, which starts and again ends a phase. s skips it, q finishes the session. The idle phase stops by itself.",
+    "Close the game window only after the last phase (or q): a phase in progress is lost."
+  ],
+  "send_back": [
+    "Tell Claude the session finished: folder tmp/owner-profiles/mm-missing (the analysis tables are printed at the end).",
+    "Which phases you skipped and why."
+  ],
+  "phases": {
+    "ingame-idle": {
+      "title": "Idle control, six-weapon Map Maker map",
+      "go_to": "The Map Maker PREVIEW of your map with the six weapons in its weapon set, you can move, nothing picked up yet",
+      "do": "Stand still. Press no button, do not move the stick, do not pick up or switch to anything. The session stops this phase by itself after 20 s.",
+      "seconds": 20
+    },
+    "ingame-fire:heatseeker": {
+      "title": "HeatSeeker (heatseeker)",
+      "go_to": "The Map Maker PREVIEW of your map, the HeatSeeker available to pick up",
+      "switch": "the HeatSeeker (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire a few rockets WITHOUT a lock, then aim at a target or bot and let the weapon lock on before you fire (homing). Do not move or switch weapon. The game lists it as Heat Seeker (name sweep T1615) and it ran the Rocket Launcher record in both earlier runs.",
+      "seconds": 25,
+      "note": "the button for any alternative fire mode, and whether a locked rocket homes"
+    },
+    "ingame-fire:dispersion_gun": {
+      "title": "Dispersion Gun (dispersion_gun)",
+      "go_to": "The Map Maker PREVIEW of your map, the Dispersion Gun available to pick up",
+      "switch": "the Dispersion Gun (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the Dispersion Gun only (hold or tap RT). Do not move or reload.",
+      "seconds": 20,
+      "note": "whether it fires a spread (a shotgun) or something else (an earlier note was unsure it is a shotgun)"
+    },
+    "ingame-fire:shotgun": {
+      "title": "Shotgun (shotgun)",
+      "go_to": "The Map Maker PREVIEW of your map, the Shotgun available to pick up",
+      "switch": "the Shotgun (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the Shotgun only (RT, both barrels if it has two). Do not move or reload.",
+      "seconds": 20,
+      "note": "how many shells before it reloads"
+    },
+    "ingame-fire:tactical_12": {
+      "title": "Tactical 12-Gauge (tactical_12)",
+      "go_to": "The Map Maker PREVIEW of your map, the Tactical 12-Gauge available to pick up",
+      "switch": "the Tactical 12-Gauge (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the Tactical 12-Gauge only (RT). Do not move or reload.",
+      "seconds": 20,
+      "note": "how many shells before it reloads, and whether it differs from the Shotgun"
+    },
+    "ingame-fire:lx18": {
+      "title": "LX-18 (lx18)",
+      "go_to": "The Map Maker PREVIEW of your map, the LX-18 available to pick up",
+      "switch": "the LX-18 (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the LX-18 only (hold or tap RT). Do not move or reload. It is not the assault rifle: an earlier run ran the pistol family callback for it.",
+      "seconds": 20,
+      "note": "how it LOOKS in your hands (pistol or rifle) and how it fires. The Uplink is NOT the LX-18"
+    },
+    "ingame-fire:assault_rifle": {
+      "title": "Assault Rifle (assault_rifle)",
+      "go_to": "The Map Maker PREVIEW of your map, the Assault Rifle available to pick up",
+      "switch": "the Assault Rifle (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the Assault Rifle only (hold RT). If you cannot find it in the weapon list under any of its names (Assault Rifle, Soviet Rifle, Scifi Autorifle, M16), leave it out of the set and answer s at this prompt.",
+      "seconds": 20,
+      "note": "the name the list showed it under. It was never found in the two earlier runs"
+    }
+  }
+}

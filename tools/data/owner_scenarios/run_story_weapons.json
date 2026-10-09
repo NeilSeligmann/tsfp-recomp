@@ -1,0 +1,125 @@
+{
+  "script": "run_story_weapons",
+  "title": "Story-mode weapon census: {labels}",
+  "summary": "A census of weapons that only appear in Story levels (the Map Maker does not offer them). One game session in ONE Story level: an idle control, then one phase per label you gave on the command line. A label is a name YOU choose ([a-z0-9_]), it only names the phase, so say in your report which weapon each label was. Each run writes a new session folder tmp/owner-profiles/story-weapons-<timestamp>, so a re-run never overwrites an earlier one.",
+  "kind": "census-session",
+  "duration": "about 3 minutes per weapon after the game is up, plus the time to reach the level",
+  "options": {
+    "labels": {
+      "free": true,
+      "default": "tnt"
+    }
+  },
+  "prerequisites": [
+    "Game HDD tmp/hdds/profile-hdd (your Story profile). The script builds the private host first, which takes a few minutes.",
+    "Choose a Story level where ALL the weapons of this run are available and stay in that same level for every phase. Known: TNT is in the second level, near the start. For the other weapons the level is not recorded anywhere, you have to know it."
+  ],
+  "steps": [
+    {
+      "text": "Press Enter in this terminal at 'Enter = start the game'. When the window opens drive to the Story level yourself: start, your profile, Story mode, the level, and play until you can move and the first weapon is within reach. Nothing is measured until you continue at a phase prompt.",
+      "substeps": [
+        "For tnt that is the second Story level, near the start."
+      ]
+    },
+    {
+      "phase": "ingame-idle"
+    },
+    {
+      "text": "Weapon {n}: label {item}, phase ingame-fire@{item}.",
+      "seconds": 20,
+      "repeat": {
+        "over": "labels",
+        "table": "labels"
+      },
+      "substeps": [
+        "Get the weapon in your hands during the throwaway step before the prompt (find or pick it up, D-pad right/left to equip it).",
+        "Use ONLY that weapon for the window (fire, throw, or place and detonate, as it normally works), then stop. Note the buttons on the console."
+      ]
+    }
+  ],
+  "note_at_end": [
+    "Which weapon each label really was (its name on screen), and the level you used.",
+    "The buttons for placing, throwing, detonating or any alternative mode.",
+    "If the game stopped: the 'unimplemented instruction at ...' or STOP line it prints."
+  ],
+  "stop": [
+    "At every phase prompt: continue with Enter in this terminal, which starts and again ends a phase. s skips it, q finishes the session. The idle phase stops by itself.",
+    "Close the game window only after the last phase (or q): a phase in progress is lost."
+  ],
+  "send_back": [
+    "Tell Claude the session finished: the folder tmp/owner-profiles/story-weapons-... the script printed (the analysis tables are printed at the end).",
+    "Which weapon each label was."
+  ],
+  "phases": {
+    "ingame-idle": {
+      "title": "Idle control in the Story level, before the weapons",
+      "go_to": "The Story level you loaded, standing still where you can move, holding what you hold at the start",
+      "do": "Stand still. Press no button, do not move the stick, do not pick up or switch to anything. The session stops this phase by itself after 20 s.",
+      "seconds": 20
+    },
+    "ingame-fire": {
+      "title": "Use the weapon {label}",
+      "go_to": "The Story level where the weapon {label} is available, the weapon in your hands",
+      "switch": "the weapon you named {label} (find or pick it up in this level, then D-pad right/left until it is in your hands)",
+      "do": "Use ONLY the weapon {label}, the way it normally works (fire it, throw it, or place and detonate it). Do not switch weapon, do not use anything else.",
+      "seconds": 20,
+      "note": "the buttons you pressed for {label}, and which weapon {label} really was (its name on screen)"
+    },
+    "ingame-fire:tnt": {
+      "title": "Use TNT",
+      "go_to": "The second Story level, near the start, the TNT in your hands",
+      "switch": "the TNT (find or pick it up in this level, then D-pad right/left until it is in your hands)",
+      "do": "Place a TNT charge and detonate it, the way it normally works, then place the next one, repeat. Use only the TNT, stay clear of the blast.",
+      "seconds": 20,
+      "note": "the button to place it and the button to detonate it"
+    },
+    "ingame-fire:time_grenade": {
+      "title": "Throw the time grenade",
+      "go_to": "The Story level where the time grenade is available, it in your hands",
+      "switch": "the time grenade (pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Throw the grenade only (RT), wait until it goes off, throw the next one, repeat. Do not move far or switch weapon.",
+      "seconds": 20,
+      "note": "what the grenade does when it goes off and what its name is on screen"
+    },
+    "ingame-fire:monkey_gun": {
+      "title": "Fire the monkey gun",
+      "go_to": "The Story level where the monkey gun is available, it in your hands",
+      "switch": "the monkey gun (pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Fire the monkey gun only (hold or tap RT). Do not move far or switch weapon.",
+      "seconds": 20,
+      "note": "what it fires, and its name on screen"
+    },
+    "ingame-fire:scifi_rocket": {
+      "title": "Fire the sci-fi rocket launcher",
+      "go_to": "The Story level where the sci-fi rocket launcher is available, it in your hands",
+      "switch": "the rocket launcher (pick it up, then D-pad right/left until it is in your hands)",
+      "do": "Fire rockets only (RT), wait until they hit, repeat. Do not move far or switch weapon.",
+      "seconds": 20,
+      "note": "whether the rockets home, any alternative fire mode, and its name on screen"
+    }
+  },
+  "tables": {
+    "labels": {
+      "tnt": {
+        "steps": [
+          "tnt: TNT. Place a charge and detonate it the way it works, repeat. Note the button to place and the button to detonate. It is available in the second Story level, near the start."
+        ]
+      },
+      "time_grenade": {
+        "steps": [
+          "time_grenade: a thrown grenade. Throw it and wait until it goes off, repeat."
+        ]
+      },
+      "monkey_gun": {
+        "steps": [
+          "monkey_gun: fire it, repeat."
+        ]
+      },
+      "scifi_rocket": {
+        "steps": [
+          "scifi_rocket: fire rockets, repeat."
+        ]
+      }
+    }
+  }
+}

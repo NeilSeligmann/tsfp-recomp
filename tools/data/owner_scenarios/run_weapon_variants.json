@@ -1,0 +1,852 @@
+{
+  "script": "run_weapon_variants",
+  "title": "Weapon variants census, batches {start} to 9, one Map Maker map",
+  "summary": "Records every weapon variant and fire mode that is not measured yet, one Map Maker weapon set per batch, in ONE game session (session folder tmp/owner-profiles/mm-var-all, the game is never restarted between batches). Each batch starts with an idle control, then one 20 s phase per weapon or fire mode. Plan and results: docs/t-weapon-variants.md (the phase labels here are the labels of its table).",
+  "kind": "census-session",
+  "duration": "about 5 to 8 minutes per batch, up to 9 batches",
+  "options": {
+    "start": {
+      "values": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+      ],
+      "default": "1"
+    },
+    "hotkeys": {
+      "values": [
+        "on",
+        "off"
+      ],
+      "default": "off"
+    }
+  },
+  "prerequisites": [
+    "Game HDD tmp/hdds/editor-hdd with your Map Maker level. The SAME level stays loaded for the whole session. The script builds the private host first (a few minutes).",
+    "A Map Maker map has only 6 weapon slots, so a batch is one weapon set of at most 6 weapons. Every x2 (dual) weapon, mine type, rifle, sniper and grenade type takes its own slot. A fire MODE (normal and bounce, rocket, alternative, spin, thermal) is switched on the SAME weapon and costs no slot, each mode is its own phase.",
+    "Batches below {start} are not shown and not asked. Starting at a later batch resumes the plan there, in the same session folder mm-var-all as the earlier runs.",
+    "Weapons that are NOT in the Map Maker weapon list (so far: Time Disruptor Grenade, Monkey Gun, TNT, Brick, Sci-Fi Rocket Launcher, and Uplink, Assault Rifle never found): leave them out and answer s at their phase."
+  ],
+  "steps": [
+    {
+      "text": "Press Enter in this terminal at 'Enter = start the game'. When the window opens drive to the Map Maker yourself: start, players, profile, Map Maker, load your map, open the editor, set the weapon set to the weapons of batch {start} (listed below, make sure each can be picked up in the preview), then enter the PREVIEW and wait until you can move. Nothing is measured until you continue at a prompt ({hotkey:advance})."
+    },
+    {
+      "text": "Batch {item}: {title}. Weapon set: {weapons}.",
+      "repeat": {
+        "over": "start",
+        "table": "batches",
+        "onwards": true
+      }
+    },
+    {
+      "text": "BETWEEN batches (no game restart): when the session asks for the idle control of the next batch, FIRST swap the weapon set to that batch (the weapon set page lives in the editor, so leave the preview, change the set there and enter the preview again, INFERRED), THEN continue ({hotkey:advance}) at the idle prompt."
+    },
+    {
+      "text": "How every phase prompt works: the prompt shows Switch to, Go to, Then, Time and Note. FIRST pick up the weapon (and switch the fire mode if the phase says so), THEN continue ({hotkey:advance}) and the window starts (the prompt says GO NOW). Use ONLY that weapon and mode during the window, stop with {hotkey:advance} at about the suggested time. Never switch weapon inside a window, only between. s skips a phase."
+    }
+  ],
+  "note_at_end": [
+    "The button for every fire mode you switched (bounce, rocket, alternative, spin, thermal, secondary fire).",
+    "Ammo behaviour: which weapons ran out, which reloaded by themselves (the rocket launcher does) and which had no reload.",
+    "Which weapons you could NOT find in the weapon list, and the names you searched.",
+    "If the game stopped: copy the 'unimplemented instruction at ...' line it prints."
+  ],
+  "stop": [
+    "At every prompt: s skips a phase, q finishes the session. A phase in progress is lost when you finish.",
+    {
+      "text": "Close the game window only after the last phase (or q). Hotkeys: continue with {hotkey:advance}.",
+      "when": {
+        "hotkeys": "on"
+      }
+    },
+    {
+      "text": "Close the game window only after the last phase (or q).",
+      "when": {
+        "hotkeys": "off"
+      }
+    }
+  ],
+  "send_back": [
+    "Tell Claude the session finished: folder tmp/owner-profiles/mm-var-all (the analysis tables are printed at the end).",
+    "Which phases you skipped and why, and the buttons for the fire modes.",
+    "The 'unimplemented instruction' line if the game stopped."
+  ],
+  "phases": {
+    "ingame-fire:grenade_frag": {
+      "title": "Batch 1: Grenade (grenade_frag)",
+      "go_to": "The Map Maker PREVIEW of batch 1, you can move, weapon set of batch 1 loaded",
+      "switch": "the Grenade (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Throw grenades only (RT), wait until each one explodes, repeat. Do not move far or switch weapon.",
+      "seconds": 20,
+      "note": "how many grenades you had and what the explosion did"
+    },
+    "ingame-fire:grenade_plasma": {
+      "title": "Batch 1: Plasma Grenade (grenade_plasma)",
+      "go_to": "The Map Maker PREVIEW of batch 1, you can move, weapon set of batch 1 loaded",
+      "switch": "the Plasma Grenade (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Throw plasma grenades only (RT), wait until each one goes off, repeat. Do not move far or switch weapon.",
+      "seconds": 20,
+      "note": "how many you had and what a plasma grenade does differently from the frag grenade"
+    },
+    "ingame-fire:mine_remote": {
+      "title": "Batch 1: Remote Mine (mine_remote)",
+      "go_to": "The Map Maker PREVIEW of batch 1, you can move, weapon set of batch 1 loaded",
+      "switch": "the Remote Mine (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Place a few remote mines (primary fire, RT), then trigger them with the remote in your other hand (SECONDARY fire), repeat. The detonator is the secondary fire of the remote mine, not a separate weapon.",
+      "seconds": 25,
+      "note": "the button of the secondary fire that detonates"
+    },
+    "ingame-fire:mine_proximity": {
+      "title": "Batch 1: Proximity Mine (mine_proximity)",
+      "go_to": "The Map Maker PREVIEW of batch 1, you can move, weapon set of batch 1 loaded",
+      "switch": "the Proximity Mine (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Place a mine, then walk away from it or let it trigger, repeat. Do not switch weapon.",
+      "seconds": 25,
+      "note": "how long a mine took to trigger and what set it off"
+    },
+    "ingame-fire:mine_timed": {
+      "title": "Batch 1: Timed Mine (mine_timed)",
+      "go_to": "The Map Maker PREVIEW of batch 1, you can move, weapon set of batch 1 loaded",
+      "switch": "the Timed Mine (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Place a mine and wait for it to go off, repeat. Do not switch weapon.",
+      "seconds": 25,
+      "note": "how long the timer ran before it exploded"
+    },
+    "ingame-fire:scifi_handgun_normal": {
+      "title": "Batch 2: Sci-Fi Handgun (scifi_handgun_normal)",
+      "go_to": "The Map Maker PREVIEW of batch 2, you can move, weapon set of batch 2 loaded",
+      "switch": "the Sci-Fi Handgun (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the Sci-Fi Handgun in its NORMAL mode only (hold or tap RT). Do not switch the fire mode, do not move or reload.",
+      "seconds": 20,
+      "note": "whether it fires single shots or bursts"
+    },
+    "ingame-fire:scifi_handgun_bounce": {
+      "title": "Batch 2: Sci-Fi Handgun (scifi_handgun_bounce)",
+      "go_to": "The Map Maker PREVIEW of batch 2, you can move, weapon set of batch 2 loaded",
+      "switch": "the Sci-Fi Handgun (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Switch the Sci-Fi Handgun to its BOUNCE mode first (shots ricochet off walls), then fire in bounce mode only. The docs do not name the mode button: try the other fire button, LT and the face buttons, and write down which one it was.",
+      "seconds": 20,
+      "note": "the button that switches to bounce"
+    },
+    "ingame-fire:scifi_handgun_x2_normal": {
+      "title": "Batch 2: Sci-Fi Handgun x2 (scifi_handgun_x2_normal)",
+      "go_to": "The Map Maker PREVIEW of batch 2, you can move, weapon set of batch 2 loaded",
+      "switch": "the Sci-Fi Handgun x2 (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the dual Sci-Fi Handguns in their NORMAL mode only (hold or tap RT, both guns). Do not switch the fire mode.",
+      "seconds": 20,
+      "note": "whether both guns fire together"
+    },
+    "ingame-fire:scifi_handgun_x2_bounce": {
+      "title": "Batch 2: Sci-Fi Handgun x2 (scifi_handgun_x2_bounce)",
+      "go_to": "The Map Maker PREVIEW of batch 2, you can move, weapon set of batch 2 loaded",
+      "switch": "the Sci-Fi Handgun x2 (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Switch the dual Sci-Fi Handguns to BOUNCE mode first, then fire in bounce mode only. The docs do not name the mode button: try the other fire button, LT and the face buttons, and write down which one it was.",
+      "seconds": 20,
+      "note": "the button that switches to bounce, and whether it switches both guns"
+    },
+    "ingame-fire:scifi_sniper_normal": {
+      "title": "Batch 2: Sci-Fi Sniper Rifle (scifi_sniper_normal)",
+      "go_to": "The Map Maker PREVIEW of batch 2, you can move, weapon set of batch 2 loaded",
+      "switch": "the Sci-Fi Sniper Rifle (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the Sci-Fi Sniper Rifle in its NORMAL mode only (RT), without the scope. Do not move or reload.",
+      "seconds": 20,
+      "note": "the rate of fire and whether it needs a reload"
+    },
+    "ingame-fire:scifi_sniper_alt": {
+      "title": "Batch 2: Sci-Fi Sniper Rifle (scifi_sniper_alt)",
+      "go_to": "The Map Maker PREVIEW of batch 2, you can move, weapon set of batch 2 loaded",
+      "switch": "the Sci-Fi Sniper Rifle (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Switch to the ALTERNATIVE mode first (the zoom scope, INFERRED from an earlier measurement), then fire in that mode only. The docs do not name the mode button: try the other fire button, LT and the face buttons, and write down which one it was.",
+      "seconds": 20,
+      "note": "the button for the alternative mode and what the screen looks like in it"
+    },
+    "ingame-fire:electrotool_normal": {
+      "title": "Batch 2: ElectroTool (electrotool_normal)",
+      "go_to": "The Map Maker PREVIEW of batch 2, you can move, weapon set of batch 2 loaded",
+      "switch": "the ElectroTool (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the ElectroTool in its NORMAL mode only (hold RT). Do not switch the fire mode, do not move.",
+      "seconds": 20,
+      "note": "what the normal mode shoots (a beam or bullets)"
+    },
+    "ingame-fire:electrotool_alt": {
+      "title": "Batch 2: ElectroTool (electrotool_alt)",
+      "go_to": "The Map Maker PREVIEW of batch 2, you can move, weapon set of batch 2 loaded",
+      "switch": "the ElectroTool (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Switch the ElectroTool to its ALTERNATIVE mode first, then fire in that mode only. The docs do not name the mode button: try the other fire button, LT and the face buttons, and write down which one it was.",
+      "seconds": 20,
+      "note": "the button for the alternative mode and what it shoots (this decides which mode is called normal, the earlier owner naming was unclear)"
+    },
+    "ingame-fire:electrotool_x2": {
+      "title": "Batch 2: ElectroTool x2 (electrotool_x2)",
+      "go_to": "The Map Maker PREVIEW of batch 2, you can move, weapon set of batch 2 loaded",
+      "switch": "the ElectroTool x2 (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the dual ElectroTools in their NORMAL mode only (hold RT, both). Do not switch the fire mode.",
+      "seconds": 20,
+      "note": "whether both guns fire together"
+    },
+    "ingame-fire:smg_normal": {
+      "title": "Batch 3: K-SMG (smg_normal)",
+      "go_to": "The Map Maker PREVIEW of batch 3, you can move, weapon set of batch 3 loaded",
+      "switch": "the K-SMG (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the K-SMG in its NORMAL mode only (hold RT). Do not switch the fire mode, do not move.",
+      "seconds": 20,
+      "note": "whether it is full auto"
+    },
+    "ingame-fire:smg_rocket": {
+      "title": "Batch 3: K-SMG (smg_rocket)",
+      "go_to": "The Map Maker PREVIEW of batch 3, you can move, weapon set of batch 3 loaded",
+      "switch": "the K-SMG (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Switch the K-SMG to its ROCKET mode first, then fire rockets only. The docs do not name the mode button: try the other fire button, LT and the face buttons, and write down which one it was.",
+      "seconds": 20,
+      "note": "the button that switches to rockets and how many rockets you can fire"
+    },
+    "ingame-fire:smg_x2": {
+      "title": "Batch 3: K-SMG x2 (smg_x2)",
+      "go_to": "The Map Maker PREVIEW of batch 3, you can move, weapon set of batch 3 loaded",
+      "switch": "the K-SMG x2 (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the dual K-SMGs in their NORMAL mode only (hold RT, both guns).",
+      "seconds": 20,
+      "note": "whether both guns fire together"
+    },
+    "ingame-fire:machinepistol": {
+      "title": "Batch 3: Machine Pistol (machinepistol)",
+      "go_to": "The Map Maker PREVIEW of batch 3, you can move, weapon set of batch 3 loaded",
+      "switch": "the Machine Pistol (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the Machine Pistol only (hold RT). Do not move or reload. The game lists this weapon as Machine Gun (name sweep T1615), pick that entry if you see no Machine Pistol.",
+      "seconds": 20,
+      "note": "which name the list showed"
+    },
+    "ingame-fire:machinepistol_x2": {
+      "title": "Batch 3: Machine Pistol x2 (machinepistol_x2)",
+      "go_to": "The Map Maker PREVIEW of batch 3, you can move, weapon set of batch 3 loaded",
+      "switch": "the Machine Pistol x2 (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the dual Machine Pistols only (hold RT, both guns).",
+      "seconds": 20,
+      "note": "whether both guns fire together"
+    },
+    "ingame-fire:luger": {
+      "title": "Batch 4: Kruger 9mm (luger)",
+      "go_to": "The Map Maker PREVIEW of batch 4, you can move, weapon set of batch 4 loaded",
+      "switch": "the Kruger 9mm (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the Kruger 9mm only (hold or tap RT). Do not move or reload.",
+      "seconds": 20,
+      "note": "whether it fires single shots"
+    },
+    "ingame-fire:luger_x2": {
+      "title": "Batch 4: Kruger 9mm x2 (luger_x2)",
+      "go_to": "The Map Maker PREVIEW of batch 4, you can move, weapon set of batch 4 loaded",
+      "switch": "the Kruger 9mm x2 (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the dual Kruger 9mm only (hold or tap RT, both guns).",
+      "seconds": 20,
+      "note": "whether both guns fire together"
+    },
+    "ingame-fire:revolver": {
+      "title": "Batch 4: Revolver (revolver)",
+      "go_to": "The Map Maker PREVIEW of batch 4, you can move, weapon set of batch 4 loaded",
+      "switch": "the Revolver (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the Revolver only (tap RT), reload when it is empty (X), keep firing. Do not move.",
+      "seconds": 20,
+      "note": "how many shots before it reloads"
+    },
+    "ingame-fire:flare": {
+      "title": "Batch 4: Flare Gun (flare)",
+      "go_to": "The Map Maker PREVIEW of batch 4, you can move, weapon set of batch 4 loaded",
+      "switch": "the Flare Gun (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the Flare Gun only (tap RT), repeat. Do not move or switch weapon.",
+      "seconds": 20,
+      "note": "what a flare does when it lands. If the game stops, the 'unimplemented instruction' line (this weapon once crashed the game, fixed since)"
+    },
+    "ingame-fire:flare_x2": {
+      "title": "Batch 4: Flare Gun x2 (flare_x2)",
+      "go_to": "The Map Maker PREVIEW of batch 4, you can move, weapon set of batch 4 loaded",
+      "switch": "the Flare Gun x2 (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the dual Flare Guns only (tap RT, both guns), repeat.",
+      "seconds": 20,
+      "note": "whether both guns fire together"
+    },
+    "ingame-fire:pistol9mm_x2": {
+      "title": "Batch 5: Pistol 9mm x2 (pistol9mm_x2)",
+      "go_to": "The Map Maker PREVIEW of batch 5, you can move, weapon set of batch 5 loaded",
+      "switch": "the Pistol 9mm x2 (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the dual Pistol 9mm only (hold or tap RT, both guns).",
+      "seconds": 20,
+      "note": "whether both guns fire together"
+    },
+    "ingame-fire:vintage_rifle": {
+      "title": "Batch 5: Vintage Rifle (vintage_rifle)",
+      "go_to": "The Map Maker PREVIEW of batch 5, you can move, weapon set of batch 5 loaded",
+      "switch": "the Vintage Rifle (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the Vintage Rifle only (hold or tap RT). Do not move or reload.",
+      "seconds": 20,
+      "note": "the rate of fire"
+    },
+    "ingame-fire:assault_rifle": {
+      "title": "Batch 5: Assault Rifle (assault_rifle)",
+      "go_to": "The Map Maker PREVIEW of batch 5, you can move, weapon set of batch 5 loaded",
+      "switch": "the Assault Rifle (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the Assault Rifle only (hold RT). If you cannot find it in the weapon list under any of its names (Assault Rifle, Soviet Rifle, Scifi Autorifle; the LX-18 is NOT this weapon), leave it out and answer s at this prompt.",
+      "seconds": 20,
+      "note": "the name the list showed it under (it was never found in earlier runs)"
+    },
+    "ingame-fire:scifi_shotgun": {
+      "title": "Batch 5: Sci-Fi Shotgun (scifi_shotgun)",
+      "go_to": "The Map Maker PREVIEW of batch 5, you can move, weapon set of batch 5 loaded",
+      "switch": "the Sci-Fi Shotgun (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the Sci-Fi Shotgun only (RT). In the list this is the Dispersion Gun (measured earlier as this record). Do not move or reload.",
+      "seconds": 20,
+      "note": "the name in the list, and whether the spread fans out"
+    },
+    "ingame-fire:double_shotgun": {
+      "title": "Batch 5: Double Shotgun (double_shotgun)",
+      "go_to": "The Map Maker PREVIEW of batch 5, you can move, weapon set of batch 5 loaded",
+      "switch": "the Double Shotgun (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the Double Shotgun only (RT, both barrels). In the list this is the plain Shotgun (measured earlier as this record). Do not move.",
+      "seconds": 20,
+      "note": "the name in the list, and how many shells before it reloads"
+    },
+    "ingame-fire:harpoon": {
+      "title": "Batch 6: Harpoon Gun (harpoon)",
+      "go_to": "The Map Maker PREVIEW of batch 6, you can move, weapon set of batch 6 loaded",
+      "switch": "the Harpoon Gun (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the Harpoon Gun only (RT). Do not move.",
+      "seconds": 20,
+      "note": "whether the harpoon sticks to what it hits"
+    },
+    "ingame-fire:ghost_gun": {
+      "title": "Batch 6: Ghost Gun (ghost_gun)",
+      "go_to": "The Map Maker PREVIEW of batch 6, you can move, weapon set of batch 6 loaded",
+      "switch": "the Ghost Gun (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the Ghost Gun only (hold RT). Do not move.",
+      "seconds": 20,
+      "note": "what the shots look like"
+    },
+    "ingame-fire:plasma_autorifle": {
+      "title": "Batch 6: Plasma AutoRifle (plasma_autorifle)",
+      "go_to": "The Map Maker PREVIEW of batch 6, you can move, weapon set of batch 6 loaded",
+      "switch": "the Plasma AutoRifle (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the Plasma AutoRifle only (hold RT). Do not move.",
+      "seconds": 20,
+      "note": "whether it overheats"
+    },
+    "ingame-fire:mag_charger": {
+      "title": "Batch 6: Mag-Charger (mag_charger)",
+      "go_to": "The Map Maker PREVIEW of batch 6, you can move, weapon set of batch 6 loaded",
+      "switch": "the Mag-Charger (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the Mag-Charger in its NORMAL mode only (hold or tap RT). Do not switch the mode, do not move.",
+      "seconds": 20,
+      "note": "whether you charge it before it fires"
+    },
+    "ingame-fire:mag_charger_thermal": {
+      "title": "Batch 6: Mag-Charger (mag_charger_thermal)",
+      "go_to": "The Map Maker PREVIEW of batch 6, you can move, weapon set of batch 6 loaded",
+      "switch": "the Mag-Charger (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Switch the Mag-Charger to its THERMAL mode first (a heat-vision overlay replaces the weapon view, INFERRED from an earlier measurement), then fire in that mode only. The docs do not name the mode button: try the other fire button, LT and the face buttons, and write down which one it was.",
+      "seconds": 20,
+      "note": "the button for the thermal mode"
+    },
+    "ingame-fire:uplink": {
+      "title": "Batch 7: Uplink (uplink)",
+      "go_to": "The Map Maker PREVIEW of batch 7, you can move, weapon set of batch 7 loaded",
+      "switch": "the Uplink (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Use the Uplink only (aim at a movable object, pull it, hold it, let it go, repeat). If the weapon list does not offer it, leave it out and answer s at this prompt (it was never found in the list so far, the Story script run_uplink_story covers it).",
+      "seconds": 20,
+      "note": "whether you had it at all"
+    },
+    "ingame-fire:dart_gun": {
+      "title": "Batch 7: Dart Gun (dart_gun)",
+      "go_to": "The Map Maker PREVIEW of batch 7, you can move, weapon set of batch 7 loaded",
+      "switch": "the Dart Gun (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the Dart Gun only (RT). The game lists it as injector. Do not move.",
+      "seconds": 20,
+      "note": "the name in the list, and what a dart does to a target"
+    },
+    "ingame-fire:sbp500": {
+      "title": "Batch 7: SBP500 (sbp500)",
+      "go_to": "The Map Maker PREVIEW of batch 7, you can move, weapon set of batch 7 loaded",
+      "switch": "the SBP500 (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the SBP500 only (RT). Do not move.",
+      "seconds": 20,
+      "note": "how it fires (single, burst or beam)"
+    },
+    "ingame-fire:pistol9mm": {
+      "title": "Batch 7: Pistol 9mm (pistol9mm)",
+      "go_to": "The Map Maker PREVIEW of batch 7, you can move, weapon set of batch 7 loaded",
+      "switch": "the Pistol 9mm (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire the single Pistol 9mm only (hold or tap RT). Do not move or reload.",
+      "seconds": 20,
+      "note": "nothing special, it is the known pistol"
+    },
+    "ingame-fire:minigun": {
+      "title": "Batch 8: Minigun (minigun)",
+      "go_to": "The Map Maker PREVIEW of batch 8, you can move, weapon set of batch 8 loaded",
+      "switch": "the Minigun (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "From rest (barrel not spinning) HOLD fire (RT) for about 5 s so the spin-up DELAY before the first shot is inside the phase, release, wait 3 s, repeat once. Normal mode.",
+      "seconds": 25,
+      "note": "how long the barrel took to spin up before the first shot"
+    },
+    "ingame-fire:minigun_overheat": {
+      "title": "Batch 8: Minigun (minigun_overheat)",
+      "go_to": "The Map Maker PREVIEW of batch 8, you can move, weapon set of batch 8 loaded",
+      "switch": "the Minigun (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "SUSTAINED fire: hold the trigger without releasing until the gun OVERHEATS (fire stops or the heat gauge is full), keep holding 3 s more, then release and wait for it to COOL DOWN fully (about 10 s) before you end the phase.",
+      "seconds": 40,
+      "note": "how many seconds until it overheated and how long it took to cool down"
+    },
+    "ingame-fire:minigun_spin": {
+      "title": "Batch 8: Minigun (minigun_spin)",
+      "go_to": "The Map Maker PREVIEW of batch 8, you can move, weapon set of batch 8 loaded",
+      "switch": "the Minigun (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Switch to the CONSTANT SPIN alternative mode first (the barrel keeps spinning, ready to fire), let the barrel spin 5 s WITHOUT firing, then fire in short bursts of 1 to 2 s with pauses, no overheating. The docs do not name the mode button: try the other fire button, LT and the face buttons, and write down which one it was.",
+      "seconds": 25,
+      "note": "the button that switches to constant spin"
+    },
+    "ingame-fire:heatseeker": {
+      "title": "Batch 9: Heat Seeker (heatseeker)",
+      "go_to": "The Map Maker PREVIEW of batch 9, you can move, weapon set of batch 9 loaded",
+      "switch": "the Heat Seeker (pick it up from its spawner, then D-pad right/left until it is in your hands)",
+      "do": "Fire a few rockets WITHOUT a lock, then aim at a target or bot and let the weapon lock on before you fire (homing). Do not switch weapon.",
+      "seconds": 25,
+      "note": "the button for any alternative mode, and whether a locked rocket homes"
+    },
+    "ingame-idle:b2": {
+      "title": "Idle control, batch 2",
+      "go_to": "The Map Maker PREVIEW with the weapons of batch 2 in the weapon set. Swap the set BEFORE you continue here",
+      "do": "Stand still. Press no button, do not move the stick, do not pick up a weapon. The session stops this phase by itself after 20 s.",
+      "seconds": 20,
+      "note": "you must have swapped the weapon set to batch 2 before starting this phase: leave the preview, change the set in the editor, enter the preview again"
+    },
+    "ingame-idle:b3": {
+      "title": "Idle control, batch 3",
+      "go_to": "The Map Maker PREVIEW with the weapons of batch 3 in the weapon set. Swap the set BEFORE you continue here",
+      "do": "Stand still. Press no button, do not move the stick, do not pick up a weapon. The session stops this phase by itself after 20 s.",
+      "seconds": 20,
+      "note": "you must have swapped the weapon set to batch 3 before starting this phase: leave the preview, change the set in the editor, enter the preview again"
+    },
+    "ingame-idle:b4": {
+      "title": "Idle control, batch 4",
+      "go_to": "The Map Maker PREVIEW with the weapons of batch 4 in the weapon set. Swap the set BEFORE you continue here",
+      "do": "Stand still. Press no button, do not move the stick, do not pick up a weapon. The session stops this phase by itself after 20 s.",
+      "seconds": 20,
+      "note": "you must have swapped the weapon set to batch 4 before starting this phase: leave the preview, change the set in the editor, enter the preview again"
+    },
+    "ingame-idle:b5": {
+      "title": "Idle control, batch 5",
+      "go_to": "The Map Maker PREVIEW with the weapons of batch 5 in the weapon set. Swap the set BEFORE you continue here",
+      "do": "Stand still. Press no button, do not move the stick, do not pick up a weapon. The session stops this phase by itself after 20 s.",
+      "seconds": 20,
+      "note": "you must have swapped the weapon set to batch 5 before starting this phase: leave the preview, change the set in the editor, enter the preview again"
+    },
+    "ingame-idle:b6": {
+      "title": "Idle control, batch 6",
+      "go_to": "The Map Maker PREVIEW with the weapons of batch 6 in the weapon set. Swap the set BEFORE you continue here",
+      "do": "Stand still. Press no button, do not move the stick, do not pick up a weapon. The session stops this phase by itself after 20 s.",
+      "seconds": 20,
+      "note": "you must have swapped the weapon set to batch 6 before starting this phase: leave the preview, change the set in the editor, enter the preview again"
+    },
+    "ingame-idle:b7": {
+      "title": "Idle control, batch 7",
+      "go_to": "The Map Maker PREVIEW with the weapons of batch 7 in the weapon set. Swap the set BEFORE you continue here",
+      "do": "Stand still. Press no button, do not move the stick, do not pick up a weapon. The session stops this phase by itself after 20 s.",
+      "seconds": 20,
+      "note": "you must have swapped the weapon set to batch 7 before starting this phase: leave the preview, change the set in the editor, enter the preview again"
+    },
+    "ingame-idle:b8": {
+      "title": "Idle control, batch 8",
+      "go_to": "The Map Maker PREVIEW with the weapons of batch 8 in the weapon set. Swap the set BEFORE you continue here",
+      "do": "Stand still. Press no button, do not move the stick, do not pick up a weapon. The session stops this phase by itself after 20 s.",
+      "seconds": 20,
+      "note": "you must have swapped the weapon set to batch 8 before starting this phase: leave the preview, change the set in the editor, enter the preview again"
+    },
+    "ingame-idle:b9": {
+      "title": "Idle control, batch 9",
+      "go_to": "The Map Maker PREVIEW with the weapons of batch 9 in the weapon set. Swap the set BEFORE you continue here",
+      "do": "Stand still. Press no button, do not move the stick, do not pick up a weapon. The session stops this phase by itself after 20 s.",
+      "seconds": 20,
+      "note": "you must have swapped the weapon set to batch 9 before starting this phase: leave the preview, change the set in the editor, enter the preview again"
+    },
+    "ingame-idle": {
+      "title": "Idle control, first batch ({start})",
+      "go_to": "The Map Maker PREVIEW with the weapons of batch {start} in the weapon set, you can move",
+      "do": "Stand still. Press no button, do not move the stick, do not pick up a weapon. The session stops this phase by itself after 20 s.",
+      "seconds": 20
+    }
+  },
+  "tables": {
+    "batches": {
+      "1": {
+        "title": "Grenades and mines",
+        "weapons": "Grenade, Plasma Grenade, Remote Mine (it comes with the remote in the other hand), Proximity Mine, Timed Mine",
+        "items": [
+          {
+            "label": "grenade_frag",
+            "name": "Grenade",
+            "do": "Throw grenades only (RT), wait until each one explodes, repeat. Do not move far or switch weapon.",
+            "seconds": 20
+          },
+          {
+            "label": "grenade_plasma",
+            "name": "Plasma Grenade",
+            "do": "Throw plasma grenades only (RT), wait until each one goes off, repeat. Do not move far or switch weapon.",
+            "seconds": 20
+          },
+          {
+            "label": "mine_remote",
+            "name": "Remote Mine",
+            "do": "Place a few remote mines (primary fire, RT), then trigger them with the remote in your other hand (SECONDARY fire), repeat. The detonator is the secondary fire of the remote mine, not a separate weapon.",
+            "seconds": 25
+          },
+          {
+            "label": "mine_proximity",
+            "name": "Proximity Mine",
+            "do": "Place a mine, then walk away from it or let it trigger, repeat. Do not switch weapon.",
+            "seconds": 25
+          },
+          {
+            "label": "mine_timed",
+            "name": "Timed Mine",
+            "do": "Place a mine and wait for it to go off, repeat. Do not switch weapon.",
+            "seconds": 25
+          }
+        ],
+        "item_step": "Phase ingame-fire@{label} ({name}, about {seconds} s): {do}",
+        "steps_after": [
+          "The Map Maker offers only three mines (proximity, remote, timed): the remote mine and its remote take ONE weapon slot, so the five weapons fit the six slots."
+        ],
+        "steps": [
+          "Idle control FIRST (phase ingame-idle:b{item}, except the FIRST batch of this run which uses plain ingame-idle): stand still, press nothing, do not pick anything up. It stops by itself after 20 s."
+        ]
+      },
+      "2": {
+        "title": "Sci-Fi Handgun, Sci-Fi Sniper Rifle, ElectroTool (normal and alternative fire modes)",
+        "weapons": "Sci-Fi Handgun, Sci-Fi Handgun x2 (dual), Sci-Fi Sniper Rifle, ElectroTool, ElectroTool x2 (dual)",
+        "items": [
+          {
+            "label": "scifi_handgun_normal",
+            "name": "Sci-Fi Handgun",
+            "do": "Fire the Sci-Fi Handgun in its NORMAL mode only (hold or tap RT). Do not switch the fire mode, do not move or reload.",
+            "seconds": 20
+          },
+          {
+            "label": "scifi_handgun_bounce",
+            "name": "Sci-Fi Handgun",
+            "do": "Switch the Sci-Fi Handgun to its BOUNCE mode first (shots ricochet off walls), then fire in bounce mode only. The docs do not name the mode button: try the other fire button, LT and the face buttons, and write down which one it was.",
+            "seconds": 20
+          },
+          {
+            "label": "scifi_handgun_x2_normal",
+            "name": "Sci-Fi Handgun x2",
+            "do": "Fire the dual Sci-Fi Handguns in their NORMAL mode only (hold or tap RT, both guns). Do not switch the fire mode.",
+            "seconds": 20
+          },
+          {
+            "label": "scifi_handgun_x2_bounce",
+            "name": "Sci-Fi Handgun x2",
+            "do": "Switch the dual Sci-Fi Handguns to BOUNCE mode first, then fire in bounce mode only. The docs do not name the mode button: try the other fire button, LT and the face buttons, and write down which one it was.",
+            "seconds": 20
+          },
+          {
+            "label": "scifi_sniper_normal",
+            "name": "Sci-Fi Sniper Rifle",
+            "do": "Fire the Sci-Fi Sniper Rifle in its NORMAL mode only (RT), without the scope. Do not move or reload.",
+            "seconds": 20
+          },
+          {
+            "label": "scifi_sniper_alt",
+            "name": "Sci-Fi Sniper Rifle",
+            "do": "Switch to the ALTERNATIVE mode first (the zoom scope, INFERRED from an earlier measurement), then fire in that mode only. The docs do not name the mode button: try the other fire button, LT and the face buttons, and write down which one it was.",
+            "seconds": 20
+          },
+          {
+            "label": "electrotool_normal",
+            "name": "ElectroTool",
+            "do": "Fire the ElectroTool in its NORMAL mode only (hold RT). Do not switch the fire mode, do not move.",
+            "seconds": 20
+          },
+          {
+            "label": "electrotool_alt",
+            "name": "ElectroTool",
+            "do": "Switch the ElectroTool to its ALTERNATIVE mode first, then fire in that mode only. The docs do not name the mode button: try the other fire button, LT and the face buttons, and write down which one it was.",
+            "seconds": 20
+          },
+          {
+            "label": "electrotool_x2",
+            "name": "ElectroTool x2",
+            "do": "Fire the dual ElectroTools in their NORMAL mode only (hold RT, both). Do not switch the fire mode.",
+            "seconds": 20
+          }
+        ],
+        "item_step": "Phase ingame-fire@{label} ({name}, about {seconds} s): {do}",
+        "steps_after": [
+          "Slots: Sci-Fi Handgun, its x2, the sniper, ElectroTool and its x2 are 5 weapons, one slot each. The mode phases use the SAME weapon: switch the mode, do not add a slot."
+        ],
+        "steps": [
+          "Idle control FIRST (phase ingame-idle:b{item}, except the FIRST batch of this run which uses plain ingame-idle): stand still, press nothing, do not pick anything up. It stops by itself after 20 s."
+        ]
+      },
+      "3": {
+        "title": "K-SMG and Machine Pistol (rocket mode, dual)",
+        "weapons": "K-SMG, K-SMG x2 (dual), Machine Pistol (the game may list it as Machine Gun), Machine Pistol x2 (dual)",
+        "items": [
+          {
+            "label": "smg_normal",
+            "name": "K-SMG",
+            "do": "Fire the K-SMG in its NORMAL mode only (hold RT). Do not switch the fire mode, do not move.",
+            "seconds": 20
+          },
+          {
+            "label": "smg_rocket",
+            "name": "K-SMG",
+            "do": "Switch the K-SMG to its ROCKET mode first, then fire rockets only. The docs do not name the mode button: try the other fire button, LT and the face buttons, and write down which one it was.",
+            "seconds": 20
+          },
+          {
+            "label": "smg_x2",
+            "name": "K-SMG x2",
+            "do": "Fire the dual K-SMGs in their NORMAL mode only (hold RT, both guns).",
+            "seconds": 20
+          },
+          {
+            "label": "machinepistol",
+            "name": "Machine Pistol",
+            "do": "Fire the Machine Pistol only (hold RT). Do not move or reload. The game lists this weapon as Machine Gun (name sweep T1615), pick that entry if you see no Machine Pistol.",
+            "seconds": 20
+          },
+          {
+            "label": "machinepistol_x2",
+            "name": "Machine Pistol x2",
+            "do": "Fire the dual Machine Pistols only (hold RT, both guns).",
+            "seconds": 20
+          }
+        ],
+        "item_step": "Phase ingame-fire@{label} ({name}, about {seconds} s): {do}",
+        "steps_after": [
+          "The Sci-Fi Rocket Launcher and TNT used to be in this batch and are gone: the Map Maker does not offer them (owner-reported)."
+        ],
+        "steps": [
+          "Idle control FIRST (phase ingame-idle:b{item}, except the FIRST batch of this run which uses plain ingame-idle): stand still, press nothing, do not pick anything up. It stops by itself after 20 s."
+        ]
+      },
+      "4": {
+        "title": "Kruger 9mm, Revolver and Flare Gun",
+        "weapons": "Kruger 9mm, Kruger 9mm x2 (dual), Revolver, Flare Gun, Flare Gun x2 (dual)",
+        "items": [
+          {
+            "label": "luger",
+            "name": "Kruger 9mm",
+            "do": "Fire the Kruger 9mm only (hold or tap RT). Do not move or reload.",
+            "seconds": 20
+          },
+          {
+            "label": "luger_x2",
+            "name": "Kruger 9mm x2",
+            "do": "Fire the dual Kruger 9mm only (hold or tap RT, both guns).",
+            "seconds": 20
+          },
+          {
+            "label": "revolver",
+            "name": "Revolver",
+            "do": "Fire the Revolver only (tap RT), reload when it is empty (X), keep firing. Do not move.",
+            "seconds": 20
+          },
+          {
+            "label": "flare",
+            "name": "Flare Gun",
+            "do": "Fire the Flare Gun only (tap RT), repeat. Do not move or switch weapon.",
+            "seconds": 20
+          },
+          {
+            "label": "flare_x2",
+            "name": "Flare Gun x2",
+            "do": "Fire the dual Flare Guns only (tap RT, both guns), repeat.",
+            "seconds": 20
+          }
+        ],
+        "item_step": "Phase ingame-fire@{label} ({name}, about {seconds} s): {do}",
+        "steps_after": [
+          "The Monkey Gun used to be in this batch and is gone: the Map Maker does not offer it (owner-reported)."
+        ],
+        "steps": [
+          "Idle control FIRST (phase ingame-idle:b{item}, except the FIRST batch of this run which uses plain ingame-idle): stand still, press nothing, do not pick anything up. It stops by itself after 20 s."
+        ]
+      },
+      "5": {
+        "title": "Pistol 9mm x2, Vintage Rifle, Assault Rifle, shotguns",
+        "weapons": "Pistol 9mm x2 (dual), Vintage Rifle, Assault Rifle (also try the names Soviet Rifle and Scifi Autorifle), Sci-Fi Shotgun (the game lists it as Dispersion Gun), Double Shotgun (the game lists it as Shotgun)",
+        "items": [
+          {
+            "label": "pistol9mm_x2",
+            "name": "Pistol 9mm x2",
+            "do": "Fire the dual Pistol 9mm only (hold or tap RT, both guns).",
+            "seconds": 20
+          },
+          {
+            "label": "vintage_rifle",
+            "name": "Vintage Rifle",
+            "do": "Fire the Vintage Rifle only (hold or tap RT). Do not move or reload.",
+            "seconds": 20
+          },
+          {
+            "label": "assault_rifle",
+            "name": "Assault Rifle",
+            "do": "Fire the Assault Rifle only (hold RT). If you cannot find it in the weapon list under any of its names (Assault Rifle, Soviet Rifle, Scifi Autorifle; the LX-18 is NOT this weapon), leave it out and answer s at this prompt.",
+            "seconds": 20
+          },
+          {
+            "label": "scifi_shotgun",
+            "name": "Sci-Fi Shotgun",
+            "do": "Fire the Sci-Fi Shotgun only (RT). In the list this is the Dispersion Gun (measured earlier as this record). Do not move or reload.",
+            "seconds": 20
+          },
+          {
+            "label": "double_shotgun",
+            "name": "Double Shotgun",
+            "do": "Fire the Double Shotgun only (RT, both barrels). In the list this is the plain Shotgun (measured earlier as this record). Do not move.",
+            "seconds": 20
+          }
+        ],
+        "item_step": "Phase ingame-fire@{label} ({name}, about {seconds} s): {do}",
+        "steps_after": [],
+        "steps": [
+          "Idle control FIRST (phase ingame-idle:b{item}, except the FIRST batch of this run which uses plain ingame-idle): stand still, press nothing, do not pick anything up. It stops by itself after 20 s."
+        ]
+      },
+      "6": {
+        "title": "Harpoon, Ghost Gun, Plasma AutoRifle, Mag-Charger",
+        "weapons": "Harpoon Gun, Ghost Gun, Plasma AutoRifle, Mag-Charger, Mag-Charger in its thermal mode (the same weapon, no extra slot)",
+        "items": [
+          {
+            "label": "harpoon",
+            "name": "Harpoon Gun",
+            "do": "Fire the Harpoon Gun only (RT). Do not move.",
+            "seconds": 20
+          },
+          {
+            "label": "ghost_gun",
+            "name": "Ghost Gun",
+            "do": "Fire the Ghost Gun only (hold RT). Do not move.",
+            "seconds": 20
+          },
+          {
+            "label": "plasma_autorifle",
+            "name": "Plasma AutoRifle",
+            "do": "Fire the Plasma AutoRifle only (hold RT). Do not move.",
+            "seconds": 20
+          },
+          {
+            "label": "mag_charger",
+            "name": "Mag-Charger",
+            "do": "Fire the Mag-Charger in its NORMAL mode only (hold or tap RT). Do not switch the mode, do not move.",
+            "seconds": 20
+          },
+          {
+            "label": "mag_charger_thermal",
+            "name": "Mag-Charger",
+            "do": "Switch the Mag-Charger to its THERMAL mode first (a heat-vision overlay replaces the weapon view, INFERRED from an earlier measurement), then fire in that mode only. The docs do not name the mode button: try the other fire button, LT and the face buttons, and write down which one it was.",
+            "seconds": 20
+          }
+        ],
+        "item_step": "Phase ingame-fire@{label} ({name}, about {seconds} s): {do}",
+        "steps_after": [
+          "The Brick used to be in this batch and is gone: the Map Maker does not offer it (owner-reported, definitive)."
+        ],
+        "steps": [
+          "Idle control FIRST (phase ingame-idle:b{item}, except the FIRST batch of this run which uses plain ingame-idle): stand still, press nothing, do not pick anything up. It stops by itself after 20 s."
+        ]
+      },
+      "7": {
+        "title": "Uplink, Dart Gun, SBP500, Pistol 9mm",
+        "weapons": "Uplink (the Gravity Gun, probably NOT in the list), Dart Gun (the game lists it as injector), SBP500, Pistol 9mm",
+        "items": [
+          {
+            "label": "uplink",
+            "name": "Uplink",
+            "do": "Use the Uplink only (aim at a movable object, pull it, hold it, let it go, repeat). If the weapon list does not offer it, leave it out and answer s at this prompt (it was never found in the list so far, the Story script run_uplink_story covers it).",
+            "seconds": 20
+          },
+          {
+            "label": "dart_gun",
+            "name": "Dart Gun",
+            "do": "Fire the Dart Gun only (RT). The game lists it as injector. Do not move.",
+            "seconds": 20
+          },
+          {
+            "label": "sbp500",
+            "name": "SBP500",
+            "do": "Fire the SBP500 only (RT). Do not move.",
+            "seconds": 20
+          },
+          {
+            "label": "pistol9mm",
+            "name": "Pistol 9mm",
+            "do": "Fire the single Pistol 9mm only (hold or tap RT). Do not move or reload.",
+            "seconds": 20
+          }
+        ],
+        "item_step": "Phase ingame-fire@{label} ({name}, about {seconds} s): {do}",
+        "steps_after": [
+          "NOTE: in one earlier map the preview started with the Uplink already in your hands (measured, cause unknown). Look at your hands before the idle control and tell Claude what you hold at the start."
+        ],
+        "steps": [
+          "Idle control FIRST (phase ingame-idle:b{item}, except the FIRST batch of this run which uses plain ingame-idle): stand still, press nothing, do not pick anything up. It stops by itself after 20 s."
+        ]
+      },
+      "8": {
+        "title": "Minigun (spin-up, overheating, constant spin)",
+        "weapons": "Minigun (ONE weapon, there is NO Minigun x2)",
+        "items": [
+          {
+            "label": "minigun",
+            "name": "Minigun",
+            "do": "From rest (barrel not spinning) HOLD fire (RT) for about 5 s so the spin-up DELAY before the first shot is inside the phase, release, wait 3 s, repeat once. Normal mode.",
+            "seconds": 25
+          },
+          {
+            "label": "minigun_overheat",
+            "name": "Minigun",
+            "do": "SUSTAINED fire: hold the trigger without releasing until the gun OVERHEATS (fire stops or the heat gauge is full), keep holding 3 s more, then release and wait for it to COOL DOWN fully (about 10 s) before you end the phase.",
+            "seconds": 40
+          },
+          {
+            "label": "minigun_spin",
+            "name": "Minigun",
+            "do": "Switch to the CONSTANT SPIN alternative mode first (the barrel keeps spinning, ready to fire), let the barrel spin 5 s WITHOUT firing, then fire in short bursts of 1 to 2 s with pauses, no overheating. The docs do not name the mode button: try the other fire button, LT and the face buttons, and write down which one it was.",
+            "seconds": 25
+          }
+        ],
+        "item_step": "Phase ingame-fire@{label} ({name}, about {seconds} s): {do}",
+        "steps_after": [
+          "The minigun has NO reload, so there is no reload phase (docs/t1527-minigun-census-and-callback.md)."
+        ],
+        "steps": [
+          "Idle control FIRST (phase ingame-idle:b{item}, except the FIRST batch of this run which uses plain ingame-idle): stand still, press nothing, do not pick anything up. It stops by itself after 20 s."
+        ]
+      },
+      "9": {
+        "title": "Heat Seeker",
+        "weapons": "Heat Seeker (the homing rocket launcher)",
+        "items": [
+          {
+            "label": "heatseeker",
+            "name": "Heat Seeker",
+            "do": "Fire a few rockets WITHOUT a lock, then aim at a target or bot and let the weapon lock on before you fire (homing). Do not switch weapon.",
+            "seconds": 25
+          }
+        ],
+        "item_step": "Phase ingame-fire@{label} ({name}, about {seconds} s): {do}",
+        "steps_after": [
+          "Earlier plans called this weapon HeatSeeker and tied it to a different record: the game lists it as Heat Seeker and the earlier measurements ran the rocket record shared with the Rocket Launcher (T1553, T1626). Just fire it as described."
+        ],
+        "steps": [
+          "Idle control FIRST (phase ingame-idle:b{item}, except the FIRST batch of this run which uses plain ingame-idle): stand still, press nothing, do not pick anything up. It stops by itself after 20 s."
+        ]
+      }
+    }
+  }
+}

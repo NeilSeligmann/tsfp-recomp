@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Agent status</title>
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<header id="top">
+  <h1><a href="/dashboard">Agent status</a></h1>
+  <nav id="tabs" aria-label="Views"></nav>
+  <div id="meta">
+    <span id="updated">loading</span>
+    <button id="pause" type="button" aria-pressed="false">Pause</button>
+  </div>
+</header>
+<main id="view">
+  <noscript><p>This page needs JavaScript to show the status tables.</p></noscript>
+  <div id="notes"></div>
+  <div id="entity"></div>
+  <div id="tables"></div>
+</main>
+<div id="banner" role="alert" hidden></div>
+<script type="module" src="/static/app.js"></script>
+</body>
+</html>

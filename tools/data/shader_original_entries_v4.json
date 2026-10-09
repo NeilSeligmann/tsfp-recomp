@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "profile": "shader-assembler-v4",
+  "addresses": [
+    "0x003E6714",
+    "0x003EA301",
+    "0x003EE2B3",
+    "0x003EFEA7",
+    "0x003F1791",
+    "0x003F22B4",
+    "0x003F42A0",
+    "0x003FC8A8",
+    "0x00402BCF",
+    "0x00402C5C"
+  ]
+}

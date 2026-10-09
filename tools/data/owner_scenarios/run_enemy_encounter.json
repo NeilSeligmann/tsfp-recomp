@@ -1,0 +1,49 @@
+{
+  "script": "run_enemy_encounter",
+  "title": "Hostile enemy encounter census (ai_* attribution)",
+  "summary": "One Story session. An idle control, then 30 s in sight of the first HOSTILE enemies. The census (indirect call targets) of the encounter is ranked against the idle control and the ai_* / char_class functions are attributed by tools.ai_attribution (T1741). Session folder tmp/owner-profiles/enemy-encounter-STAMP. Where the first hostile NPCs are is INFERRED, see docs/t-ai-enemy-encounter.md.",
+  "kind": "census-session",
+  "duration": "about 15 minutes after the game is up, plus the time to reach the enemies",
+  "prerequisites": [
+    "Game HDD tmp/hdds/profile-hdd (your Story profile). The script builds the private host first, which takes a few minutes.",
+    "A Story save that can reach the first hostile enemies past the rebel base. The first minutes are friendly scripted rebels (T1225), do not stop there."
+  ],
+  "steps": [
+    {
+      "text": "Press Enter at 'Enter = start the game'. When the window opens drive to Story yourself and play to the first enemies that SHOOT AT YOU. Nothing is measured until you continue at a phase prompt."
+    },
+    {
+      "phase": "ingame-idle"
+    },
+    {
+      "phase": "ingame-enemy-encounter"
+    }
+  ],
+  "note_at_end": [
+    "Which level/area and how long into the level you met the first hostile enemy, and what they looked like.",
+    "Whether they shot at you, chased you, called others, died (and how many shots).",
+    "If the game stopped: the 'unimplemented instruction at ...' or STOP line."
+  ],
+  "stop": [
+    "Enter in this terminal starts and again ends a phase. s skips, q finishes. Close the window only after the last phase."
+  ],
+  "send_back": [
+    "Tell Claude the session finished: folder tmp/owner-profiles/enemy-encounter-STAMP (the ai attribution table is printed at the end).",
+    "The level/area notes above."
+  ],
+  "phases": {
+    "ingame-idle": {
+      "title": "Idle control next to the enemies",
+      "go_to": "The spot where the hostile enemies are about to see you, but they have NOT noticed you yet (or stand behind cover)",
+      "do": "Stand still. Do not press any button and do not move the stick.",
+      "seconds": 20
+    },
+    "ingame-enemy-encounter": {
+      "title": "Fight the hostile enemies",
+      "go_to": "Within sight of the first hostile enemies",
+      "do": "Let them see you, take cover, shoot them, let them chase and shoot at you. Keep the fight going for the whole window.",
+      "seconds": 30,
+      "note": "the area, the number of enemies, what they did"
+    }
+  }
+}

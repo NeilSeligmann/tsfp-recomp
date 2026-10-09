@@ -1,0 +1,4 @@
+entry_va,position,evidence
+0x0036cb50,7,"terminal widget record init: callers push the shown text label id as the eighth argument (pushed third from the last), the record is drawn later through 0x3d7b0 with a computed id; T1507 sibling_candidates review (30 sites, 18 distinct ids, titles read as terminal texts)"
+0x0036cc40,4,"terminal screen init: callers push the screen title label id as the fifth argument (27 sites, 23 distinct ids, titles read as terminal icon names); the fourth argument is a texture path id (0x36d to 0x37b), not a label"
+0x00147200,1,"HUD notice panel append entry: argument 1 is stored at the head of a 0x1c byte entry and drawn later through 0x3d7b0 (12 sites, 12 distinct ids 0x1612 to 0x1657, titles read as button prompts)"

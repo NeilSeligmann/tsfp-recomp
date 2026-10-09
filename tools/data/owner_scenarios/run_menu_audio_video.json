@@ -1,0 +1,52 @@
+{
+  "script": "run_menu_audio_video",
+  "title": "Menu session: Settings > Audio/Video options (open it twice, change values, leave)",
+  "summary": "A short menu census of the Audio/Video options screen (T1566, follow-up of the T1496 crash that the owner reported fixed on 2026-10-07). Two labelled phases in one game run: first scroll through EVERY option and change a few values, then reopen the screen, check the values were kept and leave. Also a crash check: the screen must not stop the game. The script has no idle control phase, so the analysis pools the navigation parts between the phases.",
+  "kind": "census-session",
+  "duration": "about 3 minutes after the game window opens",
+  "options": {
+    "hotkeys": {
+      "values": ["on", "off"],
+      "default": "off"
+    }
+  },
+  "prerequisites": [
+    "Game HDD: tmp/hdds/profile-hdd (it holds your profile). A new timestamped folder tmp/owner-profiles/menu-av-<time> is made on every run, so a re-run never overwrites an earlier one.",
+    "No route and no Map Maker: you drive by hand from the start screen."
+  ],
+  "phases": {
+    "menu-audio-video": {
+      "title": "Audio/Video options: scroll through every option and change some",
+      "go_to": "Main Menu > Settings > Audio/Video options (select the entry but do not scroll yet)",
+      "do": "Scroll down and up through EVERY option once. Change a few values: toggle one setting and move a volume slider a few steps. Accept or apply, then back out to Settings. Do not open Controls.",
+      "seconds": 30,
+      "note": "which options the screen has and which ones you changed (names and old and new value)"
+    },
+    "menu-audio-video-leave": {
+      "title": "Audio/Video options: reopen, check, leave",
+      "go_to": "Main Menu > Settings (you just left Audio/Video)",
+      "do": "Reopen Audio/Video options, check that the values you changed are still set, back out to Settings, then back out to the Main Menu.",
+      "seconds": 20,
+      "note": "whether the changed values were kept or reverted"
+    }
+  },
+  "steps": [
+    "When the window opens: choose your player count and profile and go to the Main Menu. Then Settings. Do NOT enter Audio/Video yet, the first prompt tells you when.",
+    {"phase": "menu-audio-video"},
+    "Between the phases the game keeps running, you can take your time. Stay in the Settings menu until the next prompt.",
+    {"phase": "menu-audio-video-leave"},
+    "Finish: the tool closes the game and prints the analysis."
+  ],
+  "note_at_end": [
+    "Did the game crash, freeze or glitch (sound or picture) in the Audio/Video screen? If it stopped, copy the 'unimplemented instruction at ...' or 'STOP' line the script prints.",
+    "Anything unexpected in the options (a missing option, a slider that did nothing)."
+  ],
+  "stop": [
+    "At each phase prompt: Enter starts and Enter ends the phase, s skips it, q finishes the session. The phases do not stop by themselves.",
+    "After the last phase the tool closes the game by itself. Do not close the window before then."
+  ],
+  "send_back": [
+    "Tell Claude the session finished: folder tmp/owner-profiles/menu-av-<time> (the script prints it).",
+    "The crash check lines at the end ('crash check (last stop lines)'), and your notes above."
+  ]
+}

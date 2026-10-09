@@ -1,0 +1,206 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later
+ *
+ * GENERATED, AND COMMITTED ON PURPOSE. Regenerate with:
+ *
+ *     python -m tools.d3dscan.rstable <your own default.xbe> \
+ *         --method-names <an NV2A register header> \
+ *         --method-names <a second, independent one> \
+ *         --emit-c src/gpu/d3d8_render_state_table.c
+ *
+ * ONLY THE TABLE IS GENERATED. The dispatch that walks it is hand-written in
+ * `d3d8_render_state.c`, so regenerating against a different build cannot silently
+ * rewrite behaviour, only data.
+ *
+ * WHY COMMITTED RATHER THAN GITIGNORED. `src/xbox/xdk_surface.c` is generated and
+ * gitignored because every row of it is a guest address recovered from the user's
+ * executable, and `src/audio/dsound_hle.c` compiles its rows in so a fresh clone builds.
+ * This file follows `dsound_hle.c`: it holds NV2A method numbers and D3D8 dirty-bit
+ * masks, which `docs/provenance.md` classes as facts about the hardware and our own
+ * analysis output, and `src/gpu/` cannot do anything at all without them. The per-state
+ * handler ADDRESSES, which are the part that would be an address dump, are deliberately
+ * NOT emitted here -- the HLE replaces those handlers rather than calling them, so only
+ * the index range they occupy is needed. `tools/ci/check-no-disc-data.sh` rejects bulk
+ * per-address output by content, and this file carries none.
+ *
+ * NAMES CARRY THEIR SOURCE COUNT. `name_sources` is how many independent NV2A register
+ * references named the method: 2 means doubly derived, 1 means a single route and is
+ * marked rather than quietly included, 0 means no local reference names it and `name` is
+ * NULL. `docs/d3d8-usage.md` §2.1 is why: a table of this shape written from recall was
+ * wrong in 46 of 102 entries, off by one slot, and every name looked plausible.
+ */
+
+#include "d3d8_render_state.h"
+
+
+const uint32_t d3d8_rs_immediate_bound = 0x5c;
+const uint32_t d3d8_rs_deferred_bound  = 0x88;
+const uint32_t d3d8_rs_handler_bound   = 0xa6;
+
+const d3d8_render_state_row d3d8_render_state_rows[D3D8_RS_TABLE_ROWS] = {
+    [0x00] = { 0x0260, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_COMBINER_ALPHA_ICW" },
+    [0x01] = { 0x0264, 0, D3D8_RS_IMMEDIATE, 2, 1, 0, "SET_COMBINER_ALPHA_ICW" },
+    [0x02] = { 0x0268, 0, D3D8_RS_IMMEDIATE, 2, 2, 0, "SET_COMBINER_ALPHA_ICW" },
+    [0x03] = { 0x026C, 0, D3D8_RS_IMMEDIATE, 2, 3, 0, "SET_COMBINER_ALPHA_ICW" },
+    [0x04] = { 0x0270, 0, D3D8_RS_IMMEDIATE, 2, 4, 0, "SET_COMBINER_ALPHA_ICW" },
+    [0x05] = { 0x0274, 0, D3D8_RS_IMMEDIATE, 2, 5, 0, "SET_COMBINER_ALPHA_ICW" },
+    [0x06] = { 0x0278, 0, D3D8_RS_IMMEDIATE, 2, 6, 0, "SET_COMBINER_ALPHA_ICW" },
+    [0x07] = { 0x027C, 0, D3D8_RS_IMMEDIATE, 2, 7, 0, "SET_COMBINER_ALPHA_ICW" },
+    [0x08] = { 0x0288, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_COMBINER_SPECULAR_FOG_CW0" },
+    [0x09] = { 0x028C, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_COMBINER_SPECULAR_FOG_CW1" },
+    [0x0a] = { 0x0A60, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_COMBINER_FACTOR0" },
+    [0x0b] = { 0x0A64, 0, D3D8_RS_IMMEDIATE, 2, 1, 0, "SET_COMBINER_FACTOR0" },
+    [0x0c] = { 0x0A68, 0, D3D8_RS_IMMEDIATE, 2, 2, 0, "SET_COMBINER_FACTOR0" },
+    [0x0d] = { 0x0A6C, 0, D3D8_RS_IMMEDIATE, 2, 3, 0, "SET_COMBINER_FACTOR0" },
+    [0x0e] = { 0x0A70, 0, D3D8_RS_IMMEDIATE, 2, 4, 0, "SET_COMBINER_FACTOR0" },
+    [0x0f] = { 0x0A74, 0, D3D8_RS_IMMEDIATE, 2, 5, 0, "SET_COMBINER_FACTOR0" },
+    [0x10] = { 0x0A78, 0, D3D8_RS_IMMEDIATE, 2, 6, 0, "SET_COMBINER_FACTOR0" },
+    [0x11] = { 0x0A7C, 0, D3D8_RS_IMMEDIATE, 2, 7, 0, "SET_COMBINER_FACTOR0" },
+    [0x12] = { 0x0A80, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_COMBINER_FACTOR1" },
+    [0x13] = { 0x0A84, 0, D3D8_RS_IMMEDIATE, 2, 1, 0, "SET_COMBINER_FACTOR1" },
+    [0x14] = { 0x0A88, 0, D3D8_RS_IMMEDIATE, 2, 2, 0, "SET_COMBINER_FACTOR1" },
+    [0x15] = { 0x0A8C, 0, D3D8_RS_IMMEDIATE, 2, 3, 0, "SET_COMBINER_FACTOR1" },
+    [0x16] = { 0x0A90, 0, D3D8_RS_IMMEDIATE, 2, 4, 0, "SET_COMBINER_FACTOR1" },
+    [0x17] = { 0x0A94, 0, D3D8_RS_IMMEDIATE, 2, 5, 0, "SET_COMBINER_FACTOR1" },
+    [0x18] = { 0x0A98, 0, D3D8_RS_IMMEDIATE, 2, 6, 0, "SET_COMBINER_FACTOR1" },
+    [0x19] = { 0x0A9C, 0, D3D8_RS_IMMEDIATE, 2, 7, 0, "SET_COMBINER_FACTOR1" },
+    [0x1a] = { 0x0AA0, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_COMBINER_ALPHA_OCW" },
+    [0x1b] = { 0x0AA4, 0, D3D8_RS_IMMEDIATE, 2, 1, 0, "SET_COMBINER_ALPHA_OCW" },
+    [0x1c] = { 0x0AA8, 0, D3D8_RS_IMMEDIATE, 2, 2, 0, "SET_COMBINER_ALPHA_OCW" },
+    [0x1d] = { 0x0AAC, 0, D3D8_RS_IMMEDIATE, 2, 3, 0, "SET_COMBINER_ALPHA_OCW" },
+    [0x1e] = { 0x0AB0, 0, D3D8_RS_IMMEDIATE, 2, 4, 0, "SET_COMBINER_ALPHA_OCW" },
+    [0x1f] = { 0x0AB4, 0, D3D8_RS_IMMEDIATE, 2, 5, 0, "SET_COMBINER_ALPHA_OCW" },
+    [0x20] = { 0x0AB8, 0, D3D8_RS_IMMEDIATE, 2, 6, 0, "SET_COMBINER_ALPHA_OCW" },
+    [0x21] = { 0x0ABC, 0, D3D8_RS_IMMEDIATE, 2, 7, 0, "SET_COMBINER_ALPHA_OCW" },
+    [0x22] = { 0x0AC0, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_COMBINER_COLOR_ICW" },
+    [0x23] = { 0x0AC4, 0, D3D8_RS_IMMEDIATE, 2, 1, 0, "SET_COMBINER_COLOR_ICW" },
+    [0x24] = { 0x0AC8, 0, D3D8_RS_IMMEDIATE, 2, 2, 0, "SET_COMBINER_COLOR_ICW" },
+    [0x25] = { 0x0ACC, 0, D3D8_RS_IMMEDIATE, 2, 3, 0, "SET_COMBINER_COLOR_ICW" },
+    [0x26] = { 0x0AD0, 0, D3D8_RS_IMMEDIATE, 2, 4, 0, "SET_COMBINER_COLOR_ICW" },
+    [0x27] = { 0x0AD4, 0, D3D8_RS_IMMEDIATE, 2, 5, 0, "SET_COMBINER_COLOR_ICW" },
+    [0x28] = { 0x0AD8, 0, D3D8_RS_IMMEDIATE, 2, 6, 0, "SET_COMBINER_COLOR_ICW" },
+    [0x29] = { 0x0ADC, 0, D3D8_RS_IMMEDIATE, 2, 7, 0, "SET_COMBINER_COLOR_ICW" },
+    [0x2a] = { 0x17F8, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_SHADER_CLIP_PLANE_MODE" },
+    [0x2b] = { 0x1E20, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_SPECULAR_FOG_FACTOR" },
+    [0x2c] = { 0x1E24, 0, D3D8_RS_IMMEDIATE, 2, 1, 0, "SET_SPECULAR_FOG_FACTOR" },
+    [0x2d] = { 0x1E40, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_COMBINER_COLOR_OCW" },
+    [0x2e] = { 0x1E44, 0, D3D8_RS_IMMEDIATE, 2, 1, 0, "SET_COMBINER_COLOR_OCW" },
+    [0x2f] = { 0x1E48, 0, D3D8_RS_IMMEDIATE, 2, 2, 0, "SET_COMBINER_COLOR_OCW" },
+    [0x30] = { 0x1E4C, 0, D3D8_RS_IMMEDIATE, 2, 3, 0, "SET_COMBINER_COLOR_OCW" },
+    [0x31] = { 0x1E50, 0, D3D8_RS_IMMEDIATE, 2, 4, 0, "SET_COMBINER_COLOR_OCW" },
+    [0x32] = { 0x1E54, 0, D3D8_RS_IMMEDIATE, 2, 5, 0, "SET_COMBINER_COLOR_OCW" },
+    [0x33] = { 0x1E58, 0, D3D8_RS_IMMEDIATE, 2, 6, 0, "SET_COMBINER_COLOR_OCW" },
+    [0x34] = { 0x1E5C, 0, D3D8_RS_IMMEDIATE, 2, 7, 0, "SET_COMBINER_COLOR_OCW" },
+    [0x35] = { 0x1E60, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_COMBINER_CONTROL" },
+    [0x36] = { 0x1D90, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_COLOR_CLEAR_VALUE" },
+    [0x37] = { 0x1E74, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_DOT_RGBMAPPING" },
+    [0x38] = { 0x1E78, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_SHADER_OTHER_STAGE_INPUT" },
+    [0x39] = { 0x0354, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_DEPTH_FUNC" },
+    [0x3a] = { 0x033C, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_ALPHA_FUNC" },
+    [0x3b] = { 0x0304, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_BLEND_ENABLE" },
+    [0x3c] = { 0x0300, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_ALPHA_TEST_ENABLE" },
+    [0x3d] = { 0x0340, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_ALPHA_REF" },
+    [0x3e] = { 0x0344, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_BLEND_FUNC_SFACTOR" },
+    [0x3f] = { 0x0348, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_BLEND_FUNC_DFACTOR" },
+    [0x40] = { 0x035C, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_DEPTH_MASK" },
+    [0x41] = { 0x0310, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_DITHER_ENABLE" },
+    [0x42] = { 0x037C, 0, D3D8_RS_IMMEDIATE, 2, 0, 1, "SET_SHADE_MODEL" },
+    [0x43] = { 0x0358, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_COLOR_MASK" },
+    [0x44] = { 0x0374, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_STENCIL_OP_ZFAIL" },
+    [0x45] = { 0x0378, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_STENCIL_OP_ZPASS" },
+    [0x46] = { 0x0364, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_STENCIL_FUNC" },
+    [0x47] = { 0x0368, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_STENCIL_FUNC_REF" },
+    [0x48] = { 0x036C, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_STENCIL_FUNC_MASK" },
+    [0x49] = { 0x0360, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_STENCIL_MASK" },
+    [0x4a] = { 0x0350, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_BLEND_EQUATION" },
+    [0x4b] = { 0x034C, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_BLEND_COLOR" },
+    [0x4c] = { 0x09F8, 0, D3D8_RS_IMMEDIATE, 1, 6, 0, "SET_SPECULAR_PARAMS" },
+    [0x4d] = { 0x0384, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_POLYGON_OFFSET_SCALE_FACTOR" },
+    [0x4e] = { 0x0388, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_POLYGON_OFFSET_BIAS" },
+    [0x4f] = { 0x0330, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_POLY_OFFSET_POINT_ENABLE" },
+    [0x50] = { 0x0334, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_POLY_OFFSET_LINE_ENABLE" },
+    [0x51] = { 0x0338, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_POLY_OFFSET_FILL_ENABLE" },
+    [0x52] = { 0x1D78, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_ZMIN_MAX_CONTROL" },
+    [0x53] = { 0x147C, 0, D3D8_RS_IMMEDIATE, 1, 0, 0, "SET_STIPPLE_ENABLE" },
+    [0x54] = { 0x1D90, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_COLOR_CLEAR_VALUE" },
+    [0x55] = { 0x1D90, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_COLOR_CLEAR_VALUE" },
+    [0x56] = { 0x1D90, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_COLOR_CLEAR_VALUE" },
+    [0x57] = { 0x1D90, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_COLOR_CLEAR_VALUE" },
+    [0x58] = { 0x1D90, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_COLOR_CLEAR_VALUE" },
+    [0x59] = { 0x1D90, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_COLOR_CLEAR_VALUE" },
+    [0x5a] = { 0x1D90, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_COLOR_CLEAR_VALUE" },
+    [0x5b] = { 0x1D90, 0, D3D8_RS_IMMEDIATE, 2, 0, 0, "SET_COLOR_CLEAR_VALUE" },
+    [0x5c] = { 0, 0x2000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x5d] = { 0, 0x2000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x5e] = { 0, 0x2000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x5f] = { 0, 0x2000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x60] = { 0, 0x2000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x61] = { 0, 0x2000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x62] = { 0, 0x000F, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x63] = { 0, 0x000F, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x64] = { 0, 0x000F, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x65] = { 0, 0x000F, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x66] = { 0, 0x1200, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x67] = { 0, 0x3000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x68] = { 0, 0x1000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x69] = { 0, 0x1000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x6a] = { 0, 0x1000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x6b] = { 0, 0x1000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x6c] = { 0, 0x1000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x6d] = { 0, 0x1000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x6e] = { 0, 0x1000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x6f] = { 0, 0x1000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x70] = { 0, 0x1000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x71] = { 0, 0x1000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x72] = { 0, 0x1000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x73] = { 0, 0x1000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x74] = { 0, 0x0100, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x75] = { 0, 0x0100, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x76] = { 0, 0x0900, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x77] = { 0, 0x0100, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x78] = { 0, 0x0100, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x79] = { 0, 0x0100, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x7a] = { 0, 0x0100, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x7b] = { 0, 0x0100, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x7c] = { 0, 0x0000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x7d] = { 0, 0x0000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x7e] = { 0, 0x0000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x7f] = { 0, 0x0000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x80] = { 0, 0x0000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x81] = { 0, 0x0000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x82] = { 0, 0x0000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x83] = { 0, 0x0000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x84] = { 0, 0x0000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x85] = { 0, 0x0000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x86] = { 0, 0x0000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x87] = { 0, 0x0000, D3D8_RS_DEFERRED, 0, 0, 0, NULL },
+    [0x88] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x89] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x8a] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x8b] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x8c] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x8d] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x8e] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x8f] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x90] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x91] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x92] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x93] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x94] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x95] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x96] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x97] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x98] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x99] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x9a] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x9b] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x9c] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x9d] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x9e] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0x9f] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0xa0] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0xa1] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0xa2] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0xa3] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0xa4] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+    [0xa5] = { 0, 0, D3D8_RS_HANDLER, 0, 0, 0, NULL },
+};
